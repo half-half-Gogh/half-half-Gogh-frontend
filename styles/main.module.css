@@ -1,0 +1,59 @@
+.overlayBase {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition-property: background-color, opacity;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  outline: 0;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlayAfter {
+  background-color: rgba(0, 0, 0, 0.8);
+  opacity: 1;
+}
+
+.overlayBefore {
+  background-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+}
+
+.contentBase {
+  background-color: transparent;
+  transition-property: background-color, width, height;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 60%;
+  height: 45%;
+  border: 5px solid #f3c5c5;
+  background: #f6e7d8;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 3%;
+  outline: none;
+  text-align: center;
+  justify-content: center;
+}
+
+.contentAfter {
+  width: 60%;
+  height: 45%;
+  background-color: #f6e7d8;
+}
+
+.contentBefore {
+  width: 0%;
+  height: 0%;
+  background-color: transparent;
+}

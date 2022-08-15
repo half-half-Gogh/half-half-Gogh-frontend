@@ -6,7 +6,10 @@ const Home: NextPage = () => {
     <div>
       <nav>
         <Link href="/MyCanvas">
-          <a>MyCanvas</a>
+          <a style={{display: 'flex'}}>MyCanvas</a>
+        </Link>
+        <Link href="/main">
+          <a style={{display: 'flex'}}>로그인 / 회원가입</a>
         </Link>
       </nav>
     </div>
