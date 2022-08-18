@@ -3,11 +3,15 @@
   justify-content: center;
   align-items: center;
   background-color: #f6e7d8;
+  max-width: 500px;
+  max-height: 900px;
 }
 .container {
   margin-top: 3%;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
+  touch-action: none;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,12 +24,13 @@
   text-align: center;
 }
 .myCanvas {
-  border: 10px groove black;
+  border: 10px outset rgb(253, 179, 140);
   border-radius: 10%;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
+
 .canvasZone {
-  height: 50%;
+  height: 45%;
   width: 100%;
   text-align: center;
   margin-top: 3%;
@@ -36,17 +41,24 @@
   align-items: center;
   justify-content: center;
 }
-.colorZone {
+.strokeZone {
+  height: 40%;
   width: 100%;
-  height: 20%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 5%;
+  text-align: center;
+}
+.colorZone {
+  width: 40%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .widthZone {
-  width: 100%;
-  height: 20%;
+  width: 60%;
+  height: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,33 +103,33 @@
   display: block;
   position: relative;
   float: left;
-  width: 13%;
+  width: 18%;
   height: 80%;
   padding: 0;
   margin: 2% 3% 1% 3%;
   font-weight: 600;
   text-align: center;
-  line-height: 50px;
+
   color: black;
-  border-radius: 40%;
+  border-radius: 60%;
   transition: all 0.2s;
-  box-shadow: 0px 5px 0px 0px #f3c5c5;
-  background: #ffc3c3;
+  box-shadow: 0px 5px 0px 0px rgb(253, 179, 140);
+  background: rgb(253, 179, 140);
 }
 .btn:active {
   box-shadow: 0px 0px 0px 0px #f3c5c5;
   margin-top: 15px;
   margin-bottom: 5px;
 }
-.modalBtnZone {
-  margin-top: 30%;
+.saveBtnZone {
+  margin-top: 20%;
   height: 50%;
   width: 100%;
   display: flex;
   justify-content: space-around;
   text-align: center;
 }
-.modalBtn {
+.saveBtn {
   display: block;
   position: relative;
   float: left;
@@ -126,22 +138,61 @@
   padding: 0;
   margin: 2% 3% 1% 3%;
   font-weight: 600;
-  text-align: center;
   line-height: 50px;
   color: black;
   border-radius: 40%;
   transition: all 0.2s;
-  box-shadow: 0px 5px 0px 0px #f3c5c5;
-  background: #ffc3c3;
+  box-shadow: 0px 5px 0px 0px rgb(253, 179, 140);
+  background: rgb(253, 179, 140);
   text-align: center;
   font-size: 1rem;
 }
-.modalBtn:active {
+.saveBtn:active {
   box-shadow: 0px 0px 0px 0px #f3c5c5;
   margin-top: 15px;
   margin-bottom: 5px;
 }
+.galleryBtnZone {
+  height: 100%;
+  width: 100%;
 
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.galleryBtnDiv {
+  width: 100%;
+  height: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+.galleryBtn {
+  display: block;
+  position: relative;
+  float: left;
+  width: 60%;
+  height: 45%;
+  padding: 0;
+
+  font-weight: 600;
+  line-height: 50px;
+  color: black;
+  border-radius: 45%;
+  transition: all 0.2s;
+  box-shadow: 0px 5px 0px 0px rgb(253, 179, 140);
+  background: rgb(253, 179, 140);
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 7%;
+}
+.galleryBtn:active {
+  box-shadow: 0px 0px 0px 0px #f3c5c5;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
 .overlayBase {
   padding: 1rem;
   position: fixed;
@@ -177,9 +228,7 @@
   transition-duration: 500ms;
   transition-timing-function: ease-in-out;
   position: absolute;
-  top: 20%;
-  left: 24.5%;
-  width: 50%;
+  width: 70%;
   height: 30%;
   border: 5px solid #f3c5c5;
   background: #f6e7d8;
@@ -194,12 +243,16 @@
 }
 
 .contentAfter {
-  width: 50%;
+  top: 20%;
+  left: 14%;
+  width: 70%;
   height: 30%;
   background-color: #f6e7d8;
 }
 
 .contentBefore {
+  top: 20%;
+  left: 14%;
   width: 0%;
   height: 0%;
   background-color: transparent;
