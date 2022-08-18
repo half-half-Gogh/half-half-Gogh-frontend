@@ -32,7 +32,6 @@ const MyCanvas = () => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
     const context: CanvasRenderingContext2D | null = canvas.getContext("2d");
-    console.log(window.innerHeight);
     if (!context || !windowSize) return;
     setWindowSize({
       width: window.innerWidth,
@@ -99,7 +98,6 @@ const MyCanvas = () => {
     link.href = image;
     link.download = "Paint";
     link.click();
-    setModalOpen(false);
   };
   const canvasMouseEventListener = (
     event: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
@@ -130,9 +128,10 @@ const MyCanvas = () => {
   ) => {
     if (!ctx) return;
     const canvasElement = event.currentTarget as HTMLCanvasElement;
-    let x: number = event.touches[0].clientX - canvasElement.offsetLeft;
-    let y: number = event.touches[0].clientY - canvasElement.offsetTop;
+
     if (type === "move" && down) {
+      let x: number = event.touches[0].clientX - canvasElement.offsetLeft;
+      let y: number = event.touches[0].clientY - canvasElement.offsetTop;
       if (array.length === 0) {
         array.push({ x, y });
       } else {
@@ -144,6 +143,7 @@ const MyCanvas = () => {
         ctx.stroke();
         ctx.restore();
         array.push({ x, y });
+        window.scrollbars;
       }
     }
   };
@@ -165,10 +165,10 @@ const MyCanvas = () => {
             ></input>
             {"      "}님의 그림
           </div>
-          <div className={styles.canvasZone}>
+          <div>
             <canvas
-              width={windowSize.width / 2}
-              height={windowSize.height / 2}
+              width={windowSize.width > 500 ? 450 : windowSize.width / 1.2}
+              height={windowSize.width > 500 ? 450 : windowSize.width / 1.2}
               ref={canvasRef}
               className={styles.myCanvas}
               onMouseDown={(event) => {
@@ -202,43 +202,50 @@ const MyCanvas = () => {
             ></canvas>
           </div>
           <div className={styles.optionZone}>
-            <div className={styles.colorZone}>
-              <p>색상 : </p>
-              {"   "}
-              <div
-                className={styles.swatch}
-                onClick={() => {
-                  setPickerOpen(true);
-                }}
-              >
+            <div className={styles.strokeZone}>
+              <div className={styles.colorZone}>
+                <p>색상 : </p>
+
+                {"   "}
                 <div
-                  style={{
-                    width: "1rem",
-                    height: "1.1rem",
-                    borderRadius: "2px",
-                    backgroundColor: pickerColor,
+                  className={styles.swatch}
+                  onClick={() => {
+                    setPickerOpen(true);
                   }}
-                />
+                >
+                  <div
+                    style={{
+                      width: "1rem",
+                      height: "1.1rem",
+                      borderRadius: "2px",
+                      backgroundColor: pickerColor,
+                    }}
+                  />
+                </div>
+                {pickerOpen ? (
+                  <Picker
+                    setPickerOpen={setPickerOpen}
+                    pickerColor={pickerColor}
+                    pickerChange={pickerChange}
+                  ></Picker>
+                ) : null}
               </div>
-              {pickerOpen ? (
-                <Picker
-                  setPickerOpen={setPickerOpen}
-                  pickerColor={pickerColor}
-                  pickerChange={pickerChange}
-                ></Picker>
-              ) : null}
+              <div className={styles.widthZone}>
+                <div className="strokeDiv">
+                  <p>{strokeWidth}</p>
+                </div>
+
+                <input
+                  className={styles.rangeStyle}
+                  ref={rangeRef}
+                  onChange={() => {
+                    if (rangeRef.current) changeWidth(rangeRef.current.value);
+                  }}
+                  type="range"
+                ></input>
+              </div>
             </div>
-            <div className={styles.widthZone}>
-              <p>크기 : {strokeWidth}</p>
-              <input
-                className={styles.rangeStyle}
-                ref={rangeRef}
-                onChange={() => {
-                  if (rangeRef.current) changeWidth(rangeRef.current.value);
-                }}
-                type="range"
-              ></input>
-            </div>
+
             <div className={styles.btnZone}>
               <button className={styles.btn} onClick={() => clearCanvas()}>
                 초기화
@@ -261,14 +268,17 @@ const MyCanvas = () => {
       <style jsx>
         {`
           p {
-            margin-right: 2%;
+            margin-right: 10%;
             font-size: 1.5rem;
+            text-align: center;
           }
           .inputZone {
+            margin-top: 15%;
             font-size: 1.5rem;
+            margin-bottom: 5%;
           }
           .nickNameInput {
-            width: 15%;
+            width: 30%;
             height: 7%;
             font-size: 15px;
             border: 0;
@@ -278,6 +288,14 @@ const MyCanvas = () => {
             background-color: rgba(255, 255, 255, 0.5);
             text-align: end;
             font-size: 1.5rem;
+          }
+          .strokeDiv {
+            width: 15%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
           }
         `}
       </style>
