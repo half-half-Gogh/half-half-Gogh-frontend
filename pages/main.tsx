@@ -26,10 +26,18 @@ const main = () => {
   
   return (
     <div className={"container"}>
-      <div style={{marginTop: "150px"}}>
+      <div>
          <Image src={title} />
          <h1 style={{fontSize: "5.2rem", color: "#3e4356", marginTop: "-10px", fontFamily: "SEBANG_Gothic_Bold, cursive"}}>반의반고흐</h1>
       </div>
+      <div style={{display:"flex", border: "1px solid red", width: "80%", marginLeft: "10%"}}>
+        <div className={"btnZone"}>
+          <button className={"btn"} onClick={() => setSignUpModal(true)}>
+            회원가입
+          </button>
+        </div>
+      </div>
+      { /*
       <div className={"btnZone"}>
         <button className={"btn"} onClick={() => setSignUpModal(true)}>
           회원가입
@@ -56,6 +64,7 @@ const main = () => {
           로그인
         </button>
       </div>
+        */}
       <Modal
       isOpen={signUpModal}
       closeTimeoutMS={500}
@@ -143,6 +152,9 @@ const main = () => {
 
       <style jsx>
         {`
+          * {
+            border: 1px solid white;
+          }
           h1 {
             font-size: 6rem;
             font-weight: 500;
@@ -151,7 +163,7 @@ const main = () => {
           .container {
             position: absolute;
             width: 90%;
-            top: 40%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%,-50%);
             justify-content: center;
@@ -163,10 +175,10 @@ const main = () => {
           }
           .btnZone {
             width: 100%;
-            height: 40%;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid black;
           }
           .btn {
             display: block;
