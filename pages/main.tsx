@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Modal from 'react-modal';
 import styles from "../styles/main.module.css";
 import Image from 'next/image';
-import temp from '/public/images/temp.png';
+import title from '/public/images/title_img.png';
 import cloud from '/public/images/cloud.png';
 
 const main = () => {
@@ -26,9 +26,9 @@ const main = () => {
   
   return (
     <div className={"container"}>
-      <div>
-        <Image src={temp} />
-        <h1>반의반고흐</h1>
+      <div style={{marginTop: "150px"}}>
+        <Image src={title} />
+        <h1 style={{fontSize: "5.2rem", color: "#3e4356", marginTop: "-10px", fontFamily: "SEBANG_Gothic_Bold, cursive"}}>반의반고흐</h1>
       </div>
       <div className={"btnZone"}>
         <button className={"btn"} onClick={() => setSignUpModal(true)}>
@@ -179,13 +179,13 @@ const main = () => {
             font-weight: 200;
             text-align: center;
             line-height: 50px;
-            color: black;
+            color: #CD5C5C;
             border-radius: 5%;
             transition: all 0.2s;
             box-shadow: 0px 5px 0px 0px #f3c5c5;
             background: #ffc3c3;
-            font-family: 'Kirang Haerang', cursive;
-            font-size: 1.3rem;
+            font-family: 'KOTRAHOPE', cursive;
+            font-size: 1.6rem;
           }
           .btn:active {
             box-shadow: 0px 0px 0px 0px #f3c5c5;
