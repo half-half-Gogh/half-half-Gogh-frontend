@@ -44,6 +44,7 @@ const MyCanvas = () => {
     context.fillStyle = "white";
     context.fillRect(0, 0, window.innerWidth, window.innerHeight);
     setCtx(context);
+    console.log(window.innerWidth, window.innerHeight);
   }, []);
   useEffect(() => {
     if (!ctx) return;
@@ -59,7 +60,6 @@ const MyCanvas = () => {
     let tmpctx: CanvasRenderingContext2D | null = ctx;
     if (tmpctx) {
       tmpctx.strokeStyle = pickerColor;
-
       setCtx(tmpctx);
     }
   }, [pickerColor]);
@@ -94,7 +94,7 @@ const MyCanvas = () => {
     if (!canvasRef.current) return;
     const image = canvasRef.current.toDataURL("image/jpeg");
     const link = document.createElement("a");
-    console.log(image);
+
     link.href = image;
     link.download = "Paint";
     link.click();
@@ -167,8 +167,8 @@ const MyCanvas = () => {
           </div>
           <div>
             <canvas
-              width={windowSize.width > 500 ? 450 : windowSize.width / 1.2}
-              height={windowSize.width > 500 ? 450 : windowSize.width / 1.2}
+              width={windowSize.width > 500 ? 430 : windowSize.width / 1.2}
+              height={windowSize.width > 500 ? 430 : windowSize.width / 1.2}
               ref={canvasRef}
               className={styles.myCanvas}
               onMouseDown={(event) => {
@@ -296,6 +296,8 @@ const MyCanvas = () => {
             justify-content: center;
             align-items: center;
             text-align: center;
+          }
+          div {
           }
         `}
       </style>
