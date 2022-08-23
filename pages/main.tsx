@@ -4,11 +4,12 @@ import Modal from 'react-modal';
 import styles from "../styles/main.module.css";
 import Image from 'next/image';
 import title from '/public/images/title_img.png';
-import cloud from '/public/images/cloud.png';
+import { TiKey, TiUser } from "react-icons/ti";
 
 const main = () => {
   const router = useRouter();
   const [signUpModal, setSignUpModal] = useState<boolean>(false);
+  const [loginMode, setLoginMode] = useState<boolean>(false);
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
   const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("밤톨이멍멍");
@@ -26,39 +27,41 @@ const main = () => {
   
   return (
     <div className={"container"}>
-      <div style={{marginTop: "150px"}}>
+      <div>
          <Image src={title} />
-         <h1 style={{fontSize: "5.2rem", color: "#3e4356", marginTop: "-10px", fontFamily: "SEBANG_Gothic_Bold, cursive"}}>반의반고흐</h1>
+         <h1 style={{fontSize: "4.5rem", color: "#3e4356", marginTop: "-10px", fontFamily: "SEBANG_Gothic_Bold, cursive"}}>반의반고흐</h1>
       </div>
-      <div className={"btnZone"}>
-        <button className={"btn"} onClick={() => setSignUpModal(true)}>
-          회원가입
-        </button>
-      </div>
-      <div className={"btnZone"}>
-        {checkLogin ? 
-          <div style={{display: 'inline'}}>
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <div style={{display: 'block', width: '20%'}}>
-                <p style={{fontSize: '1.2rem'}}>ID : </p>
-              </div>
-              <input style={{width: '60%'}}/>
+      <div style={{display: 'flex', width: '75%', marginLeft: '12.5%'}}>
+        <div style={{display: 'block', width: '70%', marginTop: '3px', marginRight: '3px'}}>
+          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', border: '3px solid #ffa3a3', borderRadius: '5px', marginBottom: '5px'}}>
+            <div style={{display: 'block', width: '20%'}}>
+              <TiUser size="2rem" color="#ffa3a3"/>
             </div>
-      
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <div style={{width: '20%'}}>
-                <p style={{fontSize: '1.2rem'}}>PW : </p>
-              </div>
-              <input style={{width: '60%'}}/>
+            <input style={{width: '80%', height: '100%', border: '0', backgroundColor: 'transparent'}} placeholder="ID"/>
+          </div>
+    
+          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', border: '3px solid #ffa3a3', borderRadius: '5px'}}>
+            <div style={{width: '20%'}}>
+              <TiKey size="2rem" color="#ffa3a3"/>
             </div>
-          </div> : <div></div> }
-        <button className={"btn"} onClick={() => {checkLogin ? setLoginSuccess(true) : setCheckLogin(true)}}>
-          로그인
-        </button>
+            <input style={{width: '80%', height: '100%', border: '0', backgroundColor: 'transparent'}} placeholder="PW"/>
+          </div>
+        </div>
+        <div style={{width: '30%'}}>
+          <button className={"btn"} onClick={() => {setLoginSuccess(true)}}>
+            로그인
+          </button>
+        </div>
       </div>
+      <button 
+        style={{marginTop: '15px', border: '0', backgroundColor: 'transparent'}}
+        onClick={() => setSignUpModal(true)}
+      >
+        <a style={{fontSize: '1.2rem', fontFamily: 'KOTRAHOPE, cursive', color : '#ffa3a3', textDecoration: 'underline'}}>회원가입</a>
+      </button>
       <Modal
       isOpen={signUpModal}
-      closeTimeoutMS={500}
+      closeTimeoutMS={200}
       overlayClassName={{
         base: styles.overlayBase,
         afterOpen: styles.overlayAfter,
@@ -70,42 +73,38 @@ const main = () => {
         beforeClose: styles.contentBefore,
       }}
       >
-        <div>
-          <p style={{display: 'inline', lineHeight: 3}}>회원가입</p>
-          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <div style={{width: '30%'}}>
-              <p style={{fontSize: '1.2rem'}}>닉네임 : </p>
-            </div>
-            <div style={{width: '60%'}}>
-              <input />
-            </div>
+        <div style={{width: '100%', height: '100%'}}>
+          <div style={{height: '15%', backgroundColor: '#f3c5c5', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <span style={{display: 'inline', color: '#CD5C5C'}}>회원가입</span>  
           </div>
-          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <div style={{width: '30%'}}>
-              <p style={{fontSize: '1.2rem'}}>이메일 : </p>
+          <div style={{height: '85%', backgroundColor: '#f6e7d8', borderTopLeftRadius: '10px', borderTopRightRadius: '10px'}}>
+            <div style={{display: 'grid', textAlign: 'left', width: '90%', height: '20%', marginLeft: '5%', alignItems: 'flex-end'}}>            
+              <p style={{fontSize: '1rem', margin: '0px 0px'}}>미술관 이름</p>     
+              <input style={{border: '2px solid #575757', height: '70%', background: '#ece7e2', borderRadius: '5px'}}/>           
             </div>
-            <div style={{width: '60%'}}>
-              <input />
+            <div style={{display: 'grid', textAlign: 'left', width: '90%', height: '20%', marginLeft: '5%', alignItems: 'flex-end'}}>            
+              <p style={{fontSize: '1rem', margin: '0px 0px'}}>아이디</p>     
+              <input style={{border: '2px solid #575757', height: '70%', background: '#ece7e2', borderRadius: '5px'}}/>           
             </div>
-          </div>
-          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <div style={{width: '30%'}}>
-              <p style={{fontSize: '1.2rem'}}>비밀번호 : </p>
+            <div style={{display: 'grid', textAlign: 'left', width: '90%', height: '20%', marginLeft: '5%', alignItems: 'flex-end'}}>            
+              <p style={{fontSize: '1rem', margin: '0px 0px'}}>비밀번호</p>     
+              <input style={{border: '2px solid #575757', height: '70%', background: '#ece7e2', borderRadius: '5px'}}/>           
             </div>
-            <div style={{width: '60%'}}>
-              <input />
+            <div style={{display: 'grid', textAlign: 'left', width: '90%', height: '20%', marginLeft: '5%', alignItems: 'flex-end'}}>            
+              <p style={{fontSize: '1rem', margin: '0px 0px'}}>비밀번호 확인</p>     
+              <input style={{border: '2px solid #575757', height: '70%', background: '#ece7e2', borderRadius: '5px'}}/>           
             </div>
-          </div>
-          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <div className={"btnZone"}>
-              <button className={"modalBtn"}>
-                가입하기
-              </button>
-            </div>
-            <div className={"btnZone"} onClick={() => setSignUpModal(false)}>
-              <button className={"modalBtn"}>
-                메인으로
-              </button>
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '92.5%', height: '20%', marginLeft: '3.75%'}}>
+              <div className={"btnZone"}>
+                <button className={"modalBtn"}>
+                  <p style={{margin: '0'}}>가입하기</p>
+                </button>
+              </div>
+              <div className={"btnZone"} onClick={() => setSignUpModal(false)}>
+                <button className={"modalBtn"}>
+                  메인으로
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -151,7 +150,7 @@ const main = () => {
           .container {
             position: absolute;
             width: 90%;
-            top: 40%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%,-50%);
             justify-content: center;
@@ -163,29 +162,29 @@ const main = () => {
           }
           .btnZone {
             width: 100%;
-            height: 40%;
+            height: 80%;
+            marginTop: 10%;
             display: flex;
             align-items: center;
             justify-content: center;
           }
           .btn {
             display: block;
-            position: relative;
             float: left;
-            width: 25%;
-            height: 80%;
+            width: 100%;
+            height: 100%;
             padding: 0;
-            margin: 2% 3% 1% 3%;
             font-weight: 200;
             text-align: center;
             line-height: 50px;
             color: #CD5C5C;
             border-radius: 5%;
             transition: all 0.2s;
-            box-shadow: 0px 5px 0px 0px #f3c5c5;
+            box-shadow: 0px 0px 0px 0px #f3c5c5;
             background: #ffc3c3;
             font-family: 'KOTRAHOPE', cursive;
             font-size: 1.6rem;
+            border-color: #ffc3c3;
           }
           .btn:active {
             box-shadow: 0px 0px 0px 0px #f3c5c5;
@@ -198,23 +197,25 @@ const main = () => {
             float: left;
             width: 100%;
             height: 80%;
-            padding: 0;
             margin: 2% 3% 1% 3%;
             font-weight: 200;
             text-align: center;
-            line-height: 50px;
             color: #CD5C5C;
             border-radius: 5%;
             transition: all 0.2s;
-            box-shadow: 0px 5px 0px 0px #f3c5c5;
+            box-shadow: 0px 0px 0px 0px #f3c5c5;
             background: #ffc3c3;
             font-family: 'KOTRAHOPE', cursive;
-            font-size: 1.6rem;
+            border-color: #ffc3c3;
+            font-size: 1.2rem;
           }
           .modalBtn:active {
             box-shadow: 0px 0px 0px 0px #f3c5c5;
             margin-top: 15px;
             margin-bottom: 5px;
+          }
+          input::placeholder {
+            color: #ffa3a3;
           }
         `}
       </style>

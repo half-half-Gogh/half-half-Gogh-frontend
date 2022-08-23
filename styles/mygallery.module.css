@@ -1,21 +1,31 @@
-.App {
-  text-align: center;
+.inner {
+  height: 100vh;
+  display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 100px;
+}
+.App {
+  height: 100vh;
+  overflow-y: auto;
+}
+.App::-webkit-scrollbar {
+  display: none;
 }
 .Header {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 10px;
+  left: 5%;
   right: 0;
-  height: 10%;
-  padding: 1rem;
-  color: black;
+  width: 90%;
+  height: 8%;
+  background-color: #3e4356;
   font-weight: bold;
-  font-size: 2rem;
-  display: flex;
-  justify-content: right;
+  font-size: 1.7rem;
+  display: inline;
+  justify-content: center;
   align-items: center;
+  border-radius: 10px;
 }
 .light {
   position: fixed;
@@ -44,11 +54,11 @@
 .buttonStyle {
   justify-content: center;
   align-items: center;
-  background-color: #ffc3c3;;
-  color: white;
+  background-color: #ffc3c3;
+  color: #CD5C5C;
   height: 30px;
   border-radius: 5px;
-  font-family: 'Kirang Haerang', cursive;
+  font-family: 'KOTRAHOPE', cursive;
 }
 .frameBox {
   width: 100%;
@@ -80,4 +90,9 @@
   top: 20%;
   left: 20%;
   margin-top: 400px;
+}
+.divider {
+  width: 100%;
+  height: 5px;
+  background-color: gray;
 }
