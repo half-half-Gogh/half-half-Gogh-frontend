@@ -40,7 +40,7 @@
   background: #f6e7d8;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
-  border-radius: 3%;
+  border-radius: 10px;
   outline: none;
   text-align: center;
   justify-content: center;
@@ -49,7 +49,7 @@
 .contentAfter {
   width: 60%;
   height: 45%;
-  background-color: #f6e7d8;
+  background-color: #f3c5c5;
 }
 
 .contentBefore {
