@@ -1,94 +1,127 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import temp1 from '/public/images/temp1.png';
-import frame from '/public/images/frame2.png';
-import Spotlight from '/public/images/spotlight.jpeg';
+import temp1 from '/public/images/Paint12.jpeg';
+import temp2 from '/public/images/Paint11.jpeg';
+import temp3 from '/public/images/Paint13.jpeg';
+import temp4 from '/public/images/Paint14.jpeg';
+import frame from '/public/images/frame3.png';
+import crown from '/public/images/crown.png';
 import Image from 'next/image';
 import styles from "../styles/mygallery.module.css";
+import { AiFillLike } from "react-icons/ai";
 
 const DIVIDER_HEIGHT = 5;
 
 const mygallery = () => {
   const router = useRouter();
   const userName = router.query.username;
-  const outerDivRef = useRef<any>(null);
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
 
   useEffect(() => {
-    const wheelHandler = (e:any) => {
-      e.preventDefault();
-      const { deltaY } = e;
-      const { scrollTop } = outerDivRef.current; // 스크롤 위쪽 끝부분 위치
-      const pageHeight = window.innerHeight; // 화면 세로길이, 100vh와 같습니다.
-    
-      if (deltaY > 0) {
-        // 스크롤 내릴 때
-        if (scrollTop >= 0 && scrollTop < pageHeight) {
-          //현재 1페이지
-          console.log("현재 1페이지, down");
-          outerDivRef.current.scrollTo({
-            top: pageHeight + DIVIDER_HEIGHT,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
-          //현재 2페이지
-          console.log("현재 2페이지, down");
-          outerDivRef.current.scrollTo({
-            top: pageHeight * 2 + DIVIDER_HEIGHT * 2,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else {
-          // 현재 3페이지
-          console.log("현재 3페이지, down");
-          outerDivRef.current.scrollTo({
-            top: pageHeight * 2 + DIVIDER_HEIGHT * 2,
-            left: 0,
-            behavior: "smooth",
-          });
-        }
-      } else {
-        // 스크롤 올릴 때
-        if (scrollTop >= 0 && scrollTop < pageHeight) {
-          //현재 1페이지
-          console.log("현재 1페이지, up");
-          outerDivRef.current.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
-          //현재 2페이지
-          console.log("현재 2페이지, up");
-          outerDivRef.current.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else {
-          // 현재 3페이지
-          console.log("현재 3페이지, up");
-          outerDivRef.current.scrollTo({
-            top: pageHeight + DIVIDER_HEIGHT,
-            left: 0,
-            behavior: "smooth",
-          });
-        }
-      }
-    };
-    const outerDivRefCurrent = outerDivRef.current;
-    outerDivRefCurrent.addEventListener("wheel", wheelHandler);
-    return () => {
-      outerDivRefCurrent.removeEventListener("wheel", wheelHandler);
-    };
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
   }, []);
+
+  useEffect(() => {
+    console.log(windowSize.width, windowSize.height);
+  }, [windowSize])
   return (
-    <div ref={outerDivRef} className={styles.App}>
-      <div className={styles.Header}>
-        <div style={{border: '2px solid white', width: "90%", marginLeft: "5%"}}></div>
-        <h2 style={{margin: '5px 0px', fontFamily: "SEBANG_Gothic_Bold, cursive", color: "white"}}>{userName} 미술관</h2> 
+    <div className={styles.App}>
+      <div style={{width: '100%', margin: '13vh 0px'}}>
+        <article style={{width: windowSize.width * 0.75 + 40, justifyContent: 'center', alignItems:' center', marginLeft: windowSize.width * 0.125 - 20}}>
+          <div style={{marginBottom: '-16px'}}>
+            <Image src={crown} layout={"fixed"} height={windowSize.width * 0.2} width={windowSize.width * 0.2}/>
+          </div>
+          <div style={{width: windowSize.width * 0.75, height: windowSize.width * 0.75, justifyContent: 'center', alignItems: 'center', border: '20px solid #ffc3c3', boxShadow: '0px 0px 5px 5px rgba(0, 0, 0, 0.1)'}}>
+            <Image src={temp4} layout={"fixed"} height={windowSize.width * 0.75} width={windowSize.width * 0.75}/>
+          </div>
+          <div style={{display: 'block', width: '100%', marginTop: '10px', textAlign: 'right', marginBottom: windowSize.width * 0.15}}>
+            <div style={{display: 'inline-flex', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'}}>
+              <p style={{margin: '0px 5px'}}>서창희 | </p>
+              <AiFillLike size="1rem" color="black"/>
+              <p style={{margin: '0px 5px'}}> 14</p>
+            </div>
+          </div>
+          <div style={{display: 'flex', width: '100%', marginBottom: windowSize.width * 0.1}}>
+            <div style={{display: 'inline', width: windowSize.width * 0.35, height: windowSize.width * 0.35, justifyContent: 'center', alignItems:' center', border: '10px solid #ffc3c3', marginRight: (windowSize.width * 0.1 -20), boxShadow: '0px 0px 2px 2px rgba(0, 0, 0, 0.1)'}}>
+              <Image src={temp1} layout={"fixed"} height={windowSize.width * 0.35} width={windowSize.width * 0.35}/>
+              <div style={{display: 'block', width: '100%', marginTop: '10px', textAlign: 'center'}}>
+                <div style={{display: 'inline-flex', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'}}>
+                  <p style={{margin: '0px 5px'}}>조준영 | </p>
+                  <AiFillLike size="1rem" color="black"/>
+                  <p style={{margin: '0px 5px'}}> 9</p>
+                </div>
+              </div>
+            </div>
+            <div style={{display: 'inline', width: windowSize.width * 0.35, height: windowSize.width * 0.35, justifyContent: 'center', alignItems:' center', border: '10px solid #ffc3c3', boxShadow: '0px 0px 2px 2px rgba(0, 0, 0, 0.1)'}}>
+              <Image src={temp2} layout={"fixed"} height={windowSize.width * 0.35} width={windowSize.width * 0.35}/>
+              <div style={{display: 'block', width: '100%', marginTop: '10px', textAlign: 'center'}}>
+                <div style={{display: 'inline-flex', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'}}>
+                  <p style={{margin: '0px 5px'}}>김형국 | </p>
+                  <AiFillLike size="1rem" color="black"/>
+                  <p style={{margin: '0px 5px'}}> 7</p>
+                </div>
+              </div>
+            </div>  
+          </div>
+          <div style={{display: 'flex', width: '100%', marginBottom: windowSize.width * 0.1}}>
+            <div style={{display: 'inline', width: windowSize.width * 0.35, height: windowSize.width * 0.35, justifyContent: 'center', alignItems:' center', border: '10px solid #ffc3c3', marginRight: (windowSize.width * 0.1 -20), boxShadow: '0px 0px 2px 2px rgba(0, 0, 0, 0.1)'}}>
+              <Image src={temp3} layout={"fixed"} height={windowSize.width * 0.35} width={windowSize.width * 0.35}/>
+              <div style={{display: 'block', width: '100%', marginTop: '10px', textAlign: 'center'}}>
+                <div style={{display: 'inline-flex', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'}}>
+                  <p style={{margin: '0px 5px'}}>구정민 | </p>
+                  <AiFillLike size="1rem" color="black"/>
+                  <p style={{margin: '0px 5px'}}> 5</p>
+                </div>
+              </div>
+            </div>
+            <div style={{display: 'inline', width: windowSize.width * 0.35, height: windowSize.width * 0.35, justifyContent: 'center', alignItems:' center', border: '10px solid #ffc3c3', boxShadow: '0px 0px 2px 2px rgba(0, 0, 0, 0.1)'}}>
+              <Image src={temp1} layout={"fixed"} height={windowSize.width * 0.35} width={windowSize.width * 0.35}/>
+              <div style={{display: 'block', width: '100%', marginTop: '10px', textAlign: 'center'}}>
+                <div style={{display: 'inline-flex', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'}}>
+                  <p style={{margin: '0px 5px'}}>박해주 | </p>
+                  <AiFillLike size="1rem" color="black"/>
+                  <p style={{margin: '0px 5px'}}> 4</p>
+                </div>
+              </div>
+            </div>  
+          </div>
+          <div style={{display: 'flex', width: '100%', marginBottom: windowSize.width * 0.1}}>
+            <div style={{display: 'inline', width: windowSize.width * 0.35, height: windowSize.width * 0.35, justifyContent: 'center', alignItems:' center', border: '10px solid #ffc3c3', marginRight: (windowSize.width * 0.1 -20), boxShadow: '0px 0px 2px 2px rgba(0, 0, 0, 0.1)'}}>
+              <Image src={temp2} layout={"fixed"} height={windowSize.width * 0.35} width={windowSize.width * 0.35}/>
+              <div style={{display: 'block', width: '100%', marginTop: '10px', textAlign: 'center'}}>
+                <div style={{display: 'inline-flex', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'}}>
+                  <p style={{margin: '0px 5px'}}>채문주 | </p>
+                  <AiFillLike size="1rem" color="black"/>
+                  <p style={{margin: '0px 5px'}}> 2</p>
+                </div>
+              </div>
+            </div>
+            <div style={{display: 'inline', width: windowSize.width * 0.35, height: windowSize.width * 0.35, justifyContent: 'center', alignItems:' center', border: '10px solid #ffc3c3', boxShadow: '0px 0px 2px 2px rgba(0, 0, 0, 0.1)'}}>
+              <Image src={temp3} layout={"fixed"} height={windowSize.width * 0.35} width={windowSize.width * 0.35}/>
+              <div style={{display: 'block', width: '100%', marginTop: '10px', textAlign: 'center'}}>
+                <div style={{display: 'inline-flex', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '5px'}}>
+                  <p style={{margin: '0px 5px'}}>김건휘 | </p>
+                  <AiFillLike size="1rem" color="black"/>
+                  <p style={{margin: '0px 5px'}}> 1</p>
+                </div>
+              </div>
+            </div>  
+          </div>
+        </article>
       </div>
-      <div className={styles.footer}>
+      <header className={styles.Header}>
+        <div className={styles.titleBox}>
+          <div style={{border: '2px solid white', width: "90%", marginLeft: "5%"}}></div>
+          <h2 style={{margin: '5px 0px', fontFamily: "SEBANG_Gothic_Bold, cursive", color: "white", textAlign: 'center', textShadow: '2px 2px 2px gray'}}>{userName} 미술관</h2>     
+        </div>
+      </header>
+      <footer className={styles.footer}>
         <button 
           className={styles.buttonStyle}
           onClick={() => router.push('/MyCanvas')}>
@@ -97,20 +130,8 @@ const mygallery = () => {
         <button className={styles.buttonStyle}>
           새로운 미술관 만들기
         </button>
-      </div>
-      <div className={styles.inner}>
-        <Image src={frame}/>
-      </div>
-      <div className="divider"></div>
-      <div className={styles.inner}>
-        <Image src={frame}/>
-      </div>
-      <div className="divider"></div>
-      <div className={styles.inner}>
-        <Image src={frame}/>
-      </div>
-      <div className="divider"></div>
-        
+      </footer>
+
       <style jsx>
         {`
    

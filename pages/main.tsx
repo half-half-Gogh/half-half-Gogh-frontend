@@ -5,6 +5,7 @@ import styles from "../styles/main.module.css";
 import Image from 'next/image';
 import title from '/public/images/title_img.png';
 import { TiKey, TiUser } from "react-icons/ti";
+import axios from 'axios';
 
 const main = () => {
   const router = useRouter();
@@ -15,6 +16,8 @@ const main = () => {
   const [userName, setUserName] = useState<string>("밤톨이멍멍");
   const [userLink, setUserLink] = useState<string>("http://www.half-go.io/?username=123");
   const [copyMessage, setCopyMessage] = useState<string>("미술관을 친구들에게 홍보하자!");
+  const [loginID, setLoginID] = useState<string>("");
+  const [loginPW, setLoginPW] = useState<string>("");
 
   const handleCopyClipBoard = async (text: string) => {
     try {
@@ -24,6 +27,18 @@ const main = () => {
       setCopyMessage('복사 재시도');
     }
   };
+
+  const login = async () => {
+    await axios.post("http://175.123.140.225:4000/user/login", {
+      id: loginID,
+      password:loginPW,
+    })
+    .then(function (response) {
+      console.log(response.data);
+    }).catch(function (error) {
+      console.error(error);
+    })
+  }
   
   return (
     <div className={"container"}>
@@ -36,19 +51,19 @@ const main = () => {
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', border: '3px solid #ffa3a3', borderRadius: '5px', marginBottom: '5px'}}>
             <div style={{display: 'block', width: '20%'}}>
               <TiUser size="2rem" color="#ffa3a3"/>
-            </div>
-            <input style={{width: '80%', height: '100%', border: '0', backgroundColor: 'transparent'}} placeholder="ID"/>
+             </div>
+            <input style={{width: '80%', height: '100%', border: '0', backgroundColor: 'transparent'}} placeholder="아이디" onChange={(e) => setLoginID(e.target.value)}/>
           </div>
     
           <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', border: '3px solid #ffa3a3', borderRadius: '5px'}}>
             <div style={{width: '20%'}}>
               <TiKey size="2rem" color="#ffa3a3"/>
             </div>
-            <input style={{width: '80%', height: '100%', border: '0', backgroundColor: 'transparent'}} placeholder="PW"/>
+            <input style={{width: '80%', height: '100%', border: '0', backgroundColor: 'transparent'}} type="password" placeholder="비밀번호" onChange={(e) => setLoginPW(e.target.value)}/>
           </div>
         </div>
         <div style={{width: '30%'}}>
-          <button className={"btn"} onClick={() => {setLoginSuccess(true)}}>
+          <button className={"btn"} onClick={() => {login();}}>
             로그인
           </button>
         </div>
@@ -148,6 +163,8 @@ const main = () => {
             line-height: 1;
           }
           .container {
+            max-width: 500px;
+            max-height: 900px;
             position: absolute;
             width: 90%;
             top: 50%;
@@ -178,7 +195,7 @@ const main = () => {
             text-align: center;
             line-height: 50px;
             color: #CD5C5C;
-            border-radius: 5%;
+            border-radius: 5px;
             transition: all 0.2s;
             box-shadow: 0px 0px 0px 0px #f3c5c5;
             background: #ffc3c3;
