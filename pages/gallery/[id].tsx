@@ -4,7 +4,7 @@ import temp1 from "/public/images/temp1.png";
 import frame from "/public/images/frame2.png";
 import Spotlight from "/public/images/spotlight.jpeg";
 import Image from "next/image";
-import styles from "../styles/mygallery.module.css";
+import styles from "../../styles/mygallery.module.css";
 
 const DIVIDER_HEIGHT = 5;
 

@@ -1,5 +1,5 @@
 import styles from "../styles/MyCanvas.module.css";
-import { CirclePicker } from "react-color";
+import { SketchPicker } from "react-color";
 type Props = {
   setPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   pickerColor: string;
@@ -14,11 +14,10 @@ const Picker = ({ setPickerOpen, pickerColor, pickerChange }: Props) => {
           setPickerOpen(false);
         }}
       />
-      <CirclePicker
+      <SketchPicker
         color={pickerColor}
-        circleSize={23}
         onChange={(color) => pickerChange(color.hex)}
-      ></CirclePicker>
+      ></SketchPicker>
     </div>
   );
 };
