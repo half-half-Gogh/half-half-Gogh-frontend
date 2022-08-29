@@ -32,8 +32,6 @@
   transition-duration: 500ms;
   transition-timing-function: ease-in-out;
   position: absolute;
-  top: 20%;
-  left: 20%;
   width: 60%;
   height: 45%;
   border: 5px solid #f3c5c5;

@@ -5,7 +5,9 @@ import styles from "../styles/main.module.css";
 import Image from "next/image";
 import title from "/public/images/title_img.png";
 import { TiKey, TiUser } from "react-icons/ti";
-import axios from "axios";
+
+import axios from 'axios';
+
 
 const main = () => {
   const router = useRouter();
@@ -14,11 +16,8 @@ const main = () => {
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
   const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("밤톨이멍멍");
-  const [userLink, setUserLink] = useState<string>(
-    "http://www.half-go.io/?username=123"
-  );
-  const [copyMessage, setCopyMessage] =
-    useState<string>("미술관을 친구들에게 홍보하자!");
+  const [userLink, setUserLink] = useState<string>("http://www.half-go.io/?username=123");
+  const [copyMessage, setCopyMessage] = useState<string>("미술관을 친구들에게 홍보하자!");
   const [loginID, setLoginID] = useState<string>("");
   const [loginPW, setLoginPW] = useState<string>("");
 
@@ -31,20 +30,18 @@ const main = () => {
     }
   };
 
-  const login = () => {
-    axios
-      .post("https://alexjun12.loca.lt/user/login", {
-        id: loginID,
-        password: loginPW,
-      })
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  };
-
+  const login = async () => {
+    await axios.post("http://175.123.140.225:4000/user/login", {
+      id: loginID,
+      password:loginPW,
+    })
+    .then(function (response) {
+      console.log(response.data);
+    }).catch(function (error) {
+      console.error(error);
+    })
+  }
+  
   return (
     <div className={"container"}>
       <div>
@@ -60,38 +57,14 @@ const main = () => {
           반의반고흐
         </h1>
       </div>
-      <div style={{ display: "flex", width: "75%", marginLeft: "12.5%" }}>
-        <div
-          style={{
-            display: "block",
-            width: "70%",
-            marginTop: "3px",
-            marginRight: "3px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              border: "3px solid #ffa3a3",
-              borderRadius: "5px",
-              marginBottom: "5px",
-            }}
-          >
-            <div style={{ display: "block", width: "20%" }}>
-              <TiUser size="2rem" color="#ffa3a3" />
-            </div>
-            <input
-              style={{
-                width: "80%",
-                height: "100%",
-                border: "0",
-                backgroundColor: "transparent",
-              }}
-              placeholder="아이디"
-              onChange={(e) => setLoginID(e.target.value)}
-            />
+
+      <div style={{display: 'flex', width: '75%', marginLeft: '12.5%'}}>
+        <div style={{display: 'block', width: '70%', marginTop: '3px', marginRight: '3px'}}>
+          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', border: '3px solid #ffa3a3', borderRadius: '5px', marginBottom: '5px'}}>
+            <div style={{display: 'block', width: '20%'}}>
+              <TiUser size="2rem" color="#ffa3a3"/>
+             </div>
+            <input style={{width: '80%', height: '100%', border: '0', backgroundColor: 'transparent'}} placeholder="아이디" onChange={(e) => setLoginID(e.target.value)}/>
           </div>
 
           <div
@@ -106,26 +79,11 @@ const main = () => {
             <div style={{ width: "20%" }}>
               <TiKey size="2rem" color="#ffa3a3" />
             </div>
-            <input
-              style={{
-                width: "80%",
-                height: "100%",
-                border: "0",
-                backgroundColor: "transparent",
-              }}
-              type="password"
-              placeholder="비밀번호"
-              onChange={(e) => setLoginPW(e.target.value)}
-            />
+            <input style={{width: '80%', height: '100%', border: '0', backgroundColor: 'transparent'}} type="password" placeholder="비밀번호" onChange={(e) => setLoginPW(e.target.value)}/>
           </div>
         </div>
-        <div style={{ width: "30%" }}>
-          <button
-            className={"btn"}
-            onClick={() => {
-              login();
-            }}
-          >
+        <div style={{width: '30%'}}>
+          <button className={"btn"} onClick={() => {login();}}>
             로그인
           </button>
         </div>
@@ -368,7 +326,7 @@ const main = () => {
             font-weight: 200;
             text-align: center;
             line-height: 50px;
-            color: #cd5c5c;
+            color: #CD5C5C;
             border-radius: 5px;
             transition: all 0.2s;
             box-shadow: 0px 0px 0px 0px #f3c5c5;
