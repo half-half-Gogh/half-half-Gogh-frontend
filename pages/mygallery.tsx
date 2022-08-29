@@ -30,6 +30,7 @@ const mygallery = () => {
   useEffect(() => {
     console.log(windowSize.width, windowSize.height);
   }, [windowSize])
+  
   return (
     <div className={styles.App}>
       <div style={{width: '100%', margin: '13vh 0px'}}>
@@ -124,7 +125,8 @@ const mygallery = () => {
       <footer className={styles.footer}>
         <button 
           className={styles.buttonStyle}
-          onClick={() => router.push('/MyCanvas')}>
+          onClick={() => router.push("/MyCanvas")}
+        >
           그림 그리기
         </button>
         <button className={styles.buttonStyle}>
@@ -139,6 +141,6 @@ const mygallery = () => {
       </style>
     </div>
   );
-}
+};
 
 export default mygallery;
