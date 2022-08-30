@@ -145,6 +145,7 @@ const mygallery = () => {
   useEffect(() => {
     console.log(windowSize.width, windowSize.height);
   }, [windowSize])
+  
   return (
     <div className={styles.App}>
       <div style={{width: windowSize.width * 0.70 + 60, margin: '18vh 0px', justifyContent: 'center', alignItems:' center', textAlign: 'center', zIndex: '2'}}>
@@ -262,6 +263,6 @@ const mygallery = () => {
       </style>
     </div>
   );
-}
+};
 
 export default mygallery;

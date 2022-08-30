@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import { CirclePicker } from "react-color";
-import styles from "../styles/MyCanvas.module.css";
-import Picker from "../components/Picker";
-import SaveModal from "../components/SaveModal";
+import styles from "../../styles/MyCanvas.module.css";
+import Picker from "../../components/Picker";
+import SaveModal from "../../components/SaveModal";
 import axios from "axios";
 
 const MyCanvas = () => {
