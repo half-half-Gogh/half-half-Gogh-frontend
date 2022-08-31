@@ -4,6 +4,8 @@ import styles from "../../styles/MyCanvas.module.css";
 import Picker from "../../components/Picker";
 import SaveModal from "../../components/SaveModal";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { getRandomString } from "../../components/getRandomString";
 
 const MyCanvas = () => {
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
@@ -22,7 +24,9 @@ const MyCanvas = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const rangeRef = useRef<HTMLInputElement>(null);
   const array: { x: number; y: number }[] = [];
-  const [nickName, setNickName] = useState("");
+  const [drawer, setDrawer] = useState("");
+  const router = useRouter();
+  const galleryName = router.query.username;
   useEffect(() => {
     if (rangeRef.current) {
       rangeRef.current.min = "1";
@@ -101,16 +105,17 @@ const MyCanvas = () => {
     // link.click();
     canvasRef.current.toBlob(function (blob) {
       const formData = new FormData();
-      formData.append("hello", blob!, "hello.png");
+      const fileName = getRandomString(10);
+      formData.append("halfhalfgogh", blob!, `${fileName}.png`);
 
       // Post via axios or other transport method
       axios
         .post("https://alexjun12.loca.lt/im/upload", formData)
         .then(function (response) {
-          console.log(response);
-          axios.post("https://alexjun12.loca.lt/im/upload", {
-            userid: response.data.userid,
-            writername: response.data.writername,
+          axios.post("https://alexjun12.loca.lt/im/imgInfo", {
+            galleryName: galleryName,
+            drawer: drawer,
+            imgId: response.data.fileName,
           });
         })
         .catch(function (error) {
@@ -168,6 +173,27 @@ const MyCanvas = () => {
   };
   return (
     <div className={styles.background}>
+      <header className={styles.Header}>
+        <div className={styles.titleBox}>
+          <div
+            style={{
+              width: "90%",
+              marginLeft: "5%",
+            }}
+          ></div>
+          <h2
+            style={{
+              margin: "5px 0px",
+              fontFamily: "SEBANG_Gothic_Bold, cursive",
+              color: "white",
+              textAlign: "center",
+              textShadow: "2px 2px 2px gray",
+            }}
+          >
+            {galleryName}미술관
+          </h2>
+        </div>
+      </header>
       <div className={styles.container}>
         <SaveModal
           modalOpen={modalOpen}
@@ -177,10 +203,11 @@ const MyCanvas = () => {
         <div className={styles.content}>
           <div className={"inputZone"}>
             <input
-              value={nickName}
-              onChange={(e) => setNickName(e.target.value)}
-              className={"nickNameInput"}
+              value={drawer}
+              onChange={(e) => setDrawer(e.target.value)}
+              className={"drawerInput"}
               spellCheck={false}
+              maxLength={6}
             ></input>
             {"      "}님의 그림
           </div>
@@ -296,7 +323,7 @@ const MyCanvas = () => {
             font-size: 2rem;
             margin-bottom: 5%;
           }
-          .nickNameInput {
+          .drawerInput {
             width: 30%;
             height: 7%;
             font-size: 15px;

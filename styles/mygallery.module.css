@@ -25,7 +25,9 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+
   z-index: 2;
+
 }
 .titleBox {
   display: block;
@@ -34,6 +36,8 @@
   margin-top: 5px;
   background-color: rgb(253, 179, 140);
   box-shadow: 0px 0px 5px 5px #f6e7d8;
+  margin-left: 5%;
+  margin-top: 5px;
   font-weight: bold;
   font-size: 1.7rem;
   justify-content: center;
@@ -69,6 +73,7 @@
   align-items: center;
   font-weight: 200;
   text-align: center;
+
   background-color: rgb(253, 179, 140);
   color: #CD5C5C;
   height: 30px;
@@ -77,6 +82,7 @@
   font-family: 'KOTRAHOPE', cursive;
   border-color: rgb(253, 179, 140);
   z-index: 4;
+
 }
 .frameBox {
   width: 100%;

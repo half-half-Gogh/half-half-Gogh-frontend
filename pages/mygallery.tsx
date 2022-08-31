@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import temp1 from '/public/images/Paint12.jpeg';
@@ -10,6 +11,7 @@ import frame from '/public/images/frame3.png';
 import crown from '/public/images/crown.png';
 import background from '/public/images/background.jpeg';
 import Image from 'next/image';
+
 import styles from "../styles/mygallery.module.css";
 import { AiFillLike } from "react-icons/ai";
 import axios from 'axios';
@@ -144,8 +146,8 @@ const mygallery = () => {
 
   useEffect(() => {
     console.log(windowSize.width, windowSize.height);
-  }, [windowSize])
-  
+  }, [windowSize]);
+
   return (
     <div className={styles.App}>
       <div style={{width: windowSize.width * 0.70 + 60, margin: '18vh 0px', justifyContent: 'center', alignItems:' center', textAlign: 'center', zIndex: '2'}}>
@@ -183,9 +185,10 @@ const mygallery = () => {
                   <p style={{margin: '0px 5px'}}>김형국 | </p>
                   <AiFillLike size="1rem" color="black"/>
                   <p style={{margin: '0px 5px'}}> 7</p>
+
                 </div>
               </div>
-            </div>  
+            </div>
           </div>
           <div style={{display: 'flex', width: '100%', marginBottom: windowSize.width * 0.15, justifyContent: 'space-between'}}>
             <div style={{display: 'inline', width: windowSize.width * 0.35, height: windowSize.width * 0.35, justifyContent: 'center', alignItems:' center', border: '10px ridge rgb(253, 179, 140)', boxShadow: '0px 0px 8px 2px rgba(0, 0, 0, 0.1)'}}>
@@ -205,9 +208,10 @@ const mygallery = () => {
                   <p style={{margin: '0px 5px'}}>박해주 | </p>
                   <AiFillLike size="1rem" color="black"/>
                   <p style={{margin: '0px 5px'}}> 4</p>
+
                 </div>
               </div>
-            </div>  
+            </div>
           </div>
           <div style={{display: 'flex', width: '100%', marginBottom: windowSize.width * 0.15, justifyContent: 'space-between'}}>
             <div style={{display: 'inline', width: windowSize.width * 0.35, height: windowSize.width * 0.35, justifyContent: 'center', alignItems:' center', border: '10px ridge rgb(253, 179, 140)', boxShadow: '0px 0px 8px 2px rgba(0, 0, 0, 0.1)'}}>
@@ -229,7 +233,7 @@ const mygallery = () => {
                   <p style={{margin: '0px 5px'}}> 1</p>
                 </div>
               </div>
-            </div>  
+            </div>
           </div>
           */}
         </article>
@@ -261,6 +265,7 @@ const mygallery = () => {
    
         `}
       </style>
+
     </div>
   );
 };
