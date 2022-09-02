@@ -1,14 +1,24 @@
 import styles from "../styles/MyCanvas.module.css";
 import Modal from "react-modal";
+import { useRouter } from "next/router";
 import React, { useRef, useEffect, useState } from "react";
 type Props = {
   modalOpen: boolean;
   saveImage: () => void;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  galleryName: string;
+  drawer: string;
 };
-const SaveModal = ({ modalOpen, saveImage, setModalOpen }: Props) => {
+const SaveModal = ({
+  modalOpen,
+  saveImage,
+  setModalOpen,
+  galleryName,
+  drawer,
+}: Props) => {
   const [userGallery, setUserGallery] = useState(false);
   const [isSave, setIsSave] = useState(false);
+  const router = useRouter();
   return (
     <Modal
       isOpen={modalOpen}
@@ -29,9 +39,11 @@ const SaveModal = ({ modalOpen, saveImage, setModalOpen }: Props) => {
           <div className={styles.galleryBtnDiv}>
             <button
               className={styles.galleryBtn}
-              onClick={() => {
-                setModalOpen(false);
-              }}
+              onClick={() =>
+                router.push({
+                  pathname: `/main`,
+                })
+              }
             >
               내 미술관 만들기
             </button>
@@ -39,11 +51,13 @@ const SaveModal = ({ modalOpen, saveImage, setModalOpen }: Props) => {
           <div className={styles.galleryBtnDiv}>
             <button
               className={styles.galleryBtn}
-              onClick={() => {
-                setModalOpen(false);
-              }}
+              onClick={() =>
+                router.push({
+                  pathname: `/gallery/${drawer}`,
+                })
+              }
             >
-              뭐시기 미술관 둘러보기
+              {galleryName} 미술관 둘러보기
             </button>
           </div>
         </div>

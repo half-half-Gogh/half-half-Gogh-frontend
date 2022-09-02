@@ -42,7 +42,6 @@ const MyCanvas = () => {
       width: window.innerWidth,
       height: window.innerHeight,
     });
-    context.lineJoin = "round";
     context.lineWidth = strokeWidth;
     context.lineCap = "round";
     context.lineJoin = "round";
@@ -53,7 +52,6 @@ const MyCanvas = () => {
   }, []);
   useEffect(() => {
     if (!ctx) return;
-    ctx.lineJoin = "round";
     ctx.lineWidth = strokeWidth;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -174,23 +172,32 @@ const MyCanvas = () => {
   return (
     <div className={styles.background}>
       <header className={styles.Header}>
-        <div className={styles.titleBox}>
-          <div
-            style={{
-              width: "90%",
-              marginLeft: "5%",
-            }}
-          ></div>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            maxWidth: "500px",
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            borderBottomLeftRadius: "80px",
+            borderBottomRightRadius: "80px",
+            backgroundColor: "#ffc3c3",
+            boxShadow: "0px 0px 20px 5px rgba(0, 0, 0, 0.4)",
+          }}
+        >
           <h2
             style={{
-              margin: "5px 0px",
+              display: "inline",
+              margin: "0px",
               fontFamily: "SEBANG_Gothic_Bold, cursive",
+              fontSize: "2.2rem",
               color: "white",
               textAlign: "center",
-              textShadow: "2px 2px 2px gray",
+              textShadow: "2px 2px 5px black",
             }}
           >
-            {galleryName}미술관
+            {galleryName} 미술관
           </h2>
         </div>
       </header>
@@ -199,6 +206,8 @@ const MyCanvas = () => {
           modalOpen={modalOpen}
           saveImage={saveImage}
           setModalOpen={setModalOpen}
+          galleryName={String(galleryName)}
+          drawer={String(drawer)}
         ></SaveModal>
         <div className={styles.content}>
           <div className={"inputZone"}>

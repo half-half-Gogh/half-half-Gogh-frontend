@@ -8,6 +8,7 @@
 .App {
   height: 100%;
   width: 100%;
+  background-color: rgb(251, 240, 219);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +29,6 @@
   text-align: center;
 
   z-index: 2;
-
 }
 .titleBox {
   display: block;
@@ -76,14 +76,13 @@
   text-align: center;
 
   background-color: rgb(253, 179, 140);
-  color: #CD5C5C;
+  color: #cd5c5c;
   height: 30px;
   border-radius: 0px;
   width: 50%;
-  font-family: 'KOTRAHOPE', cursive;
+  font-family: "KOTRAHOPE", cursive;
   border-color: rgb(253, 179, 140);
   z-index: 4;
-
 }
 .frameBox {
   width: 100%;

@@ -1,128 +1,460 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import temp1 from "/public/images/temp1.png";
-import frame from "/public/images/frame2.png";
-import Spotlight from "/public/images/spotlight.jpeg";
+import temp1 from "/public/images/Paint12.jpeg";
+import temp2 from "/public/images/Paint11.jpeg";
+import temp3 from "/public/images/Paint13.jpeg";
+import temp4 from "/public/images/Paint14.jpeg";
+import temp5 from "/public/images/Paint15.jpeg";
+import footer from "/public/images/footer.jpeg";
+import frame from "/public/images/frerame3.png";
+import crown from "/public/images/crown.png";
+import background from "/public/images/background.jpeg";
 import Image from "next/image";
+import {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
 import styles from "../../styles/mygallery.module.css";
-
-const DIVIDER_HEIGHT = 5;
-
-const mygallery = () => {
+import { AiFillLike } from "react-icons/ai";
+import axios from "axios";
+type Props = {
+  results: any;
+};
+const mygallery = ({
+  results,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
   const router = useRouter();
   const userName = router.query.username;
-  const outerDivRef = useRef<any>(null);
+  //const [pictures, setPictures] = useState<Array<string>>([]);
 
   useEffect(() => {
-    const wheelHandler = (e: any) => {
-      e.preventDefault();
-      const { deltaY } = e;
-      const { scrollTop } = outerDivRef.current; // 스크롤 위쪽 끝부분 위치
-      const pageHeight = window.innerHeight; // 화면 세로길이, 100vh와 같습니다.
-
-      if (deltaY > 0) {
-        // 스크롤 내릴 때
-        if (scrollTop >= 0 && scrollTop < pageHeight) {
-          //현재 1페이지
-          console.log("현재 1페이지, down");
-          outerDivRef.current.scrollTo({
-            top: pageHeight + DIVIDER_HEIGHT,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
-          //현재 2페이지
-          console.log("현재 2페이지, down");
-          outerDivRef.current.scrollTo({
-            top: pageHeight * 2 + DIVIDER_HEIGHT * 2,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else {
-          // 현재 3페이지
-          console.log("현재 3페이지, down");
-          outerDivRef.current.scrollTo({
-            top: pageHeight * 2 + DIVIDER_HEIGHT * 2,
-            left: 0,
-            behavior: "smooth",
-          });
-        }
-      } else {
-        // 스크롤 올릴 때
-        if (scrollTop >= 0 && scrollTop < pageHeight) {
-          //현재 1페이지
-          console.log("현재 1페이지, up");
-          outerDivRef.current.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else if (scrollTop >= pageHeight && scrollTop < pageHeight * 2) {
-          //현재 2페이지
-          console.log("현재 2페이지, up");
-          outerDivRef.current.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else {
-          // 현재 3페이지
-          console.log("현재 3페이지, up");
-          outerDivRef.current.scrollTo({
-            top: pageHeight + DIVIDER_HEIGHT,
-            left: 0,
-            behavior: "smooth",
-          });
-        }
-      }
-    };
-    const outerDivRefCurrent = outerDivRef.current;
-    outerDivRefCurrent.addEventListener("wheel", wheelHandler);
-    return () => {
-      outerDivRefCurrent.removeEventListener("wheel", wheelHandler);
-    };
+    if (window.innerWidth <= 500) {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    } else {
+      setWindowSize({
+        width: 500,
+        height: window.innerHeight,
+      });
+    }
   }, []);
+
+  const postText = () => {
+    axios
+      .post("http://175.123.140.225:4000/im/imgResponse", {
+        galleryName: "조준영",
+      })
+      .then((res) => {
+        console.log(res.data);
+        //setPictures((pictures) => [...pictures, ...res.data.pResult]);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  /*
+  useEffect(() => {
+    postText();
+  }, []);
+*/
+  const pictures: any = [
+    {
+      imageSrc: temp5,
+      like: "10",
+      drawer: "김형국",
+    },
+    {
+      imageSrc: temp2,
+      like: "7",
+      drawer: "조준영",
+    },
+    {
+      imageSrc: temp3,
+      like: "4",
+      drawer: "서창희",
+    },
+    {
+      imageSrc: temp4,
+      like: "3",
+      drawer: "구정민",
+    },
+    {
+      imageSrc: temp1,
+      like: "2",
+      drawer: "보리",
+    },
+    {
+      imageSrc: temp5,
+      like: "1",
+      drawer: "밤톨이",
+    },
+  ];
+
+  const rendering = () => {
+    const result = [];
+    for (let i = 0; i < pictures.length; i++) {
+      if (i == 0) {
+        result.push(
+          <>
+            <div
+              style={{
+                width: windowSize.width * 0.7,
+                height: windowSize.width * 0.7,
+                justifyContent: "center",
+                alignItems: "center",
+                border: "30px ridge rgb(253, 179, 140)",
+                boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <Image
+                src={pictures[i].imageSrc}
+                layout={"fixed"}
+                height={windowSize.width * 0.7}
+                width={windowSize.width * 0.7}
+                unoptimized={true}
+              />
+            </div>
+            <div
+              style={{
+                display: "block",
+                width: "100%",
+                marginTop: "10px",
+                textAlign: "right",
+                marginBottom: windowSize.width * 0.15,
+              }}
+            >
+              <div
+                style={{
+                  display: "inline-flex",
+                  backgroundColor: "rgba(253, 179, 140, 0.3)",
+                  borderRadius: "5px",
+                }}
+              >
+                <p style={{ margin: "0px 5px" }}>{pictures[i].drawer} | </p>
+                <AiFillLike size="1rem" color="black" />
+                <p style={{ margin: "0px 5px" }}>{pictures[i].like}</p>
+              </div>
+            </div>
+          </>
+        );
+      } else if (i != pictures.length - 1) {
+        result.push(
+          <>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                marginBottom: windowSize.width * 0.15,
+                justifyContent: "space-between",
+              }}
+            >
+              <div
+                style={{
+                  display: "inline",
+                  width: windowSize.width * 0.35,
+                  height: windowSize.width * 0.35,
+                  justifyContent: "center",
+                  alignItems: " center",
+                  border: "10px ridge rgb(253, 179, 140)",
+                  boxShadow: "0px 0px 8px 2px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <Image
+                  src={pictures[i].imageSrc}
+                  layout={"fixed"}
+                  height={windowSize.width * 0.35}
+                  width={windowSize.width * 0.35}
+                  unoptimized={true}
+                />
+                <div
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    marginTop: "10px",
+                    textAlign: "right",
+                    marginLeft: "10px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      backgroundColor: "rgba(253, 179, 140, 0.3)",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <p style={{ margin: "0px 5px" }}>{pictures[i].drawer} | </p>
+                    <AiFillLike size="1rem" color="black" />
+                    <p style={{ margin: "0px 5px" }}> {pictures[i].like}</p>
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "inline",
+                  width: windowSize.width * 0.35,
+                  height: windowSize.width * 0.35,
+                  justifyContent: "center",
+                  alignItems: " center",
+                  border: "10px ridge rgb(253, 179, 140)",
+                  boxShadow: "0px 0px 8px 2px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <Image
+                  src={pictures[i + 1].imageSrc}
+                  layout={"fixed"}
+                  height={windowSize.width * 0.35}
+                  width={windowSize.width * 0.35}
+                  unoptimized={true}
+                />
+                <div
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    marginTop: "10px",
+                    textAlign: "right",
+                    marginLeft: "10px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      backgroundColor: "rgba(253, 179, 140, 0.3)",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <p style={{ margin: "0px 5px" }}>
+                      {pictures[i + 1].drawer} |{" "}
+                    </p>
+                    <AiFillLike size="1rem" color="black" />
+                    <p style={{ margin: "0px 5px" }}> {pictures[i + 1].like}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+        i++;
+      } else {
+        result.push(
+          <>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                marginBottom: windowSize.width * 0.15,
+                justifyContent: "space-between",
+              }}
+            >
+              <div
+                style={{
+                  display: "inline",
+                  width: windowSize.width * 0.35,
+                  height: windowSize.width * 0.35,
+                  justifyContent: "center",
+                  alignItems: " center",
+                  border: "10px ridge rgb(253, 179, 140)",
+                  boxShadow: "0px 0px 8px 2px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <Image
+                  src={pictures[i].imageSrc}
+                  layout={"fixed"}
+                  height={windowSize.width * 0.35}
+                  width={windowSize.width * 0.35}
+                  unoptimized={true}
+                />
+                <div
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    marginTop: "10px",
+                    textAlign: "right",
+                    marginLeft: "10px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      backgroundColor: "rgba(253, 179, 140, 0.3)",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <p style={{ margin: "0px 5px" }}>{pictures[i].drawer} | </p>
+                    <AiFillLike size="1rem" color="black" />
+                    <p style={{ margin: "0px 5px" }}> {pictures[i].like}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+      }
+    }
+    return result;
+  };
+
   return (
-    <div ref={outerDivRef} className={styles.App}>
-      <div className={styles.Header}>
+    <div className={styles.App}>
+      <article>{rendering()}</article>
+      <header>
         <div
-          style={{ border: "2px solid white", width: "90%", marginLeft: "5%" }}
-        ></div>
-        <h2
           style={{
-            margin: "5px 0px",
-            fontFamily: "SEBANG_Gothic_Bold, cursive",
-            color: "white",
+            display: "flex",
+            width: windowSize.width,
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            borderBottomLeftRadius: "80px",
+            borderBottomRightRadius: "80px",
+            backgroundColor: "rgb(253, 179, 140)",
+            boxShadow: "0px 0px 20px 5px rgba(0, 0, 0, 0.4)",
           }}
         >
-          {userName} 미술관
-        </h2>
-      </div>
-      <div className={styles.footer}>
-        <button
-          className={styles.buttonStyle}
-          onClick={() => router.push("/MyCanvas")}
+          <h2
+            style={{
+              display: "inline",
+              margin: "0px",
+              fontFamily: "SEBANG_Gothic_Bold, cursive",
+              fontSize: "2.2rem",
+              color: "white",
+              textAlign: "center",
+              textShadow: "2px 2px 5px black",
+            }}
+          >
+            {userName} 미술관
+          </h2>
+        </div>
+      </header>
+      <footer
+        style={{
+          position: "fixed",
+          width: windowSize.width,
+          height: windowSize.height * 0.2,
+          bottom: 0,
+          zIndex: 3,
+          margin: "-1px 0px",
+          boxShadow: "0px -3px 5px 5px rgba(251, 240, 219, 1)",
+        }}
+      >
+        <Image
+          src={footer}
+          width={windowSize.width}
+          height={windowSize.height * 0.2}
+        />
+      </footer>
+      <footer
+        style={{
+          position: "fixed",
+          bottom: 0,
+          width: windowSize.width * 0.75 + 60,
+          height: "20%",
+          color: "white",
+          fontWeight: "bold",
+          justifyContent: "right",
+          alignItems: "center",
+          backgroundColor: "rgba(0, 0, 0, 0)",
+          zIndex: 4,
+        }}
+      >
+        <div
+          style={{
+            display: "block",
+            textAlign: "right",
+            marginTop: windowSize.height * 0.025,
+          }}
         >
-          그림 그리기
-        </button>
-        <button className={styles.buttonStyle}>새로운 미술관 만들기</button>
-      </div>
-      <div className={styles.inner}>
-        <Image src={frame} />
-      </div>
-      <div className="divider"></div>
-      <div className={styles.inner}>
-        <Image src={frame} />
-      </div>
-      <div className="divider"></div>
-      <div className={styles.inner}>
-        <Image src={frame} />
-      </div>
-      <div className="divider"></div>
-
-      <style jsx>{``}</style>
+          <button
+            className={styles.buttonStyle}
+            onClick={() => router.push("/MyCanvas")}
+          >
+            <p style={{ margin: "0px 0px", fontSize: "1.15rem" }}>
+              그림 그리기
+            </p>
+          </button>
+        </div>
+        <div style={{ display: "block", textAlign: "right", marginTop: "5px" }}>
+          <button className={styles.buttonStyle}>
+            <p style={{ margin: "0px 0px", fontSize: "1.15rem" }}>
+              새로운 미술관 만들기
+            </p>
+          </button>
+        </div>
+      </footer>
+      <style jsx>
+        {`
+          article {
+            width: windowSize.width * 0.7 + 60;
+            margin: 18vh 0px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 2;
+          }
+          header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 2;
+          }
+          .firstFrame {
+            width: windowSize.width * 0.7;
+            height: windowSize.width * 0.7;
+            justify-content: center;
+            align-items: center;
+            border: 30px ridge rgb(253, 179, 140);
+            box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.1);
+          }
+          .titleBox {
+            display: flex;
+            width: windowSize.width;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            border-bottom-left-radius: 80px;
+            border-bottom-right-radius: 80px;
+            background-color: rgb(253, 179, 140);
+            box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.4);
+          }
+        `}
+      </style>
     </div>
   );
 };
-
+export const getServerSideProps = async (context: any) => {
+  const results = null;
+  axios
+    .post("http://175.123.140.225:4000/im/imgResponse", {
+      galleryName: `${context.params}`,
+    })
+    .then((res) => {
+      console.log(res.data);
+      //setPictures((pictures) => [...pictures, ...res.data.pResult]);
+      const { results } = res.data;
+      return {
+        props: {
+          results,
+        },
+      };
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  return {
+    props: {
+      results,
+    },
+  };
+};
 export default mygallery;
