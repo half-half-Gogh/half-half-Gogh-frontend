@@ -1,3 +1,4 @@
+
 import React, { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import temp1 from '/public/images/Paint12.jpeg';
@@ -10,6 +11,7 @@ import frame from '/public/images/frame3.png';
 import crown from '/public/images/crown.png';
 import background from '/public/images/background.jpeg';
 import Image from 'next/image';
+
 import styles from "../styles/mygallery.module.css";
 import { AiFillLike } from "react-icons/ai";
 import axios from 'axios';
@@ -136,7 +138,6 @@ const mygallery = () => {
         i++;
       } else {
         result.push(
-          <>
           <div style={{display: 'flex', width: '100%', marginBottom: windowSize.width * 0.15, justifyContent: 'space-between'}}>
             <div style={{display: 'inline', width: windowSize.width * 0.35, height: windowSize.width * 0.35, justifyContent: 'center', alignItems:' center', border: '10px ridge rgb(253, 179, 140)', boxShadow: '0px 0px 8px 2px rgba(0, 0, 0, 0.1)'}}>
               <Image src={pictures[i].imageSrc} layout={"fixed"} height={windowSize.width * 0.35} width={windowSize.width * 0.35} unoptimized={true}/>
@@ -225,6 +226,7 @@ const mygallery = () => {
           }
         `}
       </style>
+
     </div>
   );
 };

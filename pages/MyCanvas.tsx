@@ -4,6 +4,7 @@ import styles from "../styles/MyCanvas.module.css";
 import Picker from "../components/Picker";
 import SaveModal from "../components/SaveModal";
 import axios from "axios";
+import { getRandomString } from "../components/getRandomString";
 
 const MyCanvas = () => {
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
@@ -101,17 +102,20 @@ const MyCanvas = () => {
     // link.click();
     canvasRef.current.toBlob(function (blob) {
       const formData = new FormData();
-      formData.append("hello", blob!, "hello.png");
+      const fileName = getRandomString(10);
+      formData.append("halfhalfgogh", blob!, `${fileName}.png`);
 
       // Post via axios or other transport method
       axios
         .post("https://alexjun12.loca.lt/im/upload", formData)
         .then(function (response) {
-          console.log(response);
-          axios.post("https://alexjun12.loca.lt/im/upload", {
-            userid: response.data.userid,
-            writername: response.data.writername,
-          });
+          if (fileName === response.data.fileName) {
+            axios.post("https://alexjun12.loca.lt/im/imgInfo", {
+              galleryName: "조준영",
+              drawer: nickName,
+              imgId: response.data.fileName,
+            });
+          }
         })
         .catch(function (error) {
           console.log(error);
