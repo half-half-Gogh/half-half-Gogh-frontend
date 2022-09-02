@@ -5,7 +5,6 @@ import styles from "../styles/main.module.css";
 import Image from "next/image";
 import title from "/public/images/title_img.png";
 import { TiKey, TiUser } from "react-icons/ti";
-
 import axios from 'axios';
 
 const main = () => {
