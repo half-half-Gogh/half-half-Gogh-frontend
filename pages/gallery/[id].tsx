@@ -6,9 +6,6 @@ import temp3 from "/public/images/Paint13.jpeg";
 import temp4 from "/public/images/Paint14.jpeg";
 import temp5 from "/public/images/Paint15.jpeg";
 import footer from "/public/images/footer.jpeg";
-import frame from "/public/images/frerame3.png";
-import crown from "/public/images/crown.png";
-import background from "/public/images/background.jpeg";
 import Image from "next/image";
 import {
   GetServerSideProps,
@@ -18,17 +15,24 @@ import {
 import styles from "../../styles/mygallery.module.css";
 import { AiFillLike } from "react-icons/ai";
 import axios from "axios";
+import Modal from "react-modal";
+
 type Props = {
   results: string[];
 };
 
 const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
+
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
   });
   const router = useRouter();
   const userName = router.query.username;
+  //const [pictures, setPictures] = useState<Array<string>>([]);
+  const [nowPic, setNowPic] = useState<any>();
+  const [bigpic, setBigPic] = useState<boolean>(false);
+  
   useEffect(() => {
     if (window.innerWidth <= 500) {
       setWindowSize({
@@ -116,6 +120,10 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                 height={windowSize.width * 0.7}
                 width={windowSize.width * 0.7}
                 unoptimized={true}
+                onClick={() => {
+                  setNowPic(pictures[i].imageSrc);
+                  setBigPic(true);
+                }}
               />
             </div>
             <div
@@ -142,6 +150,7 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
           </>
         );
       } else if (i != pictures.length - 1) {
+        i++;
         result.push(
           <>
             <div
@@ -164,11 +173,61 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                 }}
               >
                 <Image
+                  src={pictures[i - 1].imageSrc}
+                  layout={"fixed"}
+                  height={windowSize.width * 0.35}
+                  width={windowSize.width * 0.35}
+                  unoptimized={true}
+                  onClick={() => {
+                    setNowPic(pictures[i - 1].imageSrc);
+                    setBigPic(true);
+                  }}
+                />
+                <div
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    marginTop: "10px",
+                    textAlign: "right",
+                    marginLeft: "10px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      backgroundColor: "rgba(253, 179, 140, 0.3)",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <p style={{ margin: "0px 5px" }}>
+                      {pictures[i - 1].drawer} |{" "}
+                    </p>
+                    <AiFillLike size="1rem" color="black" />
+                    <p style={{ margin: "0px 5px" }}> {pictures[i - 1].like}</p>
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "inline",
+                  width: windowSize.width * 0.35,
+                  height: windowSize.width * 0.35,
+                  justifyContent: "center",
+                  alignItems: " center",
+                  border: "10px ridge rgb(253, 179, 140)",
+                  boxShadow: "0px 0px 8px 2px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <Image
                   src={pictures[i].imageSrc}
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
+                  onClick={() => {
+                    setNowPic(pictures[i].imageSrc);
+                    setBigPic(true);
+                  }}
                 />
                 <div
                   style={{
@@ -192,52 +251,9 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                   </div>
                 </div>
               </div>
-              <div
-                style={{
-                  display: "inline",
-                  width: windowSize.width * 0.35,
-                  height: windowSize.width * 0.35,
-                  justifyContent: "center",
-                  alignItems: " center",
-                  border: "10px ridge rgb(253, 179, 140)",
-                  boxShadow: "0px 0px 8px 2px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <Image
-                  src={pictures[i + 1].imageSrc}
-                  layout={"fixed"}
-                  height={windowSize.width * 0.35}
-                  width={windowSize.width * 0.35}
-                  unoptimized={true}
-                />
-                <div
-                  style={{
-                    display: "block",
-                    width: "100%",
-                    marginTop: "10px",
-                    textAlign: "right",
-                    marginLeft: "10px",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "inline-flex",
-                      backgroundColor: "rgba(253, 179, 140, 0.3)",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <p style={{ margin: "0px 5px" }}>
-                      {pictures[i + 1].drawer} |{" "}
-                    </p>
-                    <AiFillLike size="1rem" color="black" />
-                    <p style={{ margin: "0px 5px" }}> {pictures[i + 1].like}</p>
-                  </div>
-                </div>
-              </div>
             </div>
           </>
         );
-        i++;
       } else {
         result.push(
           <>
@@ -266,6 +282,10 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
+                  onClick={() => {
+                    setNowPic(pictures[i].imageSrc);
+                    setBigPic(true);
+                  }}
                 />
                 <div
                   style={{
@@ -384,6 +404,35 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
           </button>
         </div>
       </footer>
+      <Modal
+        isOpen={bigpic}
+        closeTimeoutMS={500}
+        overlayClassName={{
+          base: styles.overlayBase,
+          afterOpen: styles.overlayAfter,
+          beforeClose: styles.overlayBefore,
+        }}
+        className={{
+          base: styles.contentBase,
+          afterOpen: styles.contentAfter,
+          beforeClose: styles.contentBefore,
+        }}
+      >
+        <div>
+          <div onClick={() => setBigPic(false)}>
+            <p style={{ display: "inline", lineHeight: 1 }}>X</p>
+          </div>
+          <div>
+            <Image
+              src={nowPic}
+              layout={"fixed"}
+              height={windowSize.width * 0.7}
+              width={windowSize.width * 0.7}
+              unoptimized={true}
+            />
+          </div>
+        </div>
+      </Modal>
       <style jsx>
         {`
           article {
