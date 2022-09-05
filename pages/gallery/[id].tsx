@@ -18,12 +18,11 @@ import axios from "axios";
 import Modal from "react-modal";
 
 type Props = {
-  results: any;
+  results: string[];
 };
 
-const mygallery = ({
-  results,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
+
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
@@ -33,7 +32,7 @@ const mygallery = ({
   //const [pictures, setPictures] = useState<Array<string>>([]);
   const [nowPic, setNowPic] = useState<any>();
   const [bigpic, setBigPic] = useState<boolean>(false);
-
+  
   useEffect(() => {
     if (window.innerWidth <= 500) {
       setWindowSize({
@@ -67,33 +66,33 @@ const mygallery = ({
   }, []);
 */
   const pictures: any = [
+    // {
+    //   imageSrc: temp5,
+    //   like: "10",
+    //   drawer: "김형국",
+    // },
+    // {
+    //   imageSrc: temp2,
+    //   like: "7",
+    //   drawer: "조준영",
+    // },
+    // {
+    //   imageSrc: temp3,
+    //   like: "4",
+    //   drawer: "서창희",
+    // },
     {
-      imageSrc: "/images/Paint12.jpeg",
-      like: "10",
-      drawer: "김형국",
-    },
-    {
-      imageSrc: "/images/Paint11.jpeg",
-      like: "7",
-      drawer: "조준영",
-    },
-    {
-      imageSrc: "/images/Paint13.jpeg",
-      like: "4",
-      drawer: "서창희",
-    },
-    {
-      imageSrc: "/images/Paint14.jpeg",
+      imageSrc: "http://211.62.179.135:4000/" + results[0],
       like: "3",
       drawer: "구정민",
     },
     {
-      imageSrc: "/images/Paint15.jpeg",
+      imageSrc: "http://211.62.179.135:4000/" + results[1],
       like: "2",
       drawer: "보리",
     },
     {
-      imageSrc: "/images/Paint12.jpeg",
+      imageSrc: "http://211.62.179.135:4000/" + results[2],
       like: "1",
       drawer: "밤톨이",
     },
@@ -480,27 +479,29 @@ const mygallery = ({
   );
 };
 export const getServerSideProps = async (context: any) => {
-  const results = null;
-  axios
-    .post("http://175.123.140.225:4000/im/imgResponse", {
-      galleryName: `${context.params}`,
+  //"http://175.123.140.225:4000/im/imgResponse"
+  var result: any = null;
+  await axios
+    .post("http://211.62.179.135:4000/im/imgResponse", {
+      galleryName: `${context.params.id}`,
     })
     .then((res) => {
-      console.log(res.data);
       //setPictures((pictures) => [...pictures, ...res.data.pResult]);
-      const { results } = res.data;
+      //const { results } = res.data.pResult;
+      result = res.data.pResult;
       return {
         props: {
-          results,
+          results: res.data.pResult,
         },
       };
     })
     .catch((err) => {
       console.error(err);
     });
+
   return {
     props: {
-      results,
+      results: result,
     },
   };
 };
