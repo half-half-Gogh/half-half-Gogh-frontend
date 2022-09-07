@@ -14,9 +14,7 @@ const main = () => {
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
   const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
   const [userName, setUserName] = useState<string>("밤톨이멍멍");
-  const [userLink, setUserLink] = useState<string>(
-    "http://www.half-go.io/?username=123"
-  );
+  const [userLink, setUserLink] = useState<string>("http://www.half-go.io/");
   const [copyMessage, setCopyMessage] =
     useState<string>("미술관을 친구들에게 홍보하자!");
   const [loginID, setLoginID] = useState<string>("");
@@ -27,7 +25,9 @@ const main = () => {
   const [signUpPWCheck, setSignUpPWCheck] = useState<string>("");
   const [checkCorrect, setCheckCorrect] = useState<boolean>(false);
   const [permitSignUp, setPermitSignUp] = useState<boolean>(true);
-
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
+  const [failModal, setFailModal] = useState(false);
+  const [loginFail, setLoginFail] = useState(false);
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -46,9 +46,18 @@ const main = () => {
       .then(function (response) {
         console.log(response.data);
         if (typeof window !== "undefined") {
+          // const 응답 = response.data.뭐시기
+          // const 유저닉네임 = 뭐시기
+          // setUserName(뭐시기)
+          // setUserLink(`http://www.half-go.io/gallery/${뭐시기}`)
           sessionStorage.setItem("loginStatus", "true");
           sessionStorage.setItem("loginUserId", `${loginID}`);
           sessionStorage.setItem("loginUserName", `${loginID}`);
+          setLoginSuccess(true);
+          setLoginFail(false);
+        } else {
+          setLoginSuccess(true);
+          setLoginFail(true);
         }
       })
       .catch(function (error) {
@@ -65,6 +74,9 @@ const main = () => {
       })
       .then(function (response) {
         console.log(response.data);
+        //if(response.data.signin == "success")
+        setSignUpSuccess(true);
+        setFailModal(true);
       })
       .catch(function (error) {
         console.error(error);
@@ -94,6 +106,7 @@ const main = () => {
     ) {
       setPermitSignUp(false);
     }
+    setLoginFail(false);
   }, [signUpID, galleryName, signUpPWCheck, checkCorrect]);
 
   return (
@@ -201,6 +214,42 @@ const main = () => {
         </a>
       </button>
       <Modal
+        isOpen={loginFail}
+        closeTimeoutMS={200}
+        overlayClassName={{
+          base: styles.minioverlayBase,
+          afterOpen: styles.minioverlayAfter,
+          beforeClose: styles.minioverlayBefore,
+        }}
+        className={{
+          base: styles.minicontentBase,
+          afterOpen: styles.minicontentAfter,
+          beforeClose: styles.minicontentBefore,
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            fontSize: "1.5rem",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <p>로그인 실패</p>
+          <button
+            className={"failBtn"}
+            onClick={() => {
+              setLoginFail(false);
+            }}
+          >
+            확인
+          </button>
+        </div>
+      </Modal>
+      <Modal
         isOpen={signUpModal}
         closeTimeoutMS={200}
         overlayClassName={{
@@ -214,183 +263,284 @@ const main = () => {
           beforeClose: styles.contentBefore,
         }}
       >
-        <div style={{ width: "100%", height: "100%" }}>
-          <div
-            style={{
-              height: "15%",
-              backgroundColor: "#f3c5c5",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <span style={{ display: "inline", color: "#CD5C5C" }}>
-              회원가입
-            </span>
-          </div>
-          <div
-            style={{
-              height: "85%",
-              backgroundColor: "#f6e7d8",
-              borderTopLeftRadius: "10px",
-              borderTopRightRadius: "10px",
-            }}
-          >
+        {signUpSuccess ? (
+          <div style={{ width: "100%", height: "100%" }}>
             <div
               style={{
-                display: "grid",
-                textAlign: "left",
-                width: "90%",
-                height: "20%",
-                marginLeft: "5%",
-                alignItems: "flex-end",
-              }}
-            >
-              <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
-                미술관 이름 (최대 5섯글자)
-              </p>
-              <input
-                style={{
-                  border: "2px solid #575757",
-                  height: "70%",
-                  background: "#ece7e2",
-                  borderRadius: "5px",
-                }}
-                maxLength={5}
-                onChange={(e) => setGalleryName(e.target.value)}
-              />
-            </div>
-            <div
-              style={{
-                display: "grid",
-                textAlign: "left",
-                width: "90%",
-                height: "20%",
-                marginLeft: "5%",
-                alignItems: "flex-end",
-              }}
-            >
-              <p style={{ fontSize: "1rem", margin: "0px 0px" }}>아이디</p>
-              <input
-                style={{
-                  border: "2px solid #575757",
-                  height: "70%",
-                  background: "#ece7e2",
-                  borderRadius: "5px",
-                }}
-                onChange={(e) => setSignUpID(e.target.value)}
-              />
-            </div>
-            <div
-              style={{
-                display: "grid",
-                textAlign: "left",
-                width: "90%",
-                height: "20%",
-                marginLeft: "5%",
-                alignItems: "flex-end",
-              }}
-            >
-              <p style={{ fontSize: "1rem", margin: "0px 0px" }}>비밀번호</p>
-              <input
-                style={{
-                  border: "2px solid #575757",
-                  height: "70%",
-                  background: "#ece7e2",
-                  borderRadius: "5px",
-                }}
-                type={"password"}
-                onChange={(e) => setSignUpPW(e.target.value)}
-              />
-            </div>
-            <div
-              style={{
-                display: "grid",
-                textAlign: "left",
-                width: "90%",
-                height: "20%",
-                marginLeft: "5%",
-                alignItems: "flex-end",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <p
-                  style={{
-                    display: "inline",
-                    fontSize: "1rem",
-                    margin: "0px 0px",
-                  }}
-                >
-                  비밀번호 확인
-                </p>
-                {checkCorrect ? (
-                  <p
-                    style={{
-                      display: "inline",
-                      fontSize: "1rem",
-                      margin: "0px 0px",
-                    }}
-                  >
-                    ✔️
-                  </p>
-                ) : signUpPWCheck == "" ? (
-                  <p
-                    style={{
-                      display: "inline",
-                      fontSize: "1rem",
-                      margin: "0px 0px",
-                    }}
-                  ></p>
-                ) : (
-                  <p
-                    style={{
-                      display: "inline",
-                      fontSize: "1rem",
-                      margin: "0px 0px",
-                    }}
-                  >
-                    불일치
-                  </p>
-                )}
-              </div>
-              <input
-                style={{
-                  border: "2px solid #575757",
-                  height: "70%",
-                  background: "#ece7e2",
-                  borderRadius: "5px",
-                }}
-                type={"password"}
-                onChange={(e) => setSignUpPWCheck(e.target.value)}
-              />
-            </div>
-            <div
-              style={{
+                height: "15%",
+                backgroundColor: "#f3c5c5",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                width: "92.5%",
-                height: "20%",
-                marginLeft: "3.75%",
               }}
             >
-              <div className={"btnZone"}>
-                <button
-                  className={"modalBtn"}
-                  onClick={() => {
-                    signUp();
+              <span style={{ display: "inline", color: "#CD5C5C" }}>
+                회원가입
+              </span>
+            </div>
+            <div
+              style={{
+                height: "85%",
+                width: "100%",
+                backgroundColor: "#f6e7d8",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+                display: "inline-block",
+                justifyContent: "center",
+              }}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  textAlign: "center",
+                  width: "90%",
+                  height: "100%",
+                  marginLeft: "5%",
+                  alignItems: "center",
+                }}
+              >
+                <p>로그인에 성공하셨습니다 !</p>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                  disabled={permitSignUp}
                 >
-                  <p style={{ margin: "0" }}>가입하기</p>
-                </button>
-              </div>
-              <div className={"btnZone"} onClick={() => setSignUpModal(false)}>
-                <button className={"modalBtn"}>메인으로</button>
+                  <button
+                    className={"successBtn"}
+                    onClick={() => setSignUpModal(false)}
+                  >
+                    메인으로
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div style={{ width: "100%", height: "100%" }}>
+            {
+              <Modal
+                isOpen={failModal}
+                closeTimeoutMS={200}
+                overlayClassName={{
+                  base: styles.minioverlayBase,
+                  afterOpen: styles.minioverlayAfter,
+                  beforeClose: styles.minioverlayBefore,
+                }}
+                className={{
+                  base: styles.minicontentBase,
+                  afterOpen: styles.minicontentAfter,
+                  beforeClose: styles.minicontentBefore,
+                }}
+              >
+                <div
+                  style={{
+                    display: "grid",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    fontSize: "1.5rem",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <p>가 중복 됩니다!</p>
+                  <button
+                    className={"failBtn"}
+                    onClick={() => {
+                      setFailModal(false);
+                    }}
+                  >
+                    확인
+                  </button>
+                </div>
+              </Modal>
+            }
+            <div
+              style={{
+                height: "15%",
+                backgroundColor: "#f3c5c5",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <span style={{ display: "inline", color: "#CD5C5C" }}>
+                회원가입
+              </span>
+            </div>
+            <div
+              style={{
+                height: "85%",
+                backgroundColor: "#f6e7d8",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+              }}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  textAlign: "left",
+                  width: "90%",
+                  height: "20%",
+                  marginLeft: "5%",
+                  alignItems: "flex-end",
+                }}
+              >
+                <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
+                  미술관 이름 (최대 5섯글자)
+                </p>
+                <input
+                  style={{
+                    border: "2px solid #575757",
+                    height: "70%",
+                    background: "#ece7e2",
+                    borderRadius: "5px",
+                  }}
+                  maxLength={5}
+                  onChange={(e) => setGalleryName(e.target.value)}
+                />
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  textAlign: "left",
+                  width: "90%",
+                  height: "20%",
+                  marginLeft: "5%",
+                  alignItems: "flex-end",
+                }}
+              >
+                <p style={{ fontSize: "1rem", margin: "0px 0px" }}>아이디</p>
+                <input
+                  style={{
+                    border: "2px solid #575757",
+                    height: "70%",
+                    background: "#ece7e2",
+                    borderRadius: "5px",
+                  }}
+                  onChange={(e) => setSignUpID(e.target.value)}
+                />
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  textAlign: "left",
+                  width: "90%",
+                  height: "20%",
+                  marginLeft: "5%",
+                  alignItems: "flex-end",
+                }}
+              >
+                <p style={{ fontSize: "1rem", margin: "0px 0px" }}>비밀번호</p>
+                <input
+                  style={{
+                    border: "2px solid #575757",
+                    height: "70%",
+                    background: "#ece7e2",
+                    borderRadius: "5px",
+                  }}
+                  type={"password"}
+                  onChange={(e) => setSignUpPW(e.target.value)}
+                />
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  textAlign: "left",
+                  width: "90%",
+                  height: "20%",
+                  marginLeft: "5%",
+                  alignItems: "flex-end",
+                }}
+              >
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <p
+                    style={{
+                      display: "inline",
+                      fontSize: "1rem",
+                      margin: "0px 0px",
+                    }}
+                  >
+                    비밀번호 확인
+                  </p>
+                  {checkCorrect ? (
+                    <p
+                      style={{
+                        display: "inline",
+                        fontSize: "1rem",
+                        margin: "0px 0px",
+                      }}
+                    >
+                      ✔️
+                    </p>
+                  ) : signUpPWCheck == "" ? (
+                    <p
+                      style={{
+                        display: "inline",
+                        fontSize: "1rem",
+                        margin: "0px 0px",
+                      }}
+                    ></p>
+                  ) : (
+                    <p
+                      style={{
+                        display: "inline",
+                        fontSize: "1rem",
+                        margin: "0px 0px",
+                      }}
+                    >
+                      불일치
+                    </p>
+                  )}
+                </div>
+                <input
+                  style={{
+                    border: "2px solid #575757",
+                    height: "70%",
+                    background: "#ece7e2",
+                    borderRadius: "5px",
+                  }}
+                  type={"password"}
+                  onChange={(e) => setSignUpPWCheck(e.target.value)}
+                />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "92.5%",
+                  height: "20%",
+                  marginLeft: "3.75%",
+                }}
+              >
+                <div className={"btnZone"}>
+                  <button
+                    className={"modalBtn"}
+                    onClick={() => {
+                      signUp();
+                    }}
+                    disabled={permitSignUp}
+                  >
+                    <p style={{ margin: "0" }}>가입하기</p>
+                  </button>
+                </div>
+                <div
+                  className={"btnZone"}
+                  onClick={() => setSignUpModal(false)}
+                >
+                  <button className={"modalBtn"}>메인으로</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </Modal>
       <Modal
         isOpen={loginSuccess}
@@ -506,6 +656,52 @@ const main = () => {
           .modalBtn:active {
             box-shadow: 0px 0px 0px 0px #f3c5c5;
             margin-top: 15px;
+            margin-bottom: 5px;
+          }
+          .successBtn {
+            display: block;
+            position: relative;
+            float: left;
+            width: 50%;
+            height: 40%;
+            margin: 2% 3% 1% 3%;
+            font-weight: 200;
+            text-align: center;
+            color: #cd5c5c;
+            border-radius: 5%;
+            transition: all 0.2s;
+            box-shadow: 0px 0px 0px 0px #f3c5c5;
+            background: #ffc3c3;
+            font-family: "KOTRAHOPE", cursive;
+            border-color: #ffc3c3;
+            font-size: 1.2rem;
+          }
+          .successBtn:active {
+            box-shadow: 0px 0px 0px 0px #f3c5c5;
+            margin-top: 15px;
+            margin-bottom: 5px;
+          }
+          .failBtn {
+            display: block;
+            position: relative;
+            float: left;
+            width: 100%;
+            height: 70%;
+            margin: 2% 3% 1% 3%;
+            font-weight: 200;
+            text-align: center;
+            color: #cd5c5c;
+            border-radius: 5%;
+            transition: all 0.2s;
+            box-shadow: 0px 0px 0px 0px #f3c5c5;
+            background: #ffc3c3;
+            font-family: "KOTRAHOPE", cursive;
+            border-color: #ffc3c3;
+            font-size: 1.2rem;
+            margin-bottom: 20%;
+          }
+          .failBtn:active {
+            box-shadow: 0px 0px 0px 0px #f3c5c5;
             margin-bottom: 5px;
           }
           input::placeholder {

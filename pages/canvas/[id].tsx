@@ -340,10 +340,12 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
             margin-right: 10%;
             font-size: 1.5rem;
             text-align: center;
+            color: #3e4356;
           }
           .inputZone {
             margin-top: 15%;
             font-size: 2rem;
+            color: #3e4356;
             margin-bottom: 5%;
           }
           .drawerInput {

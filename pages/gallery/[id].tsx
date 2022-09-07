@@ -39,7 +39,7 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
     if (typeof window !== "undefined") {
       const status: any = sessionStorage.getItem("loginStatus");
       const userName: any = sessionStorage.getItem("loginUserName");
-      const userId: any = sessionStorage.getItem("loginUserName");
+      const userId: any = sessionStorage.getItem("loginUserId");
       setLoginStatus(status);
       setLoginUserName(userName);
       setLoginUserId(userId);

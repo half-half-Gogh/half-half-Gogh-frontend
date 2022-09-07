@@ -34,6 +34,8 @@
   position: absolute;
   width: 60%;
   height: 45%;
+  max-width: 500px;
+  max-height: 900px;
   border: 5px solid #f3c5c5;
   background: #f6e7d8;
   overflow: auto;
@@ -47,6 +49,8 @@
 .contentAfter {
   width: 60%;
   height: 45%;
+  max-width: 500px;
+  max-height: 900px;
   background-color: #f3c5c5;
 }
 
@@ -54,4 +58,66 @@
   width: 0%;
   height: 0%;
   background-color: transparent;
+}
+.minioverlayBase {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition-property: background-color, opacity;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  outline: 0;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.minioverlayAfter {
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 1;
+}
+
+.minioverlayBefore {
+  background-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+}
+
+.minicontentBase {
+  background-color: transparent;
+  transition-property: background-color, width, height;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  position: absolute;
+  width: 45%;
+  height: 15%;
+  max-width: 225px;
+  max-height: 135px;
+  border: 5px solid #f3c5c5;
+  background: #f6e7d8;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  outline: none;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.minicontentAfter {
+  width: 45%;
+  height: 15%;
+  max-width: 225px;
+  max-height: 135px;
+  z-index: 2;
+}
+
+.minicontentBefore {
+  width: 0%;
+  height: 0%;
 }
