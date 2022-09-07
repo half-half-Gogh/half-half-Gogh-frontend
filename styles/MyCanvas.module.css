@@ -110,18 +110,17 @@
   display: inline-block;
 }
 .popover {
-  position: absolute;
   z-index: 2;
   background-color: #fff;
   border-radius: 2%;
-  border: 2px groove white;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-
-  display: flex;
+  border: 3px solid #f3c5c5;
   align-items: center;
   justify-content: center;
-  left: 28%;
-  bottom: 43%;
+}
+.picker {
+  width: 20%;
+  height: 10vh;
 }
 .cover {
   position: fixed;

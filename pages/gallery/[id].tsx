@@ -22,7 +22,6 @@ type Props = {
 };
 
 const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
-
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
@@ -32,8 +31,19 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
   //const [pictures, setPictures] = useState<Array<string>>([]);
   const [nowPic, setNowPic] = useState<any>();
   const [bigpic, setBigPic] = useState<boolean>(false);
-  
+  const [loginStatus, setLoginStatus] = useState<string>();
+  const [loginUserId, setLoginUserId] = useState<string>();
+  const [loginUserName, setLoginUserName] = useState<string>();
+
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const status: any = sessionStorage.getItem("loginStatus");
+      const userName: any = sessionStorage.getItem("loginUserName");
+      const userId: any = sessionStorage.getItem("loginUserName");
+      setLoginStatus(status);
+      setLoginUserName(userName);
+      setLoginUserId(userId);
+    }
     if (window.innerWidth <= 500) {
       setWindowSize({
         width: window.innerWidth,
@@ -81,21 +91,21 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
     //   like: "4",
     //   drawer: "서창희",
     // },
-    {
-      imageSrc: "http://211.62.179.135:4000/" + results[0],
-      like: "3",
-      drawer: "구정민",
-    },
-    {
-      imageSrc: "http://211.62.179.135:4000/" + results[1],
-      like: "2",
-      drawer: "보리",
-    },
-    {
-      imageSrc: "http://211.62.179.135:4000/" + results[2],
-      like: "1",
-      drawer: "밤톨이",
-    },
+    // {
+    //   imageSrc: "http://211.62.179.135:4000/" + results[0],
+    //   like: "3",
+    //   drawer: "구정민",
+    // },
+    // {
+    //   imageSrc: "http://211.62.179.135:4000/" + results[1],
+    //   like: "2",
+    //   drawer: "보리",
+    // },
+    // {
+    //   imageSrc: "http://211.62.179.135:4000/" + results[2],
+    //   like: "1",
+    //   drawer: "밤톨이",
+    // },
   ];
 
   const rendering = () => {
@@ -397,9 +407,23 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
           </button>
         </div>
         <div style={{ display: "block", textAlign: "right", marginTop: "5px" }}>
-          <button className={styles.buttonStyle}>
+          <button
+            className={styles.buttonStyle}
+            onClick={() => {
+              if (loginStatus == "true") {
+                router.push({
+                  pathname: `/gallery/${loginUserName}`,
+                  query: { username: loginUserName },
+                });
+              } else {
+                router.push({
+                  pathname: `/main/`,
+                });
+              }
+            }}
+          >
             <p style={{ margin: "0px 0px", fontSize: "1.15rem" }}>
-              새로운 미술관 만들기
+              {loginStatus === "true" ? "내 미술관 가기" : "내 미술관 만들기"}
             </p>
           </button>
         </div>
