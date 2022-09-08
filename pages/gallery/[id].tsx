@@ -13,26 +13,34 @@ import {
   InferGetServerSidePropsType,
 } from "next";
 import styles from "../../styles/mygallery.module.css";
-import { AiFillLike } from "react-icons/ai";
+import { TiHeartOutline, TiHeartFullOutline } from "react-icons/ti";
 import axios from "axios";
 import Modal from "react-modal";
+import classnames from "classnames";
 
-type Props = {
-  results: string[];
+type resultType = {
+  src: string;
+  drawer: string;
+  like: string[];
 };
 
-const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
+const SERVER = "http://211.62.179.135:4000/";
+/*
+const mygallery = ({
+  results,
+  galleryName,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  */
 
+const mygallery = () => {
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
   });
   const router = useRouter();
-  const userName = router.query.username;
-  //const [pictures, setPictures] = useState<Array<string>>([]);
   const [nowPic, setNowPic] = useState<any>();
   const [bigpic, setBigPic] = useState<boolean>(false);
-  
+
   useEffect(() => {
     if (window.innerWidth <= 500) {
       setWindowSize({
@@ -47,62 +55,39 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
     }
   }, []);
 
-  const postText = () => {
-    axios
-      .post("http://175.123.140.225:4000/im/imgResponse", {
-        galleryName: "조준영",
-      })
-      .then((res) => {
-        console.log(res.data);
-        //setPictures((pictures) => [...pictures, ...res.data.pResult]);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-  /*
-  useEffect(() => {
-    postText();
-  }, []);
-*/
-  const pictures: any = [
-    // {
-    //   imageSrc: temp5,
-    //   like: "10",
-    //   drawer: "김형국",
-    // },
-    // {
-    //   imageSrc: temp2,
-    //   like: "7",
-    //   drawer: "조준영",
-    // },
-    // {
-    //   imageSrc: temp3,
-    //   like: "4",
-    //   drawer: "서창희",
-    // },
+  const results: resultType[] = [
     {
-      imageSrc: "http://211.62.179.135:4000/" + results[0],
-      like: "3",
+      src: "/images/Paint12.jpeg",
+      like: ["1", "1", "1"],
+      drawer: "김형국",
+    },
+    {
+      src: "/images/Paint13.jpeg",
+      like: ["1", "1", "1"],
+      drawer: "조준영",
+    },
+    {
+      src: "/images/Paint11.jpeg",
+      like: ["1", "1", "1"],
+      drawer: "서창희",
+    },
+    {
+      src: "/images/Paint14.jpeg",
+      like: ["1", "1", "1"],
       drawer: "구정민",
     },
     {
-      imageSrc: "http://211.62.179.135:4000/" + results[1],
-      like: "2",
+      src: "/images/Paint15.jpeg",
+      like: ["1", "1", "1"],
       drawer: "보리",
-    },
-    {
-      imageSrc: "http://211.62.179.135:4000/" + results[2],
-      like: "1",
-      drawer: "밤톨이",
     },
   ];
 
   const rendering = () => {
-    const result = [];
-    for (let i = 0; i < pictures.length; i++) {
+    const galleryRender = [];
+    for (let i = 0; i < results.length; i++) {
       if (i == 0) {
-        result.push(
+        galleryRender.push(
           <>
             <div
               style={{
@@ -115,13 +100,13 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
               }}
             >
               <Image
-                src={pictures[i].imageSrc}
+                src={SERVER + results[i].src}
                 layout={"fixed"}
                 height={windowSize.width * 0.7}
                 width={windowSize.width * 0.7}
                 unoptimized={true}
                 onClick={() => {
-                  setNowPic(pictures[i].imageSrc);
+                  setNowPic(SERVER + results[i].src);
                   setBigPic(true);
                 }}
               />
@@ -130,7 +115,7 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
               style={{
                 display: "block",
                 width: "100%",
-                marginTop: "10px",
+                marginTop: "15px",
                 textAlign: "right",
                 marginBottom: windowSize.width * 0.15,
               }}
@@ -140,18 +125,66 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                   display: "inline-flex",
                   backgroundColor: "rgba(253, 179, 140, 0.3)",
                   borderRadius: "5px",
+                  marginRight: "15px",
                 }}
               >
-                <p style={{ margin: "0px 5px" }}>{pictures[i].drawer} | </p>
-                <AiFillLike size="1rem" color="black" />
-                <p style={{ margin: "0px 5px" }}>{pictures[i].like}</p>
+                <p
+                  style={{
+                    marginTop: "5px",
+                    marginBottom: "5px",
+                    marginLeft: "10px",
+                    marginRight: "5px",
+                    color: "rgb(161, 121, 97)",
+                    fontSize: "1.3rem",
+                    fontWeight: 800,
+                  }}
+                >
+                  {results[i].drawer}
+                </p>
+                <p
+                  style={{
+                    marginTop: "5px",
+                    marginBottom: "5px",
+                    marginLeft: "5px",
+                    marginRight: "5px",
+                    color: "rgb(161, 121, 97)",
+                    fontSize: "1.5rem",
+                    fontWeight: 800,
+                  }}
+                >
+                  |
+                </p>
+                <TiHeartOutline
+                  size="1.5rem"
+                  color="rgb(161, 121, 97)"
+                  style={{
+                    marginTop: "6px",
+                    marginBottom: "5px",
+                    marginLeft: "5px",
+                    marginRight: "2px",
+                    fontWeight: 800,
+                  }}
+                />
+                <p
+                  style={{
+                    marginTop: "6px",
+                    marginBottom: "5px",
+                    marginLeft: "2px",
+                    marginRight: "10px",
+                    color: "rgb(161, 121, 97)",
+                    fontSize: "1.3rem",
+                    fontWeight: 800,
+                  }}
+                >
+                  {results[i].like.length}
+                </p>
               </div>
             </div>
           </>
         );
-      } else if (i != pictures.length - 1) {
+      } else if (i != results.length - 1) {
         i++;
-        result.push(
+        galleryRender.push(
           <>
             <div
               style={{
@@ -168,18 +201,18 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                   height: windowSize.width * 0.35,
                   justifyContent: "center",
                   alignItems: " center",
-                  border: "10px ridge rgb(253, 179, 140)",
+                  border: "12px ridge rgb(253, 179, 140)",
                   boxShadow: "0px 0px 8px 2px rgba(0, 0, 0, 0.1)",
                 }}
               >
                 <Image
-                  src={pictures[i - 1].imageSrc}
+                  src={SERVER + results[i - 1].src}
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(pictures[i - 1].imageSrc);
+                    setNowPic(SERVER + results[i - 1].src);
                     setBigPic(true);
                   }}
                 />
@@ -187,7 +220,7 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                   style={{
                     display: "block",
                     width: "100%",
-                    marginTop: "10px",
+                    marginTop: "16px",
                     textAlign: "right",
                     marginLeft: "10px",
                   }}
@@ -197,13 +230,55 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                       display: "inline-flex",
                       backgroundColor: "rgba(253, 179, 140, 0.3)",
                       borderRadius: "5px",
+                      marginRight: "5px",
                     }}
                   >
-                    <p style={{ margin: "0px 5px" }}>
-                      {pictures[i - 1].drawer} |{" "}
+                    <p
+                      style={{
+                        marginTop: "3px",
+                        marginBottom: "3px",
+                        marginLeft: "10px",
+                        marginRight: "3px",
+                        color: "rgb(161, 121, 97)",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      {results[i - 1].drawer}
                     </p>
-                    <AiFillLike size="1rem" color="black" />
-                    <p style={{ margin: "0px 5px" }}> {pictures[i - 1].like}</p>
+                    <p
+                      style={{
+                        marginTop: "3px",
+                        marginBottom: "3px",
+                        marginLeft: "3px",
+                        marginRight: "3px",
+                        color: "rgb(161, 121, 97)",
+                        fontSize: "1.1rem",
+                      }}
+                    >
+                      |
+                    </p>
+                    <TiHeartOutline
+                      size="1.1rem"
+                      color="rgb(161, 121, 97)"
+                      style={{
+                        marginTop: "4px",
+                        marginBottom: "3px",
+                        marginLeft: "3px",
+                        marginRight: "2px",
+                      }}
+                    />
+                    <p
+                      style={{
+                        marginTop: "4px",
+                        marginBottom: "3px",
+                        marginLeft: "2px",
+                        marginRight: "10px",
+                        color: "rgb(161, 121, 97)",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      {results[i - 1].like.length}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -214,18 +289,18 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                   height: windowSize.width * 0.35,
                   justifyContent: "center",
                   alignItems: " center",
-                  border: "10px ridge rgb(253, 179, 140)",
+                  border: "12px ridge rgb(253, 179, 140)",
                   boxShadow: "0px 0px 8px 2px rgba(0, 0, 0, 0.1)",
                 }}
               >
                 <Image
-                  src={pictures[i].imageSrc}
+                  src={SERVER + results[i].src}
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(pictures[i].imageSrc);
+                    setNowPic(SERVER + results[i].src);
                     setBigPic(true);
                   }}
                 />
@@ -245,9 +320,12 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                       borderRadius: "5px",
                     }}
                   >
-                    <p style={{ margin: "0px 5px" }}>{pictures[i].drawer} | </p>
-                    <AiFillLike size="1rem" color="black" />
-                    <p style={{ margin: "0px 5px" }}> {pictures[i].like}</p>
+                    <p style={{ margin: "0px 5px" }}>{results[i].drawer} | </p>
+                    <TiHeartOutline size="1rem" color="black" />
+                    <p style={{ margin: "0px 5px" }}>
+                      {" "}
+                      {results[i].like.length}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -255,7 +333,7 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
           </>
         );
       } else {
-        result.push(
+        galleryRender.push(
           <>
             <div
               style={{
@@ -277,13 +355,13 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                 }}
               >
                 <Image
-                  src={pictures[i].imageSrc}
+                  src={SERVER + results[i].src}
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(pictures[i].imageSrc);
+                    setNowPic(SERVER + results[i].src);
                     setBigPic(true);
                   }}
                 />
@@ -303,9 +381,12 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
                       borderRadius: "5px",
                     }}
                   >
-                    <p style={{ margin: "0px 5px" }}>{pictures[i].drawer} | </p>
-                    <AiFillLike size="1rem" color="black" />
-                    <p style={{ margin: "0px 5px" }}> {pictures[i].like}</p>
+                    <p style={{ margin: "0px 5px" }}>{results[i].drawer} | </p>
+                    <TiHeartOutline size="1rem" color="black" />
+                    <p style={{ margin: "0px 5px" }}>
+                      {" "}
+                      {results[i].like.length}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -314,7 +395,7 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
         );
       }
     }
-    return result;
+    return galleryRender;
   };
 
   return (
@@ -345,7 +426,7 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
               textShadow: "2px 2px 5px black",
             }}
           >
-            {userName} 미술관
+            {/*{galleryName}*/} 미술관
           </h2>
         </div>
       </header>
@@ -413,16 +494,41 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
           beforeClose: styles.overlayBefore,
         }}
         className={{
-          base: styles.contentBase,
-          afterOpen: styles.contentAfter,
+          base: classnames(styles.contentBase, {
+            width: windowSize.width * 0.7 + 60,
+            height: windowSize.width * 0.7 + 60,
+          }),
+          afterOpen: classnames(styles.contentAfter, {
+            width: windowSize.width * 0.7 + 60,
+            height: windowSize.width * 0.7 + 60,
+          }),
           beforeClose: styles.contentBefore,
         }}
       >
-        <div>
-          <div onClick={() => setBigPic(false)}>
+        <div style={{ textAlign: "center" }}>
+          <div
+            onClick={() => setBigPic(false)}
+            style={{
+              display: "flex-inline",
+              width: "100px",
+              marginLeft: windowSize.width * 0.7 - 40,
+              backgroundColor: "white",
+              borderTopLeftRadius: "50px",
+              borderTopRightRadius: "50px",
+            }}
+          >
             <p style={{ display: "inline", lineHeight: 1 }}>X</p>
           </div>
-          <div>
+          <div
+            style={{
+              width: windowSize.width * 0.7,
+              height: windowSize.width * 0.7,
+              justifyContent: "center",
+              alignItems: "center",
+              border: "30px ridge rgb(253, 179, 140)",
+              boxShadow: "0px 0px 10px 5px rgba(0, 0, 0, 0.1)",
+            }}
+          >
             <Image
               src={nowPic}
               layout={"fixed"}
@@ -478,9 +584,11 @@ const mygallery = ({ results }: InferGetServerSidePropsType<Props>) => {
     </div>
   );
 };
+
+/*
 export const getServerSideProps = async (context: any) => {
   //"http://175.123.140.225:4000/im/imgResponse"
-  var result: any = null;
+  var result: resultType[] = [];
   await axios
     .post("http://211.62.179.135:4000/im/imgResponse", {
       galleryName: `${context.params.id}`,
@@ -489,11 +597,12 @@ export const getServerSideProps = async (context: any) => {
       //setPictures((pictures) => [...pictures, ...res.data.pResult]);
       //const { results } = res.data.pResult;
       result = res.data.pResult;
-      return {
-        props: {
-          results: res.data.pResult,
-        },
-      };
+      //console.log(result[0].like[0] + "sdadads");
+      //return {
+      //  props: {
+      //    results: res.data.pResult,
+      //  },
+      //};
     })
     .catch((err) => {
       console.error(err);
@@ -502,7 +611,8 @@ export const getServerSideProps = async (context: any) => {
   return {
     props: {
       results: result,
+      galleryName: context.params.id,
     },
   };
-};
+};*/
 export default mygallery;
