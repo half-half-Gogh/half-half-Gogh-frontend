@@ -3,7 +3,7 @@ body {
   background-color: rgb(251, 240, 219);
   padding: 0;
   margin: 0;
-  font-family: 'KOTRAHOPE', cursive;
+  font-family: "KOTRAHOPE", cursive;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,15 +17,17 @@ body {
 }
 
 @font-face {
-  font-family: 'KOTRAHOPE';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
+  font-family: "KOTRAHOPE";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
- @font-face {
-  font-family: 'SEBANG_Gothic_Bold';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2104@1.0/SEBANG_Gothic_Bold.woff') format('woff');
+@font-face {
+  font-family: "SEBANG_Gothic_Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2104@1.0/SEBANG_Gothic_Bold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
