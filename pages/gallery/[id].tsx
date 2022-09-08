@@ -40,8 +40,19 @@ const mygallery = () => {
   const router = useRouter();
   const [nowPic, setNowPic] = useState<any>();
   const [bigpic, setBigPic] = useState<boolean>(false);
+  const [loginStatus, setLoginStatus] = useState<string>();
+  const [loginUserId, setLoginUserId] = useState<string>();
+  const [loginUserName, setLoginUserName] = useState<string>();
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const status: any = sessionStorage.getItem("loginStatus");
+      const userName: any = sessionStorage.getItem("loginUserName");
+      const userId: any = sessionStorage.getItem("loginUserId");
+      setLoginStatus(status);
+      setLoginUserName(userName);
+      setLoginUserId(userId);
+    }
     if (window.innerWidth <= 500) {
       setWindowSize({
         width: window.innerWidth,
@@ -478,9 +489,23 @@ const mygallery = () => {
           </button>
         </div>
         <div style={{ display: "block", textAlign: "right", marginTop: "5px" }}>
-          <button className={styles.buttonStyle}>
+          <button
+            className={styles.buttonStyle}
+            onClick={() => {
+              if (loginStatus == "true") {
+                router.push({
+                  pathname: `/gallery/${loginUserName}`,
+                  query: { username: loginUserName },
+                });
+              } else {
+                router.push({
+                  pathname: `/main/`,
+                });
+              }
+            }}
+          >
             <p style={{ margin: "0px 0px", fontSize: "1.15rem" }}>
-              새로운 미술관 만들기
+              {loginStatus === "true" ? "내 미술관 가기" : "내 미술관 만들기"}
             </p>
           </button>
         </div>

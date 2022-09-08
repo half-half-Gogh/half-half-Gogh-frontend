@@ -4,10 +4,18 @@ import styles from "../../styles/MyCanvas.module.css";
 import Picker from "../../components/Picker";
 import SaveModal from "../../components/SaveModal";
 import axios from "axios";
+import {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
 import { useRouter } from "next/router";
 import { getRandomString } from "../../components/getRandomString";
+type Props = {
+  galleryName: string;
+};
 
-const MyCanvas = () => {
+const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [down, setDown] = useState<boolean>(false);
@@ -26,7 +34,7 @@ const MyCanvas = () => {
   const array: { x: number; y: number }[] = [];
   const [drawer, setDrawer] = useState("");
   const router = useRouter();
-  const galleryName = router.query.username;
+
   useEffect(() => {
     if (rangeRef.current) {
       rangeRef.current.min = "1";
@@ -48,7 +56,7 @@ const MyCanvas = () => {
     context.fillStyle = "white";
     context.fillRect(0, 0, window.innerWidth, window.innerHeight);
     setCtx(context);
-    console.log(window.innerWidth, window.innerHeight);
+    //console.log(window.innerWidth, window.innerHeight);
   }, []);
   useEffect(() => {
     if (!ctx) return;
@@ -265,7 +273,7 @@ const MyCanvas = () => {
                 <div
                   className={styles.swatch}
                   onClick={() => {
-                    setPickerOpen(true);
+                    if (isStroke) setPickerOpen(true);
                   }}
                 >
                   <div
@@ -277,27 +285,33 @@ const MyCanvas = () => {
                     }}
                   />
                 </div>
+              </div>
+              <div className={styles.widthZone}>
                 {pickerOpen ? (
                   <Picker
                     setPickerOpen={setPickerOpen}
                     pickerColor={pickerColor}
                     pickerChange={pickerChange}
                   ></Picker>
-                ) : null}
-              </div>
-              <div className={styles.widthZone}>
-                <div className="strokeDiv">
-                  <p>{strokeWidth}</p>
-                </div>
+                ) : (
+                  <>
+                    <div className="strokeDiv">
+                      <p>{strokeWidth}</p>
+                    </div>
 
-                <input
-                  className={styles.rangeStyle}
-                  ref={rangeRef}
-                  onChange={() => {
-                    if (rangeRef.current) changeWidth(rangeRef.current.value);
-                  }}
-                  type="range"
-                ></input>
+                    <input
+                      className={styles.rangeStyle}
+                      ref={rangeRef}
+                      min={0}
+                      max={20}
+                      onChange={() => {
+                        if (rangeRef.current)
+                          changeWidth(rangeRef.current.value);
+                      }}
+                      type="range"
+                    ></input>
+                  </>
+                )}
               </div>
             </div>
 
@@ -326,10 +340,12 @@ const MyCanvas = () => {
             margin-right: 10%;
             font-size: 1.5rem;
             text-align: center;
+            color: #3e4356;
           }
           .inputZone {
             margin-top: 15%;
             font-size: 2rem;
+            color: #3e4356;
             margin-bottom: 5%;
           }
           .drawerInput {
@@ -360,5 +376,12 @@ const MyCanvas = () => {
       </style>
     </div>
   );
+};
+export const getServerSideProps = async (context: any) => {
+  return {
+    props: {
+      galleryName: `${context.params.id}`,
+    },
+  };
 };
 export default MyCanvas;

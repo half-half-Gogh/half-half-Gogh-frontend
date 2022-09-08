@@ -1,5 +1,5 @@
 import styles from "../styles/MyCanvas.module.css";
-import { SketchPicker } from "react-color";
+import { CompactPicker } from "react-color";
 type Props = {
   setPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   pickerColor: string;
@@ -14,10 +14,10 @@ const Picker = ({ setPickerOpen, pickerColor, pickerChange }: Props) => {
           setPickerOpen(false);
         }}
       />
-      <SketchPicker
+      <CompactPicker
         color={pickerColor}
         onChange={(color) => pickerChange(color.hex)}
-      ></SketchPicker>
+      ></CompactPicker>
     </div>
   );
 };

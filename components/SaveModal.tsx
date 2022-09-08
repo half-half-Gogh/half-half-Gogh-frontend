@@ -34,55 +34,30 @@ const SaveModal = ({
         beforeClose: styles.contentBefore,
       }}
     >
-      {isSave ? (
-        <div className={styles.galleryBtnZone}>
-          <div className={styles.galleryBtnDiv}>
-            <button
-              className={styles.galleryBtn}
-              onClick={() =>
-                router.push({
-                  pathname: `/main`,
-                })
-              }
-            >
-              내 미술관 만들기
-            </button>
-          </div>
-          <div className={styles.galleryBtnDiv}>
-            <button
-              className={styles.galleryBtn}
-              onClick={() =>
-                router.push({
-                  pathname: `/gallery/${drawer}`,
-                })
-              }
-            >
-              {galleryName} 미술관 둘러보기
-            </button>
-          </div>
+      <div>
+        <p>저장하시겠습니까?</p>
+        <div className={styles.saveBtnZone}>
+          <button
+            className={styles.saveBtn}
+            onClick={() => {
+              saveImage();
+              router.push({
+                //pathname: "/mygallery",
+                pathname: `/gallery/${galleryName}`,
+                query: { username: galleryName },
+              });
+            }}
+          >
+            네
+          </button>
+          <button
+            className={styles.saveBtn}
+            onClick={() => setModalOpen(false)}
+          >
+            아니오
+          </button>
         </div>
-      ) : (
-        <div>
-          <p>저장하시겠습니까?</p>
-          <div className={styles.saveBtnZone}>
-            <button
-              className={styles.saveBtn}
-              onClick={() => {
-                saveImage();
-                setIsSave(true);
-              }}
-            >
-              네
-            </button>
-            <button
-              className={styles.saveBtn}
-              onClick={() => setModalOpen(false)}
-            >
-              아니오
-            </button>
-          </div>
-        </div>
-      )}
+      </div>
     </Modal>
   );
 };
