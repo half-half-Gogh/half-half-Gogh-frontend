@@ -1,0 +1,164 @@
+.overlayBase {
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition-property: background-color, opacity;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  outline: 0;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  touch-action: none;
+  z-index: 11;
+}
+
+.overlayAfter {
+  background-color: rgba(0, 0, 0, 0.8);
+  opacity: 1;
+  z-index: 11;
+}
+
+.overlayBefore {
+  background-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+  z-index: 11;
+}
+
+.contentBase {
+  background-color: transparent;
+  transition-property: background-color, width, height;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  position: absolute;
+  width: 70%;
+  height: 20%;
+  border: 5px solid #f3c5c5;
+  background: #f6e7d8;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 3%;
+  outline: none;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+  max-width: 350px;
+  max-height: 270px;
+  z-index: 11;
+}
+
+.contentAfter {
+  width: 70%;
+  height: 20%;
+  max-width: 350px;
+  max-height: 270px;
+  background-color: #f6e7d8;
+  z-index: 11;
+}
+
+.contentBefore {
+  width: 0%;
+  height: 0%;
+  background-color: transparent;
+  z-index: 11;
+}
+.minioverlayBase {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition-property: background-color, opacity;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  outline: 0;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 12;
+}
+
+.minioverlayAfter {
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 1;
+  z-index: 12;
+}
+
+.minioverlayBefore {
+  background-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+  z-index: 12;
+}
+
+.minicontentBase {
+  background-color: transparent;
+  transition-property: background-color, width, height;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  position: absolute;
+  width: 45%;
+  height: 15%;
+  max-width: 225px;
+  max-height: 135px;
+  border: 5px solid #f3c5c5;
+  background: #f6e7d8;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  outline: none;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  z-index: 12;
+}
+
+.minicontentAfter {
+  width: 45%;
+  height: 15%;
+  max-width: 225px;
+  max-height: 135px;
+  z-index: 12;
+}
+
+.minicontentBefore {
+  width: 0%;
+  height: 0%;
+  z-index: 12;
+}
+
+.btn {
+  display: block;
+  float: left;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  font-weight: 200;
+  text-align: center;
+  line-height: 50px;
+  color: #cd5c5c;
+  border-radius: 5px;
+  transition: all 0.2s;
+  box-shadow: 0px 0px 0px 0px #f3c5c5;
+  background: #ffc3c3;
+  font-family: "KOTRAHOPE", cursive;
+  font-size: 1.6rem;
+  border-color: #ffc3c3;
+}
+.btn:active {
+  box-shadow: 0px 0px 0px 0px #f3c5c5;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
