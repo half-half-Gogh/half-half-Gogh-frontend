@@ -125,7 +125,13 @@ const main = () => {
         </h1>
       </div>
 
-      <div style={{ display: "flex", width: "75%", marginLeft: "12.5%" }}>
+      <div
+        style={{
+          display: "flex",
+          width: "75%",
+          marginLeft: "12.5%",
+        }}
+      >
         <div
           style={{
             display: "block",

@@ -27,7 +27,6 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-
   z-index: 2;
 }
 .titleBox {
@@ -173,4 +172,29 @@
   height: 0%;
   background-color: transparent;
   z-index: 10;
+}
+
+.nameTagBig {
+  display: inline-flex;
+  background-color: rgba(253, 179, 140, 0.3);
+  border-radius: 5px;
+  margin-right: 15px;
+}
+.nameTagSmall {
+  display: inline-flex;
+  background-color: rgba(253, 179, 140, 0.3);
+  border-radius: 5px;
+  margin-right: 5px;
+}
+.nameTagBig:active {
+  /* set time duration to your needs */
+  background: rgba(253, 179, 140, 0.5);
+  color: #fff;
+  box-shadow: none;
+}
+.nameTagSmall:active {
+  /* set time duration to your needs */
+  background: rgba(253, 179, 140, 0.5);
+  color: #fff;
+  box-shadow: none;
 }

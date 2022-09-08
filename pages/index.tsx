@@ -16,7 +16,7 @@ const Home: NextPage = () => {
         <Link href="/main">
           <a style={{ display: "flex" }}>로그인 / 회원가입</a>
         </Link>
-        <Link href="/galley/changh2">
+        <Link href="/gallery/조준영">
           <a style={{ display: "flex" }}>갤러리</a>
         </Link>
       </nav>

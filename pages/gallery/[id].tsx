@@ -13,10 +13,12 @@ import {
   InferGetServerSidePropsType,
 } from "next";
 import styles from "../../styles/mygallery.module.css";
-import { TiHeartOutline, TiHeartFullOutline } from "react-icons/ti";
+import { TiHeartOutline, TiHeartFullOutline, TiTimes } from "react-icons/ti";
 import axios from "axios";
 import Modal from "react-modal";
 import classnames from "classnames";
+import { emit } from "process";
+import LoginModal from "../../components/loginModal";
 
 type resultType = {
   src: string;
@@ -24,15 +26,16 @@ type resultType = {
   like: string[];
 };
 
-const SERVER = "http://211.62.179.135:4000/";
-/*
+//const SERVER = "http://211.62.179.135:4000/";
+//const IMAGE_PATH = "public/images/";
+const SERVER = "";
+const IMAGE_PATH = "";
+
 const mygallery = ({
-  results,
+  result,
   galleryName,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  */
-
-const mygallery = () => {
+  //const mygallery = () => {
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
@@ -40,9 +43,12 @@ const mygallery = () => {
   const router = useRouter();
   const [nowPic, setNowPic] = useState<any>();
   const [bigpic, setBigPic] = useState<boolean>(false);
-  const [loginStatus, setLoginStatus] = useState<string>();
-  const [loginUserId, setLoginUserId] = useState<string>();
-  const [loginUserName, setLoginUserName] = useState<string>();
+  const [loginStatus, setLoginStatus] = useState<string>("");
+  const [loginUserId, setLoginUserId] = useState<string>("");
+  const [loginUserName, setLoginUserName] = useState<string>("");
+  const [results, setResults] = useState<resultType[]>(result);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [loginFail, setLoginFail] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -53,6 +59,7 @@ const mygallery = () => {
       setLoginUserName(userName);
       setLoginUserId(userId);
     }
+    console.log(loginStatus);
     if (window.innerWidth <= 500) {
       setWindowSize({
         width: window.innerWidth,
@@ -64,35 +71,37 @@ const mygallery = () => {
         height: window.innerHeight,
       });
     }
+    console.log(results);
   }, []);
 
-  const results: resultType[] = [
-    {
-      src: "/images/Paint12.jpeg",
-      like: ["1", "1", "1"],
-      drawer: "김형국",
-    },
-    {
-      src: "/images/Paint13.jpeg",
-      like: ["1", "1", "1"],
-      drawer: "조준영",
-    },
-    {
-      src: "/images/Paint11.jpeg",
-      like: ["1", "1", "1"],
-      drawer: "서창희",
-    },
-    {
-      src: "/images/Paint14.jpeg",
-      like: ["1", "1", "1"],
-      drawer: "구정민",
-    },
-    {
-      src: "/images/Paint15.jpeg",
-      like: ["1", "1", "1"],
-      drawer: "보리",
-    },
-  ];
+  const sendLike = (pictureName: string, index: number) => {
+    if (loginStatus == "true") {
+      if (results[index].like.includes(loginUserId)) {
+      } else {
+        /*
+        axios
+          .post(`${SERVER}im/pressLike`, {
+            galleryName: galleryName,
+            imgId: pictureName,
+            liker: loginUserId,
+          })
+          .then((response) => {
+            console.log(response);
+            let copied: resultType[] = [...results];
+            copied[index].like.push(loginUserId);
+            setResults(copied);
+          })
+          .catch((error) => {
+            console.error(error);
+          });*/
+        let copied: resultType[] = [...results];
+        copied[index].like.push(loginUserId);
+        setResults(copied);
+      }
+    } else {
+      setModalOpen(true);
+    }
+  };
 
   const rendering = () => {
     const galleryRender = [];
@@ -111,15 +120,11 @@ const mygallery = () => {
               }}
             >
               <Image
-                src={SERVER + results[i].src}
+                src={SERVER + IMAGE_PATH + results[i].src}
                 layout={"fixed"}
                 height={windowSize.width * 0.7}
                 width={windowSize.width * 0.7}
                 unoptimized={true}
-                onClick={() => {
-                  setNowPic(SERVER + results[i].src);
-                  setBigPic(true);
-                }}
               />
             </div>
             <div
@@ -132,11 +137,13 @@ const mygallery = () => {
               }}
             >
               <div
-                style={{
-                  display: "inline-flex",
-                  backgroundColor: "rgba(253, 179, 140, 0.3)",
-                  borderRadius: "5px",
-                  marginRight: "15px",
+                className={styles.nameTagBig}
+                onClick={() => {
+                  if (loginStatus == "true") {
+                    sendLike(results[i].src, i);
+                  } else {
+                    setModalOpen(true);
+                  }
                 }}
               >
                 <p
@@ -165,17 +172,31 @@ const mygallery = () => {
                 >
                   |
                 </p>
-                <TiHeartOutline
-                  size="1.5rem"
-                  color="rgb(161, 121, 97)"
-                  style={{
-                    marginTop: "6px",
-                    marginBottom: "5px",
-                    marginLeft: "5px",
-                    marginRight: "2px",
-                    fontWeight: 800,
-                  }}
-                />
+                {results[i].like.includes(loginUserId) ? (
+                  <TiHeartFullOutline
+                    size="1.5rem"
+                    color="rgb(161, 121, 97)"
+                    style={{
+                      marginTop: "6px",
+                      marginBottom: "5px",
+                      marginLeft: "5px",
+                      marginRight: "2px",
+                      fontWeight: 800,
+                    }}
+                  />
+                ) : (
+                  <TiHeartOutline
+                    size="1.5rem"
+                    color="rgb(161, 121, 97)"
+                    style={{
+                      marginTop: "6px",
+                      marginBottom: "5px",
+                      marginLeft: "5px",
+                      marginRight: "2px",
+                      fontWeight: 800,
+                    }}
+                  />
+                )}
                 <p
                   style={{
                     marginTop: "6px",
@@ -217,13 +238,13 @@ const mygallery = () => {
                 }}
               >
                 <Image
-                  src={SERVER + results[i - 1].src}
+                  src={SERVER + IMAGE_PATH + results[i - 1].src}
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(SERVER + results[i - 1].src);
+                    setNowPic(SERVER + IMAGE_PATH + results[i - 1].src);
                     setBigPic(true);
                   }}
                 />
@@ -237,12 +258,8 @@ const mygallery = () => {
                   }}
                 >
                   <div
-                    style={{
-                      display: "inline-flex",
-                      backgroundColor: "rgba(253, 179, 140, 0.3)",
-                      borderRadius: "5px",
-                      marginRight: "5px",
-                    }}
+                    className={styles.nameTagSmall}
+                    onClick={() => sendLike(results[i - 1].src, i - 1)}
                   >
                     <p
                       style={{
@@ -268,16 +285,29 @@ const mygallery = () => {
                     >
                       |
                     </p>
-                    <TiHeartOutline
-                      size="1.1rem"
-                      color="rgb(161, 121, 97)"
-                      style={{
-                        marginTop: "4px",
-                        marginBottom: "3px",
-                        marginLeft: "3px",
-                        marginRight: "2px",
-                      }}
-                    />
+                    {results[i - 1].like.includes(loginUserId) ? (
+                      <TiHeartFullOutline
+                        size="1.1rem"
+                        color="rgb(161, 121, 97)"
+                        style={{
+                          marginTop: "4px",
+                          marginBottom: "3px",
+                          marginLeft: "3px",
+                          marginRight: "2px",
+                        }}
+                      />
+                    ) : (
+                      <TiHeartOutline
+                        size="1.1rem"
+                        color="rgb(161, 121, 97)"
+                        style={{
+                          marginTop: "4px",
+                          marginBottom: "3px",
+                          marginLeft: "3px",
+                          marginRight: "2px",
+                        }}
+                      />
+                    )}
                     <p
                       style={{
                         marginTop: "4px",
@@ -305,13 +335,13 @@ const mygallery = () => {
                 }}
               >
                 <Image
-                  src={SERVER + results[i].src}
+                  src={SERVER + IMAGE_PATH + results[i].src}
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(SERVER + results[i].src);
+                    setNowPic(SERVER + IMAGE_PATH + results[i].src);
                     setBigPic(true);
                   }}
                 />
@@ -319,22 +349,72 @@ const mygallery = () => {
                   style={{
                     display: "block",
                     width: "100%",
-                    marginTop: "10px",
+                    marginTop: "16px",
                     textAlign: "right",
                     marginLeft: "10px",
                   }}
                 >
                   <div
-                    style={{
-                      display: "inline-flex",
-                      backgroundColor: "rgba(253, 179, 140, 0.3)",
-                      borderRadius: "5px",
-                    }}
+                    className={styles.nameTagSmall}
+                    onClick={() => sendLike(results[i].src, i)}
                   >
-                    <p style={{ margin: "0px 5px" }}>{results[i].drawer} | </p>
-                    <TiHeartOutline size="1rem" color="black" />
-                    <p style={{ margin: "0px 5px" }}>
-                      {" "}
+                    <p
+                      style={{
+                        marginTop: "3px",
+                        marginBottom: "3px",
+                        marginLeft: "10px",
+                        marginRight: "3px",
+                        color: "rgb(161, 121, 97)",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      {results[i].drawer}
+                    </p>
+                    <p
+                      style={{
+                        marginTop: "3px",
+                        marginBottom: "3px",
+                        marginLeft: "3px",
+                        marginRight: "3px",
+                        color: "rgb(161, 121, 97)",
+                        fontSize: "1.1rem",
+                      }}
+                    >
+                      |
+                    </p>
+                    {results[i].like.includes(loginUserId) ? (
+                      <TiHeartFullOutline
+                        size="1.1rem"
+                        color="rgb(161, 121, 97)"
+                        style={{
+                          marginTop: "4px",
+                          marginBottom: "3px",
+                          marginLeft: "3px",
+                          marginRight: "2px",
+                        }}
+                      />
+                    ) : (
+                      <TiHeartOutline
+                        size="1.1rem"
+                        color="rgb(161, 121, 97)"
+                        style={{
+                          marginTop: "4px",
+                          marginBottom: "3px",
+                          marginLeft: "3px",
+                          marginRight: "2px",
+                        }}
+                      />
+                    )}
+                    <p
+                      style={{
+                        marginTop: "4px",
+                        marginBottom: "3px",
+                        marginLeft: "2px",
+                        marginRight: "10px",
+                        color: "rgb(161, 121, 97)",
+                        fontSize: "1rem",
+                      }}
+                    >
                       {results[i].like.length}
                     </p>
                   </div>
@@ -366,13 +446,13 @@ const mygallery = () => {
                 }}
               >
                 <Image
-                  src={SERVER + results[i].src}
+                  src={SERVER + IMAGE_PATH + results[i].src}
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(SERVER + results[i].src);
+                    setNowPic(SERVER + IMAGE_PATH + results[i].src);
                     setBigPic(true);
                   }}
                 />
@@ -380,22 +460,72 @@ const mygallery = () => {
                   style={{
                     display: "block",
                     width: "100%",
-                    marginTop: "10px",
+                    marginTop: "16px",
                     textAlign: "right",
                     marginLeft: "10px",
                   }}
                 >
                   <div
-                    style={{
-                      display: "inline-flex",
-                      backgroundColor: "rgba(253, 179, 140, 0.3)",
-                      borderRadius: "5px",
-                    }}
+                    className={styles.nameTagSmall}
+                    onClick={() => sendLike(results[i].src, i)}
                   >
-                    <p style={{ margin: "0px 5px" }}>{results[i].drawer} | </p>
-                    <TiHeartOutline size="1rem" color="black" />
-                    <p style={{ margin: "0px 5px" }}>
-                      {" "}
+                    <p
+                      style={{
+                        marginTop: "3px",
+                        marginBottom: "3px",
+                        marginLeft: "10px",
+                        marginRight: "3px",
+                        color: "rgb(161, 121, 97)",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      {results[i].drawer}
+                    </p>
+                    <p
+                      style={{
+                        marginTop: "3px",
+                        marginBottom: "3px",
+                        marginLeft: "3px",
+                        marginRight: "3px",
+                        color: "rgb(161, 121, 97)",
+                        fontSize: "1.1rem",
+                      }}
+                    >
+                      |
+                    </p>
+                    {results[i].like.includes(loginUserId) ? (
+                      <TiHeartFullOutline
+                        size="1.1rem"
+                        color="rgb(161, 121, 97)"
+                        style={{
+                          marginTop: "4px",
+                          marginBottom: "3px",
+                          marginLeft: "3px",
+                          marginRight: "2px",
+                        }}
+                      />
+                    ) : (
+                      <TiHeartOutline
+                        size="1.1rem"
+                        color="rgb(161, 121, 97)"
+                        style={{
+                          marginTop: "4px",
+                          marginBottom: "3px",
+                          marginLeft: "3px",
+                          marginRight: "2px",
+                        }}
+                      />
+                    )}
+                    <p
+                      style={{
+                        marginTop: "4px",
+                        marginBottom: "3px",
+                        marginLeft: "2px",
+                        marginRight: "10px",
+                        color: "rgb(161, 121, 97)",
+                        fontSize: "1rem",
+                      }}
+                    >
                       {results[i].like.length}
                     </p>
                   </div>
@@ -437,7 +567,7 @@ const mygallery = () => {
               textShadow: "2px 2px 5px black",
             }}
           >
-            {/*{galleryName}*/} 미술관
+            {galleryName} 미술관
           </h2>
         </div>
       </header>
@@ -508,6 +638,18 @@ const mygallery = () => {
               {loginStatus === "true" ? "내 미술관 가기" : "내 미술관 만들기"}
             </p>
           </button>
+          <button
+            className={styles.buttonStyle}
+            onClick={() => {
+              sessionStorage.setItem("loginStatus", "true");
+              sessionStorage.setItem("loginUserName", "밤톨이");
+              sessionStorage.setItem("loginUserId", "hi");
+            }}
+          >
+            <p style={{ margin: "0px 0px", fontSize: "1.15rem" }}>
+              임시 버튼입니다.
+            </p>
+          </button>
         </div>
       </footer>
       <Modal
@@ -536,13 +678,20 @@ const mygallery = () => {
             style={{
               display: "flex-inline",
               width: "100px",
+              height: "40px",
               marginLeft: windowSize.width * 0.7 - 40,
               backgroundColor: "white",
               borderTopLeftRadius: "50px",
               borderTopRightRadius: "50px",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <p style={{ display: "inline", lineHeight: 1 }}>X</p>
+            <TiTimes
+              size="2rem"
+              color="rgb(161, 121, 97)"
+              style={{ marginTop: "6px" }}
+            />
           </div>
           <div
             style={{
@@ -564,6 +713,12 @@ const mygallery = () => {
           </div>
         </div>
       </Modal>
+      <LoginModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        loginFail={loginFail}
+        setLoginFail={setLoginFail}
+      />
       <style jsx>
         {`
           article {
@@ -610,9 +765,9 @@ const mygallery = () => {
   );
 };
 
-/*
 export const getServerSideProps = async (context: any) => {
   //"http://175.123.140.225:4000/im/imgResponse"
+  /*
   var result: resultType[] = [];
   await axios
     .post("http://211.62.179.135:4000/im/imgResponse", {
@@ -628,16 +783,58 @@ export const getServerSideProps = async (context: any) => {
       //    results: res.data.pResult,
       //  },
       //};
+      results = result.sort(function (a, b) {
+        return b.like.length - a.like.length;
+      });
     })
     .catch((err) => {
       console.error(err);
     });
+*/
+
+  const result: resultType[] = [
+    {
+      src: "/images/Paint12.jpeg",
+      like: ["1", "2", "3"],
+      drawer: "김형국",
+    },
+    {
+      src: "/images/Paint13.jpeg",
+      like: ["3", "2", "4", "hi", "hihi"],
+      drawer: "조준영",
+    },
+    {
+      src: "/images/Paint11.jpeg",
+      like: ["7"],
+      drawer: "서창희",
+    },
+    {
+      src: "/images/Paint14.jpeg",
+      like: ["1", "2", "3", "11", "4", "6"],
+      drawer: "구정민",
+    },
+    {
+      src: "/images/Paint15.jpeg",
+      like: ["4", "5", "6", "hi"],
+      drawer: "보리",
+    },
+    {
+      src: "/images/Paint11.jpeg",
+      like: ["4", "5"],
+      drawer: "하이",
+    },
+  ];
+
+  let results: resultType[] = [];
+  results = result.sort(function (a, b) {
+    return b.like.length - a.like.length;
+  });
 
   return {
     props: {
-      results: result,
+      result: results,
       galleryName: context.params.id,
     },
   };
-};*/
+};
 export default mygallery;
