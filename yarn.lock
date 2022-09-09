@@ -704,6 +704,11 @@ chalk@^4.0.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
+classes@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/classes/-/classes-0.3.0.tgz#16e6033749ead443b1c54520341291708d9b678f"
+  integrity sha512-/6sfwnV5C00Z5gK26LOdxNfzeuYvNlWtVTGREYqAtyLizdoMxO4idl3WYl9qXzlViGALFhzX3UzST4lLCdAjSg==
+
 classnames@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"

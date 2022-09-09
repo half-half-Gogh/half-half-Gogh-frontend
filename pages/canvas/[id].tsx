@@ -84,7 +84,6 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
   }, [isStroke]);
   const pickerChange = (color: string) => {
     setPickerColor(color);
-    setPickerOpen(false);
   };
   const changeWidth = (linewidth: string) => {
     let tmpctx: CanvasRenderingContext2D | null = ctx;
