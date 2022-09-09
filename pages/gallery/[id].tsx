@@ -99,7 +99,14 @@ const mygallery = ({
         setResults(copied);
       }
     } else {
-      setModalOpen(true);
+      //setModalOpen(true);
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("waitingLike", "true");
+
+        router.push({
+          pathname: `/main`,
+        });
+      }
     }
   };
 
@@ -142,7 +149,13 @@ const mygallery = ({
                   if (loginStatus == "true") {
                     sendLike(results[i].src, i);
                   } else {
-                    setModalOpen(true);
+                    if (typeof window !== "undefined") {
+                      const id = router.query.id;
+                      sessionStorage.setItem("waitingPath", `/gallery/${id}`);
+                      router.push({
+                        pathname: `/main`,
+                      });
+                    }
                   }
                 }}
               >

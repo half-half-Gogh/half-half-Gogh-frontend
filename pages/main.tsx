@@ -28,6 +28,7 @@ const main = () => {
   const [signUpSuccess, setSignUpSuccess] = useState(false);
   const [failModal, setFailModal] = useState(false);
   const [loginFail, setLoginFail] = useState(false);
+  const [waitingPath, setWatingPath] = useState<string>("");
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -55,6 +56,11 @@ const main = () => {
           sessionStorage.setItem("loginUserName", `${loginID}`);
           setLoginSuccess(true);
           setLoginFail(false);
+          if (!(waitingPath === "")) {
+            router.push({
+              pathname: waitingPath,
+            });
+          }
         } else {
           setLoginSuccess(true);
           setLoginFail(true);
@@ -85,6 +91,8 @@ const main = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       sessionStorage.setItem("loginStatus", "false");
+      const path: any = sessionStorage.getItem("waitingPath");
+      setWatingPath(path);
     }
   });
   useEffect(() => {
