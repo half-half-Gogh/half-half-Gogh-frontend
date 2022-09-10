@@ -198,3 +198,106 @@
   color: #fff;
   box-shadow: none;
 }
+
+.minioverlayBase {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition-property: background-color, opacity;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  outline: 0;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 12;
+}
+
+.minioverlayAfter {
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 1;
+  z-index: 12;
+}
+
+.minioverlayBefore {
+  background-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+  z-index: 12;
+}
+
+.minicontentBase {
+  background-color: transparent;
+  transition-property: background-color, width, height;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  position: absolute;
+  width: 45%;
+  height: 15%;
+  max-width: 225px;
+  max-height: 135px;
+  border: 5px solid #f3c5c5;
+  background: #f6e7d8;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  outline: none;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  z-index: 12;
+}
+
+.minicontentAfter {
+  width: 45%;
+  height: 15%;
+  max-width: 225px;
+  max-height: 135px;
+  z-index: 12;
+}
+
+.minicontentBefore {
+  width: 0%;
+  height: 0%;
+  z-index: 12;
+}
+.mainBtn {
+  display: block;
+  width: 50%;
+  font-weight: 200;
+  text-align: center;
+  color: #cd5c5c;
+  border-radius: 5%;
+  transition: all 0.2s;
+  box-shadow: 0px 0px 0px 0px #f3c5c5;
+  background: #ffc3c3;
+  font-family: "KOTRAHOPE", cursive;
+  border-color: #ffc3c3;
+  font-size: 1.2rem;
+  margin-right: 1px;
+}
+.mainBtn:active {
+  box-shadow: 0px 0px 0px 0px #f3c5c5;
+}
+.returnBtn {
+  display: block;
+  width: 50%;
+  font-weight: 200;
+  text-align: center;
+  color: #cd5c5c;
+  border-radius: 5%;
+  transition: all 0.2s;
+  box-shadow: 0px 0px 0px 0px #f3c5c5;
+  background: rgb(243, 232, 218);
+  font-family: "KOTRAHOPE", cursive;
+  border-color: #ffc3c3;
+  font-size: 1.2rem;
+  margin-left: 1px;
+}
+.returnBtn:active {
+  box-shadow: 0px 0px 0px 0px #f3c5c5;
+}

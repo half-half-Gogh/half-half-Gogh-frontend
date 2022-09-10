@@ -198,7 +198,7 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
               display: "inline",
               margin: "0px",
               fontFamily: "SEBANG_Gothic_Bold, cursive",
-              fontSize: "2.2rem",
+              fontSize: "2rem",
               color: "white",
               textAlign: "center",
               textShadow: "2px 2px 5px black",

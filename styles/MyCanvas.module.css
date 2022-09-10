@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(251, 240, 219);
+  background-color: #f6e7d8;
   position: sticky;
 }
 .Header {
@@ -15,7 +15,6 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  background-color: rgb(251, 240, 219);
   border-radius: 30px;
 }
 .titleBox {
