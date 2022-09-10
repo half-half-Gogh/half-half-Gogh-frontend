@@ -598,6 +598,9 @@ const main = () => {
 
       <style jsx>
         {`
+          body {
+            background-color: #f6e7d8;
+          }
           h1 {
             font-size: 6rem;
             font-weight: 500;

@@ -1,10 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import temp1 from "/public/images/Paint12.jpeg";
-import temp2 from "/public/images/Paint11.jpeg";
-import temp3 from "/public/images/Paint13.jpeg";
-import temp4 from "/public/images/Paint14.jpeg";
-import temp5 from "/public/images/Paint15.jpeg";
 import footer from "/public/images/footer.jpeg";
 import Image from "next/image";
 import {
@@ -18,7 +13,6 @@ import axios from "axios";
 import Modal from "react-modal";
 import classnames from "classnames";
 import { emit } from "process";
-import LoginModal from "../../components/loginModal";
 
 type resultType = {
   src: string;
@@ -48,7 +42,6 @@ const mygallery = ({
   const [loginUserName, setLoginUserName] = useState<string>("");
   const [results, setResults] = useState<resultType[]>(result);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [loginFail, setLoginFail] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -99,14 +92,7 @@ const mygallery = ({
         setResults(copied);
       }
     } else {
-      //setModalOpen(true);
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("waitingLike", "true");
-
-        router.push({
-          pathname: `/main`,
-        });
-      }
+      setModalOpen(true);
     }
   };
 
@@ -146,17 +132,7 @@ const mygallery = ({
               <div
                 className={styles.nameTagBig}
                 onClick={() => {
-                  if (loginStatus == "true") {
-                    sendLike(results[i].src, i);
-                  } else {
-                    if (typeof window !== "undefined") {
-                      const id = router.query.id;
-                      sessionStorage.setItem("waitingPath", `/gallery/${id}`);
-                      router.push({
-                        pathname: `/main`,
-                      });
-                    }
-                  }
+                  sendLike(results[i].src, i);
                 }}
               >
                 <p
@@ -574,7 +550,7 @@ const mygallery = ({
               display: "inline",
               margin: "0px",
               fontFamily: "SEBANG_Gothic_Bold, cursive",
-              fontSize: "2.2rem",
+              fontSize: "2rem",
               color: "white",
               textAlign: "center",
               textShadow: "2px 2px 5px black",
@@ -726,17 +702,65 @@ const mygallery = ({
           </div>
         </div>
       </Modal>
-      <LoginModal
-        modalOpen={modalOpen}
-        setModalOpen={setModalOpen}
-        loginFail={loginFail}
-        setLoginFail={setLoginFail}
-      />
+      <Modal
+        isOpen={modalOpen}
+        closeTimeoutMS={200}
+        overlayClassName={{
+          base: styles.minioverlayBase,
+          afterOpen: styles.minioverlayAfter,
+          beforeClose: styles.minioverlayBefore,
+        }}
+        className={{
+          base: styles.minicontentBase,
+          afterOpen: styles.minicontentAfter,
+          beforeClose: styles.minicontentBefore,
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            fontSize: "1.5rem",
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <p style={{ margin: "5px 0px" }}>로그인이 필요합니다.</p>
+          <div style={{ display: "flex" }}>
+            <button
+              className={styles.mainBtn}
+              onClick={() => {
+                setModalOpen(false);
+                if (typeof window !== "undefined") {
+                  const id = router.query.id;
+                  sessionStorage.setItem("waitingPath", `/gallery/${id}`);
+                  router.push({
+                    pathname: `/main`,
+                  });
+                }
+              }}
+            >
+              로그인
+            </button>
+            <button
+              className={styles.returnBtn}
+              onClick={() => {
+                setModalOpen(false);
+              }}
+            >
+              창 닫기
+            </button>
+          </div>
+        </div>
+      </Modal>
       <style jsx>
         {`
           article {
             width: windowSize.width * 0.7 + 60;
-            margin: 18vh 0px;
+            margin-top: 18vh;
+            margin-bottom: 21vh;
             justify-content: center;
             align-items: center;
             text-align: center;
