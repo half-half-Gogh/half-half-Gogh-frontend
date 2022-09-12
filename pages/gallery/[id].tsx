@@ -20,10 +20,10 @@ type resultType = {
   like: string[];
 };
 
-//const SERVER = "http://211.62.179.135:4000/";
-//const IMAGE_PATH = "public/images/";
-const SERVER = "";
-const IMAGE_PATH = "";
+const SERVER = "http://211.62.179.135:4000/";
+const IMAGE_PATH = "public/images/";
+//const SERVER = "";
+//const IMAGE_PATH = "";
 
 const mygallery = ({
   result,
@@ -43,6 +43,9 @@ const mygallery = ({
   const [results, setResults] = useState<resultType[]>(result);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
+  const likeFilter = (value: string, deleteItem: string) => {
+    return value != deleteItem;
+  };
   useEffect(() => {
     if (typeof window !== "undefined") {
       const status: any = sessionStorage.getItem("loginStatus");
@@ -70,8 +73,6 @@ const mygallery = ({
   const sendLike = (pictureName: string, index: number) => {
     if (loginStatus == "true") {
       if (results[index].like.includes(loginUserId)) {
-      } else {
-        /*
         axios
           .post(`${SERVER}im/pressLike`, {
             galleryName: galleryName,
@@ -86,7 +87,27 @@ const mygallery = ({
           })
           .catch((error) => {
             console.error(error);
-          });*/
+          });
+        let copied: resultType[] = [...results];
+        let deleteIndex: number = copied[index].like.indexOf(loginUserId);
+        copied[index].like.splice(deleteIndex, 1);
+        setResults(copied);
+      } else {
+        axios
+          .post(`${SERVER}im/pressLike`, {
+            galleryName: galleryName,
+            imgId: pictureName,
+            liker: loginUserId,
+          })
+          .then((response) => {
+            console.log(response);
+            let copied: resultType[] = [...results];
+            copied[index].like.push(loginUserId);
+            setResults(copied);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
         let copied: resultType[] = [...results];
         copied[index].like.push(loginUserId);
         setResults(copied);
@@ -529,7 +550,18 @@ const mygallery = ({
   };
 
   return (
-    <div className={styles.App}>
+    <div
+      style={{
+        width: "100%",
+        height: windowSize.height,
+        backgroundColor: "rgb(251, 240, 219)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        overflowY: "auto",
+      }}
+    >
       <article>{rendering()}</article>
       <header>
         <div
@@ -600,7 +632,7 @@ const mygallery = ({
         >
           <button
             className={styles.buttonStyle}
-            onClick={() => router.push("/MyCanvas")}
+            onClick={() => router.push(`/canvas/${galleryName}`)}
           >
             <p style={{ margin: "0px 0px", fontSize: "1.15rem" }}>
               그림 그리기
@@ -804,7 +836,7 @@ const mygallery = ({
 
 export const getServerSideProps = async (context: any) => {
   //"http://175.123.140.225:4000/im/imgResponse"
-  /*
+
   var result: resultType[] = [];
   await axios
     .post("http://211.62.179.135:4000/im/imgResponse", {
@@ -827,8 +859,8 @@ export const getServerSideProps = async (context: any) => {
     .catch((err) => {
       console.error(err);
     });
-*/
 
+  /*
   const result: resultType[] = [
     {
       src: "/images/Paint12.jpeg",
@@ -861,7 +893,7 @@ export const getServerSideProps = async (context: any) => {
       drawer: "하이",
     },
   ];
-
+*/
   let results: resultType[] = [];
   results = result.sort(function (a, b) {
     return b.like.length - a.like.length;

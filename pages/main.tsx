@@ -13,7 +13,8 @@ const main = () => {
   const [loginMode, setLoginMode] = useState<boolean>(false);
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
   const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
-  const [userName, setUserName] = useState<string>("밤톨이멍멍");
+  const [userId, setUserId] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
   const [userLink, setUserLink] = useState<string>("http://www.half-go.io/");
   const [copyMessage, setCopyMessage] =
     useState<string>("미술관을 친구들에게 홍보하자!");
@@ -24,7 +25,7 @@ const main = () => {
   const [signUpPW, setSignUpPW] = useState<string>("");
   const [signUpPWCheck, setSignUpPWCheck] = useState<string>("");
   const [checkCorrect, setCheckCorrect] = useState<boolean>(false);
-  const [permitSignUp, setPermitSignUp] = useState<boolean>(true);
+  const [disallowSignUp, setDisallowSignUp] = useState<boolean>(true);
   const [signUpSuccess, setSignUpSuccess] = useState(false);
   const [failModal, setFailModal] = useState(false);
   const [loginFail, setLoginFail] = useState(false);
@@ -40,20 +41,29 @@ const main = () => {
 
   const login = async () => {
     await axios
-      .post("https://jmgu.loca.lt/user/login", {
+      .post("http://211.62.179.135:4000/user/signin", {
         id: loginID,
         password: loginPW,
       })
       .then(function (response) {
-        console.log(response.data);
-        if (typeof window !== "undefined") {
-          // const 응답 = response.data.뭐시기
-          // const 유저닉네임 = 뭐시기
-          // setUserName(뭐시기)
-          // setUserLink(`http://www.half-go.io/gallery/${뭐시기}`)
-          sessionStorage.setItem("loginStatus", "true");
-          sessionStorage.setItem("loginUserId", `${loginID}`);
-          sessionStorage.setItem("loginUserName", `${loginID}`);
+        console.log(typeof response.data.signinStatus);
+        if (
+          response.data.signinStatus === "true" ||
+          response.data.signinStatus === true
+        ) {
+          setUserName(response.data.signinUserName);
+          setUserId(response.data.signinUserId);
+          console.log(response.data);
+          if (typeof window !== "undefined") {
+            sessionStorage.removeItem("loginStatus");
+            sessionStorage.setItem("loginStatus", "true");
+            sessionStorage.setItem("loginUserId", response.data.signinUserId);
+            sessionStorage.setItem(
+              "loginUserName",
+              response.data.signinUserName
+            );
+            console.log(response.data.signinUserId + "zzllz" + userName);
+          }
           setLoginSuccess(true);
           setLoginFail(false);
           if (!(waitingPath === "")) {
@@ -62,7 +72,7 @@ const main = () => {
             });
           }
         } else {
-          setLoginSuccess(true);
+          console.log("페일맨");
           setLoginFail(true);
         }
       })
@@ -73,7 +83,7 @@ const main = () => {
 
   const signUp = async () => {
     await axios
-      .post("https://jmgu.loca.lt/user/signin", {
+      .post("http://211.62.179.135:4000/user/signup", {
         id: signUpID,
         password: signUpPWCheck,
         username: galleryName,
@@ -90,7 +100,14 @@ const main = () => {
   };
   useEffect(() => {
     if (typeof window !== "undefined") {
-      sessionStorage.setItem("loginStatus", "false");
+      if (
+        !(
+          sessionStorage.getItem("loginStatus") === "true" ||
+          sessionStorage.getItem("loginStatus")
+        )
+      ) {
+        sessionStorage.setItem("loginStatus", "false");
+      }
       const path: any = sessionStorage.getItem("waitingPath");
       setWatingPath(path);
     }
@@ -109,13 +126,13 @@ const main = () => {
     if (
       signUpID != "" &&
       galleryName != "" &&
-      signUpPWCheck != "" &&
+      signUpPW.length >= 6 &&
       checkCorrect == true
     ) {
-      setPermitSignUp(false);
+      setDisallowSignUp(false);
     }
     setLoginFail(false);
-  }, [signUpID, galleryName, signUpPWCheck, checkCorrect]);
+  }, [signUpID, galleryName, signUpPW, checkCorrect]);
 
   return (
     <div className={"container"}>
@@ -144,7 +161,6 @@ const main = () => {
           style={{
             display: "block",
             width: "70%",
-            marginTop: "3px",
             marginRight: "3px",
           }}
         >
@@ -167,6 +183,8 @@ const main = () => {
                 height: "100%",
                 border: "0",
                 backgroundColor: "transparent",
+                fontFamily: "KOTRAHOPE, cursive",
+                fontSize: "1rem",
               }}
               placeholder="아이디"
               onChange={(e) => setLoginID(e.target.value)}
@@ -190,6 +208,8 @@ const main = () => {
                 height: "100%",
                 border: "0",
                 backgroundColor: "transparent",
+                fontFamily: "KOTRAHOPE, cursive",
+                fontSize: "1rem",
               }}
               type="password"
               placeholder="비밀번호"
@@ -404,15 +424,35 @@ const main = () => {
                   alignItems: "flex-end",
                 }}
               >
-                <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
-                  미술관 이름 (최대 5섯글자)
-                </p>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
+                    미술관 이름 (5자 이하)
+                  </p>
+                  {galleryName != "" ? (
+                    <p
+                      style={{
+                        display: "inline",
+                        fontSize: "0.7rem",
+                        margin: "0px 0px",
+                      }}
+                    >
+                      ✔️
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                </div>
                 <input
                   style={{
                     border: "2px solid #575757",
                     height: "70%",
                     background: "#ece7e2",
                     borderRadius: "5px",
+                    fontFamily: "KOTRAHOPE, cursive",
+                    fontSize: "1rem",
+                    paddingLeft: "5px",
                   }}
                   maxLength={5}
                   onChange={(e) => setGalleryName(e.target.value)}
@@ -428,13 +468,33 @@ const main = () => {
                   alignItems: "flex-end",
                 }}
               >
-                <p style={{ fontSize: "1rem", margin: "0px 0px" }}>아이디</p>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <p style={{ fontSize: "1rem", margin: "0px 0px" }}>아이디</p>
+                  {signUpID != "" ? (
+                    <p
+                      style={{
+                        display: "inline",
+                        fontSize: "0.7rem",
+                        margin: "0px 0px",
+                      }}
+                    >
+                      ✔️
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                </div>
                 <input
                   style={{
                     border: "2px solid #575757",
                     height: "70%",
                     background: "#ece7e2",
                     borderRadius: "5px",
+                    fontFamily: "KOTRAHOPE, cursive",
+                    fontSize: "1rem",
+                    paddingLeft: "5px",
                   }}
                   onChange={(e) => setSignUpID(e.target.value)}
                 />
@@ -449,13 +509,35 @@ const main = () => {
                   alignItems: "flex-end",
                 }}
               >
-                <p style={{ fontSize: "1rem", margin: "0px 0px" }}>비밀번호</p>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
+                    비밀번호 (6자 이상)
+                  </p>
+                  {signUpPW.length >= 6 ? (
+                    <p
+                      style={{
+                        display: "inline",
+                        fontSize: "0.7rem",
+                        margin: "0px 0px",
+                      }}
+                    >
+                      ✔️
+                    </p>
+                  ) : (
+                    <></>
+                  )}
+                </div>
                 <input
                   style={{
                     border: "2px solid #575757",
                     height: "70%",
                     background: "#ece7e2",
                     borderRadius: "5px",
+                    fontFamily: "KOTRAHOPE, cursive",
+                    fontSize: "1rem",
+                    paddingLeft: "5px",
                   }}
                   type={"password"}
                   onChange={(e) => setSignUpPW(e.target.value)}
@@ -487,7 +569,7 @@ const main = () => {
                     <p
                       style={{
                         display: "inline",
-                        fontSize: "1rem",
+                        fontSize: "0.7rem",
                         margin: "0px 0px",
                       }}
                     >
@@ -519,6 +601,9 @@ const main = () => {
                     height: "70%",
                     background: "#ece7e2",
                     borderRadius: "5px",
+                    fontFamily: "KOTRAHOPE, cursive",
+                    fontSize: "1rem",
+                    paddingLeft: "5px",
                   }}
                   type={"password"}
                   onChange={(e) => setSignUpPWCheck(e.target.value)}
@@ -540,7 +625,7 @@ const main = () => {
                     onClick={() => {
                       signUp();
                     }}
-                    disabled={permitSignUp}
+                    disabled={disallowSignUp}
                   >
                     <p style={{ margin: "0" }}>가입하기</p>
                   </button>
