@@ -5,6 +5,7 @@ import styles from "../styles/main.module.css";
 import Image from "next/image";
 import title from "/public/images/title_img.png";
 import { TiKey, TiUser } from "react-icons/ti";
+import { BsClipboardPlus } from "react-icons/bs";
 import axios from "axios";
 
 const main = () => {
@@ -17,7 +18,7 @@ const main = () => {
   const [userName, setUserName] = useState<string>("");
   const [userLink, setUserLink] = useState<string>("http://www.half-go.io/");
   const [copyMessage, setCopyMessage] =
-    useState<string>("미술관을 친구들에게 홍보하자!");
+    useState<string>("링크를 눌러 친구들에게 홍보하자!");
   const [loginID, setLoginID] = useState<string>("");
   const [loginPW, setLoginPW] = useState<string>("");
   const [galleryName, setGalleryName] = useState<string>("");
@@ -32,6 +33,10 @@ const main = () => {
   const [loginFail, setLoginFail] = useState(false);
   const [waitingPath, setWatingPath] = useState<string>("");
   const [errorStr, setErrorStr] = useState("");
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -40,6 +45,13 @@ const main = () => {
       setCopyMessage("복사 재시도");
     }
   };
+
+  useEffect(() => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }, []);
 
   const login = async () => {
     await axios
@@ -164,16 +176,42 @@ const main = () => {
     <div className={"container"}>
       <div>
         <Image src={title} />
-        <h1
-          style={{
-            fontSize: "4.5rem",
-            color: "#3e4356",
-            marginTop: "-10px",
-            fontFamily: "SEBANG_Gothic_Bold, cursive",
-          }}
-        >
-          반의반고흐
-        </h1>
+        {windowSize.width < 363 ? (
+          windowSize.width < 281 ? (
+            <h1
+              style={{
+                fontSize: "2.8rem",
+                color: "#3e4356",
+                marginTop: "-5px",
+                fontFamily: "SEBANG_Gothic_Bold, cursive",
+              }}
+            >
+              반의반고흐
+            </h1>
+          ) : (
+            <h1
+              style={{
+                fontSize: "3.8rem",
+                color: "#3e4356",
+                marginTop: "-7px",
+                fontFamily: "SEBANG_Gothic_Bold, cursive",
+              }}
+            >
+              반의반고흐
+            </h1>
+          )
+        ) : (
+          <h1
+            style={{
+              fontSize: "4.5rem",
+              color: "#3e4356",
+              marginTop: "-10px",
+              fontFamily: "SEBANG_Gothic_Bold, cursive",
+            }}
+          >
+            반의반고흐
+          </h1>
+        )}
       </div>
 
       <div
@@ -551,7 +589,7 @@ const main = () => {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
-                    비밀번호 (6자 이상)
+                    패스워드 (6자 이상)
                   </p>
                   {signUpPW.length >= 6 ? (
                     <p
@@ -601,7 +639,7 @@ const main = () => {
                       margin: "0px 0px",
                     }}
                   >
-                    비밀번호 확인
+                    패스워드 확인
                   </p>
                   {checkCorrect ? (
                     <p
@@ -683,33 +721,46 @@ const main = () => {
         isOpen={loginSuccess}
         closeTimeoutMS={500}
         overlayClassName={{
-          base: styles.overlayBase,
-          afterOpen: styles.overlayAfter,
-          beforeClose: styles.overlayBefore,
+          base: styles.loginOverlayBase,
+          afterOpen: styles.loginOverlayAfter,
+          beforeClose: styles.loginOverlayBefore,
         }}
         className={{
-          base: styles.contentBase,
-          afterOpen: styles.contentAfter,
-          beforeClose: styles.contentBefore,
+          base: styles.loginContentBase,
+          afterOpen: styles.loginContentAfter,
+          beforeClose: styles.loginContentBefore,
         }}
       >
-        <div style={{ width: "100%", height: "100%" }}>
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <div
             style={{
-              height: "15%",
+              height: "20%",
               backgroundColor: "#f3c5c5",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <span style={{ display: "inline", color: "#CD5C5C" }}>
+            <span
+              style={{
+                display: "inline",
+                color: "#CD5C5C",
+                fontSize: "1.5rem",
+              }}
+            >
               {userName}님의 미술관
             </span>
           </div>
           <div
             style={{
-              height: "85%",
+              height: "80%",
               width: "100%",
               backgroundColor: "#f6e7d8",
               borderTopLeftRadius: "10px",
@@ -724,29 +775,46 @@ const main = () => {
                 textAlign: "center",
                 width: "90%",
                 height: "100%",
-                marginLeft: "2.5%",
+                marginLeft: "5%",
                 alignItems: "center",
               }}
             >
               <div
                 style={{
+                  display: "grid",
                   width: "100%",
                   height: "35%",
                   justifyContent: "center",
                   alignContent: "center",
+                  // border: "1px solid black",
                 }}
               >
-                <input readOnly value={userLink} />
-                <button onClick={() => handleCopyClipBoard(userLink)}>
-                  copy
-                </button>
+                <input
+                  readOnly
+                  value={userLink}
+                  onClick={() => handleCopyClipBoard(userLink)}
+                  style={{
+                    display: "block",
+                    height: "1.5rem",
+                    fontSize: "1rem",
+                    border: "3px solid #3e4356",
+                    fontFamily: "KOTRAHOPE, cursive",
+                    color: "#3e4356",
+                    borderRadius: "5px",
+                    paddingLeft: "5px",
+                    paddingTop: "2px",
+                    paddingBottom: "2px",
+                    marginTop: "3px",
+                  }}
+                />
               </div>
               <div
                 style={{
                   display: "flex",
                   width: "100%",
-                  height: "30%",
+                  height: "20%",
                   justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <p
@@ -754,25 +822,27 @@ const main = () => {
                     display: "inline",
                     fontSize: "1rem",
                     width: "100%",
-                    height: "20%",
+                    margin: "0px 0px",
+                    color: "#3e4356",
                   }}
                 >
                   {copyMessage}
                 </p>
               </div>
-
-              <button
-                className={"modalBtn"}
-                onClick={() =>
-                  router.push({
-                    //pathname: "/mygallery",
-                    pathname: `/gallery/${userName}`,
-                    query: { username: userName },
-                  })
-                }
-              >
-                내 미술관으로
-              </button>
+              <div className={"btnZone"}>
+                <button
+                  className={"modalBtn"}
+                  onClick={() =>
+                    router.push({
+                      //pathname: "/mygallery",
+                      pathname: `/gallery/${userName}`,
+                      query: { username: userName },
+                    })
+                  }
+                >
+                  내 미술관으로
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -782,6 +852,7 @@ const main = () => {
         {`
           body {
             background-color: #f6e7d8;
+            overflow-y: auto;
           }
           h1 {
             font-size: 6rem;
@@ -799,6 +870,7 @@ const main = () => {
             justify-content: center;
             align-items: center;
             text-align: center;
+            overflow-y: auto;
           }
           .temp {
             display: flex;
@@ -840,7 +912,6 @@ const main = () => {
             float: left;
             width: 100%;
             height: 80%;
-            margin: 2% 3% 1% 3%;
             font-weight: 200;
             text-align: center;
             color: #cd5c5c;
