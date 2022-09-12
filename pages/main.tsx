@@ -8,6 +8,8 @@ import { TiKey, TiUser } from "react-icons/ti";
 import { BsClipboardPlus } from "react-icons/bs";
 import axios from "axios";
 
+const SERVER = "http://34.216.11.123";
+
 const main = () => {
   const router = useRouter();
   const [signUpModal, setSignUpModal] = useState<boolean>(false);
@@ -55,7 +57,7 @@ const main = () => {
 
   const login = async () => {
     await axios
-      .post("http://211.62.179.135:4000/user/signin", {
+      .post(`${SERVER}/user/signin`, {
         id: loginID,
         password: loginPW,
       })
@@ -105,7 +107,7 @@ const main = () => {
 
   const signUp = async () => {
     await axios
-      .post("http://211.62.179.135:4000/user/signup", {
+      .post(`${SERVER}/user/signup`, {
         id: signUpID,
         password: signUpPWCheck,
         username: galleryName,

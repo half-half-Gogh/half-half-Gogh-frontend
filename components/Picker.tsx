@@ -16,6 +16,7 @@ const Picker = ({ setPickerOpen, pickerColor, pickerChange }: Props) => {
       />
       <ChromePicker
         color={pickerColor}
+        disableAlpha={true}
         onChange={(color) => pickerChange(color.hex)}
       ></ChromePicker>
     </div>

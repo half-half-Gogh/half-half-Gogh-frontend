@@ -659,18 +659,6 @@ const mygallery = ({
               {loginStatus === "true" ? "내 미술관 가기" : "내 미술관 만들기"}
             </p>
           </button>
-          <button
-            className={styles.buttonStyle}
-            onClick={() => {
-              sessionStorage.setItem("loginStatus", "true");
-              sessionStorage.setItem("loginUserName", "밤톨이");
-              sessionStorage.setItem("loginUserId", "hi");
-            }}
-          >
-            <p style={{ margin: "0px 0px", fontSize: "1.15rem" }}>
-              임시 버튼입니다.
-            </p>
-          </button>
         </div>
       </footer>
       <Modal
