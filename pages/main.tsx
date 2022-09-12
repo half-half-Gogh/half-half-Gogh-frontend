@@ -12,7 +12,7 @@ const main = () => {
   const [signUpModal, setSignUpModal] = useState<boolean>(false);
   const [loginMode, setLoginMode] = useState<boolean>(false);
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
-  const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
+  const [loginSuccess, setLoginSuccess] = useState<boolean>(true);
   const [userId, setUserId] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [userLink, setUserLink] = useState<string>("http://www.half-go.io/");
@@ -667,28 +667,87 @@ const main = () => {
           beforeClose: styles.contentBefore,
         }}
       >
-        <div>
-          <p style={{ display: "inline", lineHeight: 3 }}>
-            {userName}님의 미술관
-          </p>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <input readOnly value={userLink} />
-            <button onClick={() => handleCopyClipBoard(userLink)}>copy</button>
+        <div style={{ width: "100%", height: "100%" }}>
+          <div
+            style={{
+              height: "15%",
+              backgroundColor: "#f3c5c5",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <span style={{ display: "inline", color: "#CD5C5C" }}>
+              {userName}님의 미술관
+            </span>
           </div>
-          <p style={{ fontSize: "1rem" }}>{copyMessage}</p>
-          <div className={"btnZone"}>
-            <button
-              className={"modalBtn"}
-              onClick={() =>
-                router.push({
-                  //pathname: "/mygallery",
-                  pathname: `/gallery/${userName}`,
-                  query: { username: userName },
-                })
-              }
+          <div
+            style={{
+              height: "85%",
+              width: "100%",
+              backgroundColor: "#f6e7d8",
+              borderTopLeftRadius: "10px",
+              borderTopRightRadius: "10px",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{
+                display: "grid",
+                textAlign: "center",
+                width: "90%",
+                height: "100%",
+                marginLeft: "2.5%",
+                alignItems: "center",
+              }}
             >
-              내 미술관으로
-            </button>
+              <div
+                style={{
+                  width: "100%",
+                  height: "35%",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <input readOnly value={userLink} />
+                <button onClick={() => handleCopyClipBoard(userLink)}>
+                  copy
+                </button>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  height: "30%",
+                  justifyContent: "center",
+                }}
+              >
+                <p
+                  style={{
+                    display: "inline",
+                    fontSize: "1rem",
+                    width: "100%",
+                    height: "20%",
+                  }}
+                >
+                  {copyMessage}
+                </p>
+              </div>
+
+              <button
+                className={"modalBtn"}
+                onClick={() =>
+                  router.push({
+                    //pathname: "/mygallery",
+                    pathname: `/gallery/${userName}`,
+                    query: { username: userName },
+                  })
+                }
+              >
+                내 미술관으로
+              </button>
+            </div>
           </div>
         </div>
       </Modal>
