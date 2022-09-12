@@ -22,6 +22,7 @@ const main = () => {
   const [loginPW, setLoginPW] = useState<string>("");
   const [galleryName, setGalleryName] = useState<string>("");
   const [signUpID, setSignUpID] = useState<string>("");
+  const [idCheck, setIdCheck] = useState<boolean>(false);
   const [signUpPW, setSignUpPW] = useState<string>("");
   const [signUpPWCheck, setSignUpPWCheck] = useState<string>("");
   const [checkCorrect, setCheckCorrect] = useState<boolean>(false);
@@ -99,12 +100,24 @@ const main = () => {
       })
       .then(function (response) {
         console.log(response.data);
-        //if(response.data.signin == "success")
-        setSignUpSuccess(true);
-        setFailModal(true);
+        if (
+          response.data.signupStatus === "ture" ||
+          response.data.signupStatus
+        ) {
+          setSignUpSuccess(true);
+        } else {
+          if (response.data.signupError.includes("already in use")) {
+            setErrorStr("이미 가입된 이메일입니다.");
+          } else {
+            setErrorStr("회원가입 오류 입니다.");
+          }
+          setLoginFail(true);
+        }
       })
       .catch(function (error) {
         console.error(error);
+        setErrorStr("다시 시도해주세요.");
+        setLoginFail(true);
       });
   };
   useEffect(() => {
@@ -132,15 +145,19 @@ const main = () => {
   }, [signUpPWCheck]);
 
   useEffect(() => {
-    if (
-      signUpID != "" &&
-      galleryName != "" &&
-      signUpPW.length >= 6 &&
-      checkCorrect == true
-    ) {
+    const reg_email =
+      /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+    if (!reg_email.test(signUpID)) {
+      setIdCheck(false);
+    } else {
+      setIdCheck(true);
+    }
+  }, [signUpID]);
+
+  useEffect(() => {
+    if (idCheck && galleryName != "" && signUpPW.length >= 6 && checkCorrect) {
       setDisallowSignUp(false);
     }
-    setLoginFail(false);
   }, [signUpID, galleryName, signUpPW, checkCorrect]);
 
   return (
@@ -195,7 +212,7 @@ const main = () => {
                 fontFamily: "KOTRAHOPE, cursive",
                 fontSize: "1rem",
               }}
-              placeholder="아이디"
+              placeholder="이메일"
               onChange={(e) => setLoginID(e.target.value)}
             />
           </div>
@@ -221,7 +238,7 @@ const main = () => {
                 fontSize: "1rem",
               }}
               type="password"
-              placeholder="비밀번호"
+              placeholder="패스워드"
               onChange={(e) => setLoginPW(e.target.value)}
             />
           </div>
@@ -342,7 +359,7 @@ const main = () => {
                   alignItems: "center",
                 }}
               >
-                <p>회원가입에 성공하셨습니다 !</p>
+                <p>회원가입에 성공했습니다 !</p>
                 <div
                   style={{
                     width: "100%",
@@ -355,11 +372,16 @@ const main = () => {
                   <button
                     className={"successBtn"}
                     onClick={() => {
+                      setSignUpID("");
+                      setSignUpPW("");
+                      setGalleryName("");
+                      setDisallowSignUp(true);
+                      setCheckCorrect(false);
                       setSignUpModal(false);
                       setSignUpSuccess(false);
                     }}
                   >
-                    메인으로
+                    확인
                   </button>
                 </div>
               </div>
@@ -483,8 +505,8 @@ const main = () => {
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <p style={{ fontSize: "1rem", margin: "0px 0px" }}>아이디</p>
-                  {signUpID != "" ? (
+                  <p style={{ fontSize: "1rem", margin: "0px 0px" }}>이메일</p>
+                  {idCheck ? (
                     <p
                       style={{
                         display: "inline",
