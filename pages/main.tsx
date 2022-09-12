@@ -12,7 +12,7 @@ const main = () => {
   const [signUpModal, setSignUpModal] = useState<boolean>(false);
   const [loginMode, setLoginMode] = useState<boolean>(false);
   const [checkLogin, setCheckLogin] = useState<boolean>(false);
-  const [loginSuccess, setLoginSuccess] = useState<boolean>(true);
+  const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [userLink, setUserLink] = useState<string>("http://www.half-go.io/");
@@ -299,14 +299,16 @@ const main = () => {
           }}
         >
           <p>{errorStr}</p>
-          <button
-            className={"failBtn"}
-            onClick={() => {
-              setLoginFail(false);
-            }}
-          >
-            확인
-          </button>
+          <div className={"btnZone"}>
+            <button
+              className={"failBtn"}
+              onClick={() => {
+                setLoginFail(false);
+              }}
+            >
+              확인
+            </button>
+          </div>
         </div>
       </Modal>
       <Modal
@@ -416,14 +418,16 @@ const main = () => {
                   }}
                 >
                   <p>가 중복 됩니다!</p>
-                  <button
-                    className={"failBtn"}
-                    onClick={() => {
-                      setFailModal(false);
-                    }}
-                  >
-                    확인
-                  </button>
+                  <div className={"btnZone"}>
+                    <button
+                      className={"failBtn"}
+                      onClick={() => {
+                        setFailModal(false);
+                      }}
+                    >
+                      확인
+                    </button>
+                  </div>
                 </div>
               </Modal>
             }
