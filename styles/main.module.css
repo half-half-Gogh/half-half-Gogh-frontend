@@ -94,7 +94,7 @@
   transition-timing-function: ease-in-out;
   position: absolute;
   width: 45%;
-  height: 15%;
+  height: 20%;
   max-width: 225px;
   max-height: 135px;
   border: 5px solid #f3c5c5;
@@ -111,7 +111,7 @@
 
 .minicontentAfter {
   width: 45%;
-  height: 15%;
+  height: 20%;
   max-width: 225px;
   max-height: 135px;
   z-index: 2;

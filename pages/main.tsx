@@ -30,6 +30,7 @@ const main = () => {
   const [failModal, setFailModal] = useState(false);
   const [loginFail, setLoginFail] = useState(false);
   const [waitingPath, setWatingPath] = useState<string>("");
+  const [errorStr, setErrorStr] = useState("");
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -46,7 +47,6 @@ const main = () => {
         password: loginPW,
       })
       .then(function (response) {
-        console.log(typeof response.data.signinStatus);
         if (
           response.data.signinStatus === "true" ||
           response.data.signinStatus === true
@@ -62,7 +62,6 @@ const main = () => {
               "loginUserName",
               response.data.signinUserName
             );
-            console.log(response.data.signinUserId + "zzllz" + userName);
           }
           setLoginSuccess(true);
           setLoginFail(false);
@@ -72,12 +71,22 @@ const main = () => {
             });
           }
         } else {
-          console.log("페일맨");
+          if (response.data.signinError.includes("password")) {
+            setErrorStr("잘못된 패스워드 입니다.");
+          } else if (response.data.signinError.includes("identifier")) {
+            setErrorStr("잘못된 이메일 입니다.");
+          } else if (response.data.signinError.includes("address")) {
+            setErrorStr("이메일 형식이 아닙니다.");
+          } else {
+            setErrorStr("로그인 오류 입니다.");
+          }
           setLoginFail(true);
         }
       })
       .catch(function (error) {
         console.error(error);
+        setErrorStr("다시 시도해주세요.");
+        setLoginFail(true);
       });
   };
 
@@ -272,7 +281,7 @@ const main = () => {
             height: "100%",
           }}
         >
-          <p>로그인 실패</p>
+          <p>{errorStr}</p>
           <button
             className={"failBtn"}
             onClick={() => {
@@ -333,7 +342,7 @@ const main = () => {
                   alignItems: "center",
                 }}
               >
-                <p>로그인에 성공하셨습니다 !</p>
+                <p>회원가입에 성공하셨습니다 !</p>
                 <div
                   style={{
                     width: "100%",
@@ -345,7 +354,10 @@ const main = () => {
                 >
                   <button
                     className={"successBtn"}
-                    onClick={() => setSignUpModal(false)}
+                    onClick={() => {
+                      setSignUpModal(false);
+                      setSignUpSuccess(false);
+                    }}
                   >
                     메인으로
                   </button>
