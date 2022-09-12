@@ -3,6 +3,7 @@ import { CirclePicker } from "react-color";
 import styles from "../../styles/MyCanvas.module.css";
 import Picker from "../../components/Picker";
 import SaveModal from "../../components/SaveModal";
+import Modal from "react-modal";
 import axios from "axios";
 import {
   GetServerSideProps,
@@ -34,7 +35,7 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
   const array: { x: number; y: number }[] = [];
   const [drawer, setDrawer] = useState("");
   const router = useRouter();
-
+  const [failModal, setFailModal] = useState(false);
   useEffect(() => {
     if (rangeRef.current) {
       rangeRef.current.min = "1";
@@ -115,9 +116,9 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
 
       // Post via axios or other transport method
       axios
-        .post("https://alexjun12.loca.lt/im/upload", formData)
+        .post("http://211.62.179.135:4000/im/upload", formData)
         .then(function (response) {
-          axios.post("https://alexjun12.loca.lt/im/imgInfo", {
+          axios.post("http://211.62.179.135:4000/im/imgInfo", {
             galleryName: galleryName,
             drawer: drawer,
             imgId: response.data.fileName,
@@ -209,6 +210,54 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
         </div>
       </header>
       <div className={styles.container}>
+        <Modal
+          isOpen={failModal}
+          closeTimeoutMS={200}
+          overlayClassName={{
+            base: styles.minioverlayBase,
+            afterOpen: styles.minioverlayAfter,
+            beforeClose: styles.minioverlayBefore,
+          }}
+          className={{
+            base: styles.minicontentBase,
+            afterOpen: styles.minicontentAfter,
+            beforeClose: styles.minicontentBefore,
+          }}
+        >
+          <div
+            style={{
+              display: "inline",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              fontSize: "1.5rem",
+              width: "100%",
+              height: "80%",
+            }}
+          >
+            <p
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                fontSize: "1.3rem",
+                marginLeft: "7%",
+              }}
+            >
+              화가 이름을 입력해주세요 !
+            </p>
+            <div className={"btnZone"}>
+              <button
+                className={"failBtn"}
+                onClick={() => {
+                  setFailModal(false);
+                }}
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        </Modal>
         <SaveModal
           modalOpen={modalOpen}
           saveImage={saveImage}
@@ -326,7 +375,16 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
               >
                 {isStroke ? "지우개" : "붓"}
               </button>
-              <button className={styles.btn} onClick={() => setModalOpen(true)}>
+              <button
+                className={styles.btn}
+                onClick={() => {
+                  if (drawer.length <= 0) {
+                    setFailModal(true);
+                  } else {
+                    setModalOpen(true);
+                  }
+                }}
+              >
                 그림 저장
               </button>
             </div>
@@ -370,6 +428,33 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
             text-align: center;
           }
           div {
+          }
+          .failBtn {
+            display: block;
+            position: relative;
+            float: left;
+            width: 50%;
+            height: 40%;
+            margin: 2% 3% 1% 3%;
+            font-weight: 200;
+            text-align: center;
+            color: #cd5c5c;
+            border-radius: 5%;
+            transition: all 0.2s;
+            box-shadow: 0px 0px 0px 0px #f3c5c5;
+            background: #ffc3c3;
+            font-family: "KOTRAHOPE", cursive;
+            border-color: #ffc3c3;
+            font-size: 1.2rem;
+            margin-bottom: 20%;
+          }
+          .btnZone {
+            width: 100%;
+            height: 80%;
+            margintop: 10%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
         `}
       </style>
