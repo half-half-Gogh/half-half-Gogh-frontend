@@ -14,16 +14,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 5;
 }
 
 .overlayAfter {
   background-color: rgba(0, 0, 0, 0.8);
   opacity: 1;
+  z-index: 5;
 }
 
 .overlayBefore {
   background-color: rgba(0, 0, 0, 0);
   opacity: 0;
+  z-index: 5;
 }
 
 .contentBase {
@@ -44,6 +47,7 @@
   outline: none;
   text-align: center;
   justify-content: center;
+  z-index: 5;
 }
 
 .contentAfter {
@@ -52,12 +56,14 @@
   max-width: 500px;
   max-height: 900px;
   background-color: #f3c5c5;
+  z-index: 5;
 }
 
 .contentBefore {
   width: 0%;
   height: 0%;
   background-color: transparent;
+  z-index: 5;
 }
 .minioverlayBase {
   position: fixed;
@@ -75,16 +81,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
 }
 
 .minioverlayAfter {
   background-color: rgba(0, 0, 0, 0.3);
   opacity: 1;
+  z-index: 10;
 }
 
 .minioverlayBefore {
   background-color: rgba(0, 0, 0, 0);
   opacity: 0;
+  z-index: 10;
 }
 
 .minicontentBase {
@@ -106,7 +115,7 @@
   display: flex;
   text-align: center;
   justify-content: center;
-  z-index: 2;
+  z-index: 10;
 }
 
 .minicontentAfter {
@@ -114,10 +123,11 @@
   height: 20%;
   max-width: 225px;
   max-height: 135px;
-  z-index: 2;
+  z-index: 10;
 }
 
 .minicontentBefore {
   width: 0%;
   height: 0%;
+  z-index: 10;
 }
