@@ -35,7 +35,7 @@ const SaveModal = ({
       }}
     >
       <div>
-        <p>저장하시겠습니까?</p>
+        <p style={{ color: "#3e4356" }}>저장하시겠습니까?</p>
         <div className={styles.saveBtnZone}>
           <button
             className={styles.saveBtn}
@@ -58,6 +58,13 @@ const SaveModal = ({
           </button>
         </div>
       </div>
+      <style jsx>
+        {`
+          p {
+            color: "#3e4356";
+          }
+        `}
+      </style>
     </Modal>
   );
 };
