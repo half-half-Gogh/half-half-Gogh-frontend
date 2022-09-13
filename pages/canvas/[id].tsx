@@ -57,7 +57,6 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
     context.fillStyle = "white";
     context.fillRect(0, 0, window.innerWidth, window.innerHeight);
     setCtx(context);
-    //console.log(window.innerWidth, window.innerHeight);
   }, []);
   useEffect(() => {
     if (!ctx) return;
@@ -103,12 +102,6 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
   };
   const saveImage = () => {
     if (!canvasRef.current) return;
-    // const image = canvasRef.current.toDataURL("image/jpeg");
-    // const link = document.createElement("a");
-
-    // link.href = image;
-    // link.download = "Paint";
-    // link.click();
     canvasRef.current.toBlob(function (blob) {
       const formData = new FormData();
       const fileName = getRandomString(10);
@@ -116,9 +109,9 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
 
       // Post via axios or other transport method
       axios
-        .post("http://211.62.179.135:4000/im/upload", formData)
+        .post(`${process.env.NEXT_PUBLIC_SERVER_URL}im/upload`, formData)
         .then(function (response) {
-          axios.post("http://211.62.179.135:4000/im/imgInfo", {
+          axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}im/imgInfo`, {
             galleryName: galleryName,
             drawer: drawer,
             imgId: response.data.fileName,

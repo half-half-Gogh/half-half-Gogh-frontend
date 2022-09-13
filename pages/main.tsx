@@ -8,8 +8,6 @@ import { TiKey, TiUser } from "react-icons/ti";
 import { BsClipboardPlus } from "react-icons/bs";
 import axios from "axios";
 
-const SERVER = "http://34.216.11.123";
-
 const main = () => {
   const router = useRouter();
   const [signUpModal, setSignUpModal] = useState<boolean>(false);
@@ -57,7 +55,7 @@ const main = () => {
 
   const login = async () => {
     await axios
-      .post(`${SERVER}/user/signin`, {
+      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}user/signin`, {
         id: loginID,
         password: loginPW,
       })
@@ -68,7 +66,6 @@ const main = () => {
         ) {
           setUserName(response.data.signinUserName);
           setUserId(response.data.signinUserId);
-          console.log(response.data);
           if (typeof window !== "undefined") {
             sessionStorage.removeItem("loginStatus");
             sessionStorage.setItem("loginStatus", "true");
@@ -107,13 +104,12 @@ const main = () => {
 
   const signUp = async () => {
     await axios
-      .post(`${SERVER}/user/signup`, {
+      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}user/signup`, {
         id: signUpID,
         password: signUpPWCheck,
         username: galleryName,
       })
       .then(function (response) {
-        console.log(response.data);
         if (
           response.data.signupStatus === "ture" ||
           response.data.signupStatus
@@ -143,6 +139,11 @@ const main = () => {
         )
       ) {
         sessionStorage.setItem("loginStatus", "false");
+      } else {
+        const galleryUrl = sessionStorage.getItem("loginUserName");
+        router.push({
+          pathname: `/gallery/${galleryUrl}`,
+        });
       }
       const path: any = sessionStorage.getItem("waitingPath");
       setWatingPath(path);

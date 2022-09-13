@@ -20,7 +20,6 @@ type resultType = {
   like: string[];
 };
 
-const SERVER = "http://211.62.179.135:4000/";
 const IMAGE_PATH = "public/images/";
 //const SERVER = "";
 //const IMAGE_PATH = "";
@@ -67,14 +66,13 @@ const mygallery = ({
         height: window.innerHeight,
       });
     }
-    console.log(results);
   }, []);
 
   const sendLike = (pictureName: string, index: number) => {
     if (loginStatus == "true") {
       if (results[index].like.includes(loginUserId)) {
         axios
-          .post(`${SERVER}im/pressLike`, {
+          .post(`${process.env.NEXT_PUBLIC_SERVER_URL}im/pressLike`, {
             galleryName: galleryName,
             imgId: pictureName,
             liker: loginUserId,
@@ -94,7 +92,7 @@ const mygallery = ({
         setResults(copied);
       } else {
         axios
-          .post(`${SERVER}im/pressLike`, {
+          .post(`${process.env.NEXT_PUBLIC_SERVER_URL}im/pressLike`, {
             galleryName: galleryName,
             imgId: pictureName,
             liker: loginUserId,
@@ -134,7 +132,11 @@ const mygallery = ({
               }}
             >
               <Image
-                src={SERVER + IMAGE_PATH + results[i].src}
+                src={
+                  process.env.NEXT_PUBLIC_SERVER_URL +
+                  IMAGE_PATH +
+                  results[i].src
+                }
                 layout={"fixed"}
                 height={windowSize.width * 0.7}
                 width={windowSize.width * 0.7}
@@ -248,13 +250,21 @@ const mygallery = ({
                 }}
               >
                 <Image
-                  src={SERVER + IMAGE_PATH + results[i - 1].src}
+                  src={
+                    process.env.NEXT_PUBLIC_SERVER_URL +
+                    IMAGE_PATH +
+                    results[i - 1].src
+                  }
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(SERVER + IMAGE_PATH + results[i - 1].src);
+                    setNowPic(
+                      process.env.NEXT_PUBLIC_SERVER_URL +
+                        IMAGE_PATH +
+                        results[i - 1].src
+                    );
                     setBigPic(true);
                   }}
                 />
@@ -345,13 +355,21 @@ const mygallery = ({
                 }}
               >
                 <Image
-                  src={SERVER + IMAGE_PATH + results[i].src}
+                  src={
+                    process.env.NEXT_PUBLIC_SERVER_URL +
+                    IMAGE_PATH +
+                    results[i].src
+                  }
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(SERVER + IMAGE_PATH + results[i].src);
+                    setNowPic(
+                      process.env.NEXT_PUBLIC_SERVER_URL +
+                        IMAGE_PATH +
+                        results[i].src
+                    );
                     setBigPic(true);
                   }}
                 />
@@ -456,13 +474,21 @@ const mygallery = ({
                 }}
               >
                 <Image
-                  src={SERVER + IMAGE_PATH + results[i].src}
+                  src={
+                    process.env.NEXT_PUBLIC_SERVER_URL +
+                    IMAGE_PATH +
+                    results[i].src
+                  }
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(SERVER + IMAGE_PATH + results[i].src);
+                    setNowPic(
+                      process.env.NEXT_PUBLIC_SERVER_URL +
+                        IMAGE_PATH +
+                        results[i].src
+                    );
                     setBigPic(true);
                   }}
                 />
@@ -827,7 +853,7 @@ export const getServerSideProps = async (context: any) => {
 
   var result: resultType[] = [];
   await axios
-    .post("http://211.62.179.135:4000/im/imgResponse", {
+    .post(`${process.env.SERVER_URL}im/imgResponse`, {
       galleryName: `${context.params.id}`,
     })
     .then((res) => {
