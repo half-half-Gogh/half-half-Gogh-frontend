@@ -179,220 +179,224 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
     }
   };
   return (
-    <div className={styles.background}>
-      <header className={styles.Header}>
-        <div
-          style={{
-            display: "flex",
-            width: "100%",
-            maxWidth: "500px",
-            height: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            borderBottomLeftRadius: "80px",
-            borderBottomRightRadius: "80px",
-            backgroundColor: "#ffc3c3",
-            boxShadow: "0px 0px 20px 5px rgba(0, 0, 0, 0.4)",
-          }}
-        >
-          <h2
-            style={{
-              display: "inline",
-              margin: "0px",
-              fontFamily: "SEBANG_Gothic_Bold, cursive",
-              fontSize: "2rem",
-              color: "white",
-              textAlign: "center",
-              textShadow: "2px 2px 5px black",
-            }}
-          >
-            {galleryName} 미술관
-          </h2>
-        </div>
-      </header>
-      <div className={styles.container}>
-        <Modal
-          isOpen={failModal}
-          closeTimeoutMS={200}
-          overlayClassName={{
-            base: styles.minioverlayBase,
-            afterOpen: styles.minioverlayAfter,
-            beforeClose: styles.minioverlayBefore,
-          }}
-          className={{
-            base: styles.minicontentBase,
-            afterOpen: styles.minicontentAfter,
-            beforeClose: styles.minicontentBefore,
-          }}
-        >
+    <div>
+      {loading && <Loading />}
+      <div className={styles.background}>
+        <header className={styles.Header}>
           <div
             style={{
-              display: "inline",
+              display: "flex",
+              width: "100%",
+              maxWidth: "500px",
+              height: "100%",
               justifyContent: "center",
               alignItems: "center",
-              textAlign: "center",
-              fontSize: "1.5rem",
-              width: "100%",
-              height: "80%",
+              borderBottomLeftRadius: "80px",
+              borderBottomRightRadius: "80px",
+              backgroundColor: "#ffc3c3",
+              boxShadow: "0px 0px 20px 5px rgba(0, 0, 0, 0.4)",
             }}
           >
-            <p
+            <h2
               style={{
+                display: "inline",
+                margin: "0px",
+                fontFamily: "SEBANG_Gothic_Bold, cursive",
+                fontSize: "2rem",
+                color: "white",
+                textAlign: "center",
+                textShadow: "2px 2px 5px black",
+              }}
+            >
+              {galleryName} 미술관
+            </h2>
+          </div>
+        </header>
+        <div className={styles.container}>
+          <Modal
+            isOpen={failModal}
+            closeTimeoutMS={200}
+            overlayClassName={{
+              base: styles.minioverlayBase,
+              afterOpen: styles.minioverlayAfter,
+              beforeClose: styles.minioverlayBefore,
+            }}
+            className={{
+              base: styles.minicontentBase,
+              afterOpen: styles.minicontentAfter,
+              beforeClose: styles.minicontentBefore,
+            }}
+          >
+            <div
+              style={{
+                display: "inline",
                 justifyContent: "center",
                 alignItems: "center",
                 textAlign: "center",
-                fontSize: "1.3rem",
-                marginLeft: "7%",
+                fontSize: "1.5rem",
+                width: "100%",
+                height: "80%",
               }}
             >
-              화가 이름을 입력해주세요 !
-            </p>
-            <div className={"btnZone"}>
-              <button
-                className={"failBtn"}
-                onClick={() => {
-                  setFailModal(false);
+              <p
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  fontSize: "1.3rem",
+                  marginLeft: "7%",
                 }}
               >
-                확인
-              </button>
-            </div>
-          </div>
-        </Modal>
-        <SaveModal
-          modalOpen={modalOpen}
-          saveImage={saveImage}
-          setModalOpen={setModalOpen}
-          galleryName={String(galleryName)}
-          drawer={String(drawer)}
-        ></SaveModal>
-        <div className={styles.content}>
-          <div className={"inputZone"}>
-            <input
-              value={drawer}
-              onChange={(e) => setDrawer(e.target.value)}
-              className={"drawerInput"}
-              spellCheck={false}
-              maxLength={6}
-            ></input>
-            {"      "}님의 그림
-          </div>
-          <div>
-            <canvas
-              width={windowSize.width > 500 ? 430 : windowSize.width / 1.2}
-              height={windowSize.width > 500 ? 430 : windowSize.width / 1.2}
-              ref={canvasRef}
-              className={styles.myCanvas}
-              onMouseDown={(event) => {
-                setDown(true);
-                setUp(false);
-              }}
-              onMouseMove={(event) => {
-                canvasMouseEventListener(event, "move");
-              }}
-              onMouseLeave={(event) => {
-                canvasMouseEventListener(event, "leave");
-                setDown(false);
-                setUp(true);
-              }}
-              onMouseUp={(event) => {
-                setDown(false);
-                setUp(true);
-              }}
-              onTouchStart={(event) => {
-                setDown(true);
-                setUp(false);
-              }}
-              onTouchMove={(event) => {
-                canvasTouchEventListener(event, "move");
-              }}
-              onTouchEnd={(event) => {
-                canvasTouchEventListener(event, "leave");
-                setDown(false);
-                setUp(true);
-              }}
-            ></canvas>
-          </div>
-          <div className={styles.optionZone}>
-            <div className={styles.strokeZone}>
-              <div className={styles.colorZone}>
-                <p>색상 : </p>
-
-                {"   "}
-                <div
-                  className={styles.swatch}
+                화가 이름을 입력해주세요 !
+              </p>
+              <div className={"btnZone"}>
+                <button
+                  className={"failBtn"}
                   onClick={() => {
-                    if (isStroke) setPickerOpen(true);
+                    setFailModal(false);
                   }}
                 >
-                  <div
-                    style={{
-                      width: "1rem",
-                      height: "1.1rem",
-                      borderRadius: "2px",
-                      backgroundColor: pickerColor,
-                    }}
-                  />
-                </div>
-              </div>
-              <div className={styles.widthZone}>
-                {pickerOpen ? (
-                  <Picker
-                    setPickerOpen={setPickerOpen}
-                    pickerColor={pickerColor}
-                    pickerChange={pickerChange}
-                  ></Picker>
-                ) : (
-                  <>
-                    <div className="strokeDiv">
-                      <p>{strokeWidth}</p>
-                    </div>
-
-                    <input
-                      className={styles.rangeStyle}
-                      ref={rangeRef}
-                      min={0}
-                      max={20}
-                      onChange={() => {
-                        if (rangeRef.current)
-                          changeWidth(rangeRef.current.value);
-                      }}
-                      type="range"
-                    ></input>
-                  </>
-                )}
+                  확인
+                </button>
               </div>
             </div>
+          </Modal>
+          <SaveModal
+            modalOpen={modalOpen}
+            saveImage={saveImage}
+            setModalOpen={setModalOpen}
+            galleryName={String(galleryName)}
+            drawer={String(drawer)}
+            setLoading={setLoading}
+          ></SaveModal>
+          <div className={styles.content}>
+            <div className={"inputZone"}>
+              <input
+                value={drawer}
+                onChange={(e) => setDrawer(e.target.value)}
+                className={"drawerInput"}
+                spellCheck={false}
+                maxLength={6}
+              ></input>
+              {"      "}님의 그림
+            </div>
+            <div>
+              <canvas
+                width={windowSize.width > 500 ? 430 : windowSize.width / 1.2}
+                height={windowSize.width > 500 ? 430 : windowSize.width / 1.2}
+                ref={canvasRef}
+                className={styles.myCanvas}
+                onMouseDown={(event) => {
+                  setDown(true);
+                  setUp(false);
+                }}
+                onMouseMove={(event) => {
+                  canvasMouseEventListener(event, "move");
+                }}
+                onMouseLeave={(event) => {
+                  canvasMouseEventListener(event, "leave");
+                  setDown(false);
+                  setUp(true);
+                }}
+                onMouseUp={(event) => {
+                  setDown(false);
+                  setUp(true);
+                }}
+                onTouchStart={(event) => {
+                  setDown(true);
+                  setUp(false);
+                }}
+                onTouchMove={(event) => {
+                  canvasTouchEventListener(event, "move");
+                }}
+                onTouchEnd={(event) => {
+                  canvasTouchEventListener(event, "leave");
+                  setDown(false);
+                  setUp(true);
+                }}
+              ></canvas>
+            </div>
+            <div className={styles.optionZone}>
+              <div className={styles.strokeZone}>
+                <div className={styles.colorZone}>
+                  <p>색상 : </p>
 
-            <div className={styles.btnZone}>
-              <button className={styles.btn} onClick={() => clearCanvas()}>
-                초기화
-              </button>
-              <button
-                className={styles.btn}
-                onClick={() => {
-                  setIsStroke(!isStroke);
-                }}
-              >
-                {isStroke ? "지우개" : "붓"}
-              </button>
-              <button
-                className={styles.btn}
-                onClick={() => {
-                  if (drawer.length <= 0) {
-                    setFailModal(true);
-                  } else {
-                    setModalOpen(true);
-                  }
-                }}
-              >
-                그림 저장
-              </button>
+                  {"   "}
+                  <div
+                    className={styles.swatch}
+                    onClick={() => {
+                      if (isStroke) setPickerOpen(true);
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "1rem",
+                        height: "1.1rem",
+                        borderRadius: "2px",
+                        backgroundColor: pickerColor,
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className={styles.widthZone}>
+                  {pickerOpen ? (
+                    <Picker
+                      setPickerOpen={setPickerOpen}
+                      pickerColor={pickerColor}
+                      pickerChange={pickerChange}
+                    ></Picker>
+                  ) : (
+                    <>
+                      <div className="strokeDiv">
+                        <p>{strokeWidth}</p>
+                      </div>
+
+                      <input
+                        className={styles.rangeStyle}
+                        ref={rangeRef}
+                        min={0}
+                        max={20}
+                        onChange={() => {
+                          if (rangeRef.current)
+                            changeWidth(rangeRef.current.value);
+                        }}
+                        type="range"
+                      ></input>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className={styles.btnZone}>
+                <button className={styles.btn} onClick={() => clearCanvas()}>
+                  초기화
+                </button>
+                <button
+                  className={styles.btn}
+                  onClick={() => {
+                    setIsStroke(!isStroke);
+                  }}
+                >
+                  {isStroke ? "지우개" : "붓"}
+                </button>
+                <button
+                  className={styles.btn}
+                  onClick={() => {
+                    if (drawer.length <= 0) {
+                      setFailModal(true);
+                    } else {
+                      setModalOpen(true);
+                    }
+                  }}
+                >
+                  저장
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      {loading && <Loading />}
+
       <style jsx>
         {`
           p {
