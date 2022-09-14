@@ -15,10 +15,14 @@ import { getRandomString } from "../../components/getRandomString";
 import Loading from "../../components/Loading";
 
 type Props = {
+  userId: string;
   galleryName: string;
 };
 
-const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
+const MyCanvas = ({
+  userId,
+  galleryName,
+}: InferGetServerSidePropsType<Props>) => {
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [down, setDown] = useState<boolean>(false);
@@ -117,7 +121,7 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
         .post(`${process.env.NEXT_PUBLIC_SERVER_URL}im/upload`, formData)
         .then(function (response) {
           axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}im/imgInfo`, {
-            galleryName: galleryName,
+            loginUserId: userId,
             drawer: drawer,
             imgId: response.data.fileName,
           });
@@ -265,7 +269,7 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
             modalOpen={modalOpen}
             saveImage={saveImage}
             setModalOpen={setModalOpen}
-            galleryName={String(galleryName)}
+            userId={String(userId)}
             drawer={String(drawer)}
             setLoading={setLoading}
           ></SaveModal>
@@ -468,9 +472,21 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
   );
 };
 export const getServerSideProps = async (context: any) => {
+  let userName: string = "";
+  await axios
+    .post(`${process.env.SERVER_URL}im/responseUserName`, {
+      loginUserId: `${context.params.id}`,
+    })
+    .then((res) => {
+      userName = res.data.userName;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   return {
     props: {
-      galleryName: `${context.params.id}`,
+      userId: context.params.id,
+      galleryName: userName,
     },
   };
 };

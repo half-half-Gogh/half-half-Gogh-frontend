@@ -6,7 +6,7 @@ type Props = {
   modalOpen: boolean;
   saveImage: () => void;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  galleryName: string;
+  userId: string;
   drawer: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -14,7 +14,7 @@ const SaveModal = ({
   modalOpen,
   saveImage,
   setModalOpen,
-  galleryName,
+  userId,
   drawer,
   setLoading,
 }: Props) => {
@@ -46,8 +46,8 @@ const SaveModal = ({
               saveImage();
               router.push({
                 //pathname: "/mygallery",
-                pathname: `/gallery/${galleryName}`,
-                query: { username: galleryName },
+                pathname: `/gallery/${userId}`,
+                query: { userId: userId },
               });
             }}
           >

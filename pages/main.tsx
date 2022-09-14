@@ -28,7 +28,7 @@ const main = () => {
   const [signUpPWCheck, setSignUpPWCheck] = useState<string>("");
   const [checkCorrect, setCheckCorrect] = useState<boolean>(false);
   const [disallowSignUp, setDisallowSignUp] = useState<boolean>(true);
-  const [signUpSuccess, setSignUpSuccess] = useState(true);
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
   const [failModal, setFailModal] = useState(false);
   const [loginFail, setLoginFail] = useState(false);
   const [waitingPath, setWatingPath] = useState<string>("");
@@ -148,7 +148,7 @@ const main = () => {
         !loginSuccess
       ) {
         setLoading(true);
-        const galleryUrl = sessionStorage.getItem("loginUserName");
+        const galleryUrl = sessionStorage.getItem("loginUserId");
         router.push({
           pathname: `/gallery/${galleryUrl}`,
         });
@@ -728,7 +728,13 @@ const main = () => {
                   </div>
                   <div
                     className={"btnZone"}
-                    onClick={() => setSignUpModal(false)}
+                    onClick={() => {
+                      setSignUpModal(false);
+                      setSignUpID("");
+                      setSignUpPW("");
+                      setGalleryName("");
+                      setDisallowSignUp(true);
+                    }}
                   >
                     <button className={"modalBtn"}>메인으로</button>
                   </div>
@@ -852,13 +858,14 @@ const main = () => {
                 <div className={"btnZone"}>
                   <button
                     className={"modalBtn"}
-                    onClick={() =>
+                    onClick={() => {
+                      setLoading(true);
                       router.push({
                         //pathname: "/mygallery",
-                        pathname: `/gallery/${userName}`,
-                        query: { username: userName },
-                      })
-                    }
+                        pathname: `/gallery/${userId}`,
+                        query: { userid: userId },
+                      });
+                    }}
                   >
                     내 미술관으로
                   </button>

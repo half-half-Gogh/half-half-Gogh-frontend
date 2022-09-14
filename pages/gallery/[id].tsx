@@ -27,6 +27,7 @@ const IMAGE_PATH = "public/images/";
 const mygallery = ({
   result,
   galleryName,
+  userId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   //const mygallery = () => {
   const [windowSize, setWindowSize] = useState({
@@ -50,10 +51,11 @@ const mygallery = ({
     if (typeof window !== "undefined") {
       const status: any = sessionStorage.getItem("loginStatus");
       const userName: any = sessionStorage.getItem("loginUserName");
-      const userId: any = sessionStorage.getItem("loginUserId");
+      const userid: any = sessionStorage.getItem("loginUserId");
       setLoginStatus(status);
       setLoginUserName(userName);
-      setLoginUserId(userId);
+      setLoginUserId(userid);
+      console.log(userid + "SSSSS");
     }
     console.log(loginStatus);
     if (window.innerWidth <= 500) {
@@ -94,7 +96,7 @@ const mygallery = ({
       } else {
         axios
           .post(`${process.env.NEXT_PUBLIC_SERVER_URL}im/pressLike`, {
-            galleryName: galleryName,
+            loginUserId: userId,
             imgId: pictureName,
             liker: loginUserId,
           })
@@ -667,7 +669,7 @@ const mygallery = ({
         >
           <button
             className={styles.buttonStyle}
-            onClick={() => router.push(`/canvas/${galleryName}`)}
+            onClick={() => router.push(`/canvas/${userId}`)}
           >
             <p style={{ margin: "0px 0px", fontSize: "1.15rem" }}>
               그림 그리기
@@ -680,8 +682,8 @@ const mygallery = ({
             onClick={() => {
               if (loginStatus == "true") {
                 router.push({
-                  pathname: `/gallery/${loginUserName}`,
-                  query: { username: loginUserName },
+                  pathname: `/gallery/${loginUserId}`,
+                  query: { userId: loginUserId },
                 });
               } else {
                 router.push({
@@ -789,8 +791,7 @@ const mygallery = ({
               onClick={() => {
                 setModalOpen(false);
                 if (typeof window !== "undefined") {
-                  const id = router.query.id;
-                  sessionStorage.setItem("waitingPath", `/gallery/${id}`);
+                  sessionStorage.setItem("waitingPath", `/gallery/${userId}`);
                   router.push({
                     pathname: `/main`,
                   });
@@ -861,10 +862,11 @@ const mygallery = ({
 };
 
 export const getServerSideProps = async (context: any) => {
-  var result: resultType[] = [];
+  let result: resultType[] = [];
+  let userName: string = "";
   await axios
     .post(`${process.env.SERVER_URL}im/imgResponse`, {
-      galleryName: `${context.params.id}`,
+      loginUserId: `${context.params.id}`,
     })
     .then((res) => {
       result = res.data.pResult;
@@ -873,9 +875,20 @@ export const getServerSideProps = async (context: any) => {
           value.like.pop();
         }
       });
+      /*
       results = result.sort(function (a, b) {
         return b.like.length - a.like.length;
-      });
+      });*/
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  await axios
+    .post(`${process.env.SERVER_URL}im/responseUserName`, {
+      loginUserId: `${context.params.id}`,
+    })
+    .then((res) => {
+      userName = res.data.userName;
     })
     .catch((err) => {
       console.error(err);
@@ -889,7 +902,8 @@ export const getServerSideProps = async (context: any) => {
   return {
     props: {
       result: results,
-      galleryName: context.params.id,
+      galleryName: userName,
+      userId: context.params.id,
     },
   };
 };
