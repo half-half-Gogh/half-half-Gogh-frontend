@@ -8,7 +8,6 @@ import { TiKey, TiUser } from "react-icons/ti";
 import { BsClipboardPlus } from "react-icons/bs";
 import axios from "axios";
 import Loading from "../components/Loading";
-
 const main = () => {
   const router = useRouter();
   const [signUpModal, setSignUpModal] = useState<boolean>(false);
@@ -144,7 +143,10 @@ const main = () => {
 
       if (loginChecker == "false" || loginChecker?.toString() == "false") {
         sessionStorage.setItem("loginStatus", "false");
-      } else if (loginChecker == "true" || loginChecker?.toString() == "true") {
+      } else if (
+        (loginChecker == "true" || loginChecker?.toString() == "true") &&
+        !loginSuccess
+      ) {
         setLoading(true);
         const galleryUrl = sessionStorage.getItem("loginUserName");
         router.push({
