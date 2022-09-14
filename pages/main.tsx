@@ -7,6 +7,7 @@ import title from "/public/images/title_img.png";
 import { TiKey, TiUser } from "react-icons/ti";
 import { BsClipboardPlus } from "react-icons/bs";
 import axios from "axios";
+import Loading from "../components/Loading";
 
 const main = () => {
   const router = useRouter();
@@ -37,6 +38,7 @@ const main = () => {
     width: 0,
     height: 0,
   });
+  const [loading, setLoading] = useState<boolean>(false);
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -75,6 +77,7 @@ const main = () => {
               response.data.signinUserName
             );
           }
+          setLoading(false);
           setLoginSuccess(true);
           setLoginFail(false);
           if (!(waitingPath === "")) {
@@ -92,12 +95,14 @@ const main = () => {
           } else {
             setErrorStr("로그인 오류 입니다.");
           }
+          setLoading(false);
           setLoginFail(true);
         }
       })
       .catch(function (error) {
         console.error(error);
         setErrorStr("다시 시도해주세요.");
+        setLoading(false);
         setLoginFail(true);
       });
   };
@@ -114,6 +119,7 @@ const main = () => {
           response.data.signupStatus === "ture" ||
           response.data.signupStatus
         ) {
+          setLoading(false);
           setSignUpSuccess(true);
         } else {
           if (response.data.signupError.includes("already in use")) {
@@ -121,25 +127,25 @@ const main = () => {
           } else {
             setErrorStr("회원가입 오류 입니다.");
           }
+          setLoading(false);
           setLoginFail(true);
         }
       })
       .catch(function (error) {
         console.error(error);
         setErrorStr("다시 시도해주세요.");
+        setLoading(false);
         setLoginFail(true);
       });
   };
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (
-        !(
-          sessionStorage.getItem("loginStatus") === "true" ||
-          sessionStorage.getItem("loginStatus")
-        )
-      ) {
+      const loginChecker = sessionStorage.getItem("loginStatus");
+
+      if (loginChecker == "false" || loginChecker?.toString() == "false") {
         sessionStorage.setItem("loginStatus", "false");
-      } else {
+      } else if (loginChecker == "true" || loginChecker?.toString() == "true") {
+        setLoading(true);
         const galleryUrl = sessionStorage.getItem("loginUserName");
         router.push({
           pathname: `/gallery/${galleryUrl}`,
@@ -176,220 +182,607 @@ const main = () => {
   }, [signUpID, galleryName, signUpPW, checkCorrect]);
 
   return (
-    <div className={"container"}>
-      <div>
-        <Image src={title} />
-        {windowSize.width < 363 ? (
-          windowSize.width < 281 ? (
-            <h1
-              style={{
-                fontSize: "2.8rem",
-                color: "#3e4356",
-                marginTop: "-5px",
-                fontFamily: "SEBANG_Gothic_Bold, cursive",
-              }}
-            >
-              반의반고흐
-            </h1>
+    <div>
+      <div className={"container"}>
+        <div>
+          <Image src={title} />
+          {windowSize.width < 363 ? (
+            windowSize.width < 281 ? (
+              <h1
+                style={{
+                  fontSize: "2.8rem",
+                  color: "#3e4356",
+                  marginTop: "-5px",
+                  fontFamily: "SEBANG_Gothic_Bold, cursive",
+                }}
+              >
+                반의반고흐
+              </h1>
+            ) : (
+              <h1
+                style={{
+                  fontSize: "3.8rem",
+                  color: "#3e4356",
+                  marginTop: "-7px",
+                  fontFamily: "SEBANG_Gothic_Bold, cursive",
+                }}
+              >
+                반의반고흐
+              </h1>
+            )
           ) : (
             <h1
               style={{
-                fontSize: "3.8rem",
+                fontSize: "4.5rem",
                 color: "#3e4356",
-                marginTop: "-7px",
+                marginTop: "-10px",
                 fontFamily: "SEBANG_Gothic_Bold, cursive",
               }}
             >
               반의반고흐
             </h1>
-          )
-        ) : (
-          <h1
-            style={{
-              fontSize: "4.5rem",
-              color: "#3e4356",
-              marginTop: "-10px",
-              fontFamily: "SEBANG_Gothic_Bold, cursive",
-            }}
-          >
-            반의반고흐
-          </h1>
-        )}
-      </div>
+          )}
+        </div>
 
-      <div
-        style={{
-          display: "flex",
-          width: "75%",
-          marginLeft: "12.5%",
-        }}
-      >
         <div
           style={{
-            display: "block",
-            width: "70%",
-            marginRight: "3px",
+            display: "flex",
+            width: "75%",
+            marginLeft: "12.5%",
           }}
         >
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              border: "3px solid #ffa3a3",
-              borderRadius: "5px",
-              marginBottom: "5px",
+              display: "block",
+              width: "70%",
+              marginRight: "3px",
             }}
           >
-            <div style={{ display: "block", width: "20%" }}>
-              <TiUser size="2rem" color="#ffa3a3" />
-            </div>
-            <input
+            <div
               style={{
-                width: "80%",
-                height: "100%",
-                border: "0",
-                backgroundColor: "transparent",
-                fontFamily: "KOTRAHOPE, cursive",
-                fontSize: "1rem",
-              }}
-              placeholder="이메일"
-              onChange={(e) => setLoginID(e.target.value)}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              border: "3px solid #ffa3a3",
-              borderRadius: "5px",
-            }}
-          >
-            <div style={{ width: "20%" }}>
-              <TiKey size="2rem" color="#ffa3a3" />
-            </div>
-            <input
-              style={{
-                width: "80%",
-                height: "100%",
-                border: "0",
-                backgroundColor: "transparent",
-                fontFamily: "KOTRAHOPE, cursive",
-                fontSize: "1rem",
-              }}
-              type="password"
-              placeholder="패스워드"
-              onChange={(e) => setLoginPW(e.target.value)}
-            />
-          </div>
-        </div>
-        <div style={{ width: "30%" }}>
-          <button
-            className={"btn"}
-            onClick={() => {
-              login();
-            }}
-          >
-            로그인
-          </button>
-        </div>
-      </div>
-      <button
-        style={{
-          marginTop: "15px",
-          border: "0",
-          backgroundColor: "transparent",
-        }}
-        onClick={() => setSignUpModal(true)}
-      >
-        <a
-          style={{
-            fontSize: "1.2rem",
-            fontFamily: "KOTRAHOPE, cursive",
-            color: "#ffa3a3",
-            textDecoration: "underline",
-          }}
-        >
-          회원가입
-        </a>
-      </button>
-      <Modal
-        isOpen={loginFail}
-        closeTimeoutMS={200}
-        overlayClassName={{
-          base: styles.minioverlayBase,
-          afterOpen: styles.minioverlayAfter,
-          beforeClose: styles.minioverlayBefore,
-        }}
-        className={{
-          base: styles.minicontentBase,
-          afterOpen: styles.minicontentAfter,
-          beforeClose: styles.minicontentBefore,
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            fontSize: "1.5rem",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <p>{errorStr}</p>
-          <div className={"btnZone"}>
-            <button
-              className={"failBtn"}
-              onClick={() => {
-                setLoginFail(false);
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "3px solid #ffa3a3",
+                borderRadius: "5px",
+                marginBottom: "5px",
               }}
             >
-              확인
+              <div style={{ display: "block", width: "20%" }}>
+                <TiUser size="2rem" color="#ffa3a3" />
+              </div>
+              <input
+                style={{
+                  width: "80%",
+                  height: "100%",
+                  border: "0",
+                  backgroundColor: "transparent",
+                  fontFamily: "KOTRAHOPE, cursive",
+                  fontSize: "1rem",
+                }}
+                placeholder="이메일"
+                onChange={(e) => setLoginID(e.target.value)}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "3px solid #ffa3a3",
+                borderRadius: "5px",
+              }}
+            >
+              <div style={{ width: "20%" }}>
+                <TiKey size="2rem" color="#ffa3a3" />
+              </div>
+              <input
+                style={{
+                  width: "80%",
+                  height: "100%",
+                  border: "0",
+                  backgroundColor: "transparent",
+                  fontFamily: "KOTRAHOPE, cursive",
+                  fontSize: "1rem",
+                }}
+                type="password"
+                placeholder="패스워드"
+                onChange={(e) => setLoginPW(e.target.value)}
+              />
+            </div>
+          </div>
+          <div style={{ width: "30%" }}>
+            <button
+              className={"btn"}
+              onClick={() => {
+                login();
+                setLoading(true);
+              }}
+            >
+              로그인
             </button>
           </div>
         </div>
-      </Modal>
-      <Modal
-        isOpen={signUpModal}
-        closeTimeoutMS={200}
-        overlayClassName={{
-          base: styles.overlayBase,
-          afterOpen: styles.overlayAfter,
-          beforeClose: styles.overlayBefore,
-        }}
-        className={{
-          base: styles.contentBase,
-          afterOpen: styles.contentAfter,
-          beforeClose: styles.contentBefore,
-        }}
-      >
-        {signUpSuccess ? (
-          <div style={{ width: "100%", height: "100%" }}>
+        <button
+          style={{
+            marginTop: "15px",
+            border: "0",
+            backgroundColor: "transparent",
+          }}
+          onClick={() => {
+            setSignUpModal(true);
+          }}
+        >
+          <a
+            style={{
+              fontSize: "1.2rem",
+              fontFamily: "KOTRAHOPE, cursive",
+              color: "#ffa3a3",
+              textDecoration: "underline",
+            }}
+          >
+            회원가입
+          </a>
+        </button>
+        <Modal
+          isOpen={loginFail}
+          closeTimeoutMS={200}
+          overlayClassName={{
+            base: styles.minioverlayBase,
+            afterOpen: styles.minioverlayAfter,
+            beforeClose: styles.minioverlayBefore,
+          }}
+          className={{
+            base: styles.minicontentBase,
+            afterOpen: styles.minicontentAfter,
+            beforeClose: styles.minicontentBefore,
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              fontSize: "1.5rem",
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <p>{errorStr}</p>
+            <div className={"btnZone"}>
+              <button
+                className={"failBtn"}
+                onClick={() => {
+                  setLoginFail(false);
+                }}
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        </Modal>
+        <Modal
+          isOpen={signUpModal}
+          closeTimeoutMS={200}
+          overlayClassName={{
+            base: styles.overlayBase,
+            afterOpen: styles.overlayAfter,
+            beforeClose: styles.overlayBefore,
+          }}
+          className={{
+            base: styles.contentBase,
+            afterOpen: styles.contentAfter,
+            beforeClose: styles.contentBefore,
+          }}
+        >
+          {signUpSuccess ? (
+            <div style={{ width: "100%", height: "100%" }}>
+              <div
+                style={{
+                  height: "15%",
+                  backgroundColor: "#f3c5c5",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <span style={{ display: "inline", color: "#CD5C5C" }}>
+                  회원가입
+                </span>
+              </div>
+              <div
+                style={{
+                  height: "85%",
+                  width: "100%",
+                  backgroundColor: "#f6e7d8",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                  display: "inline-block",
+                  justifyContent: "center",
+                }}
+              >
+                <div
+                  style={{
+                    display: "grid",
+                    textAlign: "center",
+                    width: "90%",
+                    height: "100%",
+                    marginLeft: "5%",
+                    alignItems: "center",
+                  }}
+                >
+                  <p>회원가입에 성공했습니다 !</p>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <button
+                      className={"successBtn"}
+                      onClick={() => {
+                        setSignUpID("");
+                        setSignUpPW("");
+                        setGalleryName("");
+                        setDisallowSignUp(true);
+                        setCheckCorrect(false);
+                        setSignUpModal(false);
+                        setSignUpSuccess(false);
+                      }}
+                    >
+                      확인
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div style={{ width: "100%", height: "100%" }}>
+              {
+                <Modal
+                  isOpen={failModal}
+                  closeTimeoutMS={200}
+                  overlayClassName={{
+                    base: styles.minioverlayBase,
+                    afterOpen: styles.minioverlayAfter,
+                    beforeClose: styles.minioverlayBefore,
+                  }}
+                  className={{
+                    base: styles.minicontentBase,
+                    afterOpen: styles.minicontentAfter,
+                    beforeClose: styles.minicontentBefore,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "grid",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                      fontSize: "1.5rem",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  >
+                    <p>가 중복 됩니다!</p>
+                    <div className={"btnZone"}>
+                      <button
+                        className={"failBtn"}
+                        onClick={() => {
+                          setFailModal(false);
+                        }}
+                      >
+                        확인
+                      </button>
+                    </div>
+                  </div>
+                </Modal>
+              }
+              <div
+                style={{
+                  height: "15%",
+                  backgroundColor: "#f3c5c5",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <span style={{ display: "inline", color: "#CD5C5C" }}>
+                  회원가입
+                </span>
+              </div>
+              <div
+                style={{
+                  height: "85%",
+                  backgroundColor: "#f6e7d8",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "grid",
+                    textAlign: "left",
+                    width: "90%",
+                    height: "20%",
+                    marginLeft: "5%",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
+                      미술관 이름 (5자 이하)
+                    </p>
+                    {galleryName != "" ? (
+                      <p
+                        style={{
+                          display: "inline",
+                          fontSize: "0.7rem",
+                          margin: "0px 0px",
+                        }}
+                      >
+                        ✔️
+                      </p>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <input
+                    style={{
+                      border: "2px solid #575757",
+                      height: "70%",
+                      background: "#ece7e2",
+                      borderRadius: "5px",
+                      fontFamily: "KOTRAHOPE, cursive",
+                      fontSize: "1rem",
+                      paddingLeft: "5px",
+                    }}
+                    maxLength={5}
+                    onChange={(e) => setGalleryName(e.target.value)}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    textAlign: "left",
+                    width: "90%",
+                    height: "20%",
+                    marginLeft: "5%",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
+                      이메일
+                    </p>
+                    {idCheck ? (
+                      <p
+                        style={{
+                          display: "inline",
+                          fontSize: "0.7rem",
+                          margin: "0px 0px",
+                        }}
+                      >
+                        ✔️
+                      </p>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <input
+                    style={{
+                      border: "2px solid #575757",
+                      height: "70%",
+                      background: "#ece7e2",
+                      borderRadius: "5px",
+                      fontFamily: "KOTRAHOPE, cursive",
+                      fontSize: "1rem",
+                      paddingLeft: "5px",
+                    }}
+                    onChange={(e) => setSignUpID(e.target.value)}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    textAlign: "left",
+                    width: "90%",
+                    height: "20%",
+                    marginLeft: "5%",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
+                      패스워드 (6자 이상)
+                    </p>
+                    {signUpPW.length >= 6 ? (
+                      <p
+                        style={{
+                          display: "inline",
+                          fontSize: "0.7rem",
+                          margin: "0px 0px",
+                        }}
+                      >
+                        ✔️
+                      </p>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <input
+                    style={{
+                      border: "2px solid #575757",
+                      height: "70%",
+                      background: "#ece7e2",
+                      borderRadius: "5px",
+                      fontFamily: "KOTRAHOPE, cursive",
+                      fontSize: "1rem",
+                      paddingLeft: "5px",
+                    }}
+                    type={"password"}
+                    onChange={(e) => setSignUpPW(e.target.value)}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    textAlign: "left",
+                    width: "90%",
+                    height: "20%",
+                    marginLeft: "5%",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <p
+                      style={{
+                        display: "inline",
+                        fontSize: "1rem",
+                        margin: "0px 0px",
+                      }}
+                    >
+                      패스워드 확인
+                    </p>
+                    {checkCorrect ? (
+                      <p
+                        style={{
+                          display: "inline",
+                          fontSize: "0.7rem",
+                          margin: "0px 0px",
+                        }}
+                      >
+                        ✔️
+                      </p>
+                    ) : signUpPWCheck == "" ? (
+                      <p
+                        style={{
+                          display: "inline",
+                          fontSize: "1rem",
+                          margin: "0px 0px",
+                        }}
+                      ></p>
+                    ) : (
+                      <p
+                        style={{
+                          display: "inline",
+                          fontSize: "1rem",
+                          margin: "0px 0px",
+                        }}
+                      >
+                        불일치
+                      </p>
+                    )}
+                  </div>
+                  <input
+                    style={{
+                      border: "2px solid #575757",
+                      height: "70%",
+                      background: "#ece7e2",
+                      borderRadius: "5px",
+                      fontFamily: "KOTRAHOPE, cursive",
+                      fontSize: "1rem",
+                      paddingLeft: "5px",
+                    }}
+                    type={"password"}
+                    onChange={(e) => setSignUpPWCheck(e.target.value)}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "92.5%",
+                    height: "20%",
+                    marginLeft: "3.75%",
+                  }}
+                >
+                  <div className={"btnZone"}>
+                    <button
+                      className={"modalBtn"}
+                      onClick={() => {
+                        signUp();
+                        setLoading(true);
+                      }}
+                      disabled={disallowSignUp}
+                    >
+                      <p style={{ margin: "0" }}>가입하기</p>
+                    </button>
+                  </div>
+                  <div
+                    className={"btnZone"}
+                    onClick={() => setSignUpModal(false)}
+                  >
+                    <button className={"modalBtn"}>메인으로</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </Modal>
+        <Modal
+          isOpen={loginSuccess}
+          closeTimeoutMS={500}
+          overlayClassName={{
+            base: styles.loginOverlayBase,
+            afterOpen: styles.loginOverlayAfter,
+            beforeClose: styles.loginOverlayBefore,
+          }}
+          className={{
+            base: styles.loginContentBase,
+            afterOpen: styles.loginContentAfter,
+            beforeClose: styles.loginContentBefore,
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <div
               style={{
-                height: "15%",
+                height: "20%",
                 backgroundColor: "#f3c5c5",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <span style={{ display: "inline", color: "#CD5C5C" }}>
-                회원가입
+              <span
+                style={{
+                  display: "inline",
+                  color: "#CD5C5C",
+                  fontSize: "1.5rem",
+                }}
+              >
+                {userName}님의 미술관
               </span>
             </div>
             <div
               style={{
-                height: "85%",
+                height: "80%",
                 width: "100%",
                 backgroundColor: "#f6e7d8",
                 borderTopLeftRadius: "10px",
                 borderTopRightRadius: "10px",
-                display: "inline-block",
                 justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <div
@@ -402,461 +795,78 @@ const main = () => {
                   alignItems: "center",
                 }}
               >
-                <p>회원가입에 성공했습니다 !</p>
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <button
-                    className={"successBtn"}
-                    onClick={() => {
-                      setSignUpID("");
-                      setSignUpPW("");
-                      setGalleryName("");
-                      setDisallowSignUp(true);
-                      setCheckCorrect(false);
-                      setSignUpModal(false);
-                      setSignUpSuccess(false);
-                    }}
-                  >
-                    확인
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div style={{ width: "100%", height: "100%" }}>
-            {
-              <Modal
-                isOpen={failModal}
-                closeTimeoutMS={200}
-                overlayClassName={{
-                  base: styles.minioverlayBase,
-                  afterOpen: styles.minioverlayAfter,
-                  beforeClose: styles.minioverlayBefore,
-                }}
-                className={{
-                  base: styles.minicontentBase,
-                  afterOpen: styles.minicontentAfter,
-                  beforeClose: styles.minicontentBefore,
-                }}
-              >
                 <div
                   style={{
                     display: "grid",
+                    width: "100%",
+                    height: "35%",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    // border: "1px solid black",
+                  }}
+                >
+                  <input
+                    readOnly
+                    value={userLink}
+                    onClick={() => handleCopyClipBoard(userLink)}
+                    style={{
+                      display: "block",
+                      height: "1.5rem",
+                      fontSize: "1rem",
+                      border: "3px solid #3e4356",
+                      fontFamily: "KOTRAHOPE, cursive",
+                      color: "#3e4356",
+                      borderRadius: "5px",
+                      paddingLeft: "5px",
+                      paddingTop: "2px",
+                      paddingBottom: "2px",
+                      marginTop: "3px",
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    height: "20%",
                     justifyContent: "center",
                     alignItems: "center",
-                    textAlign: "center",
-                    fontSize: "1.5rem",
-                    width: "100%",
-                    height: "100%",
                   }}
-                >
-                  <p>가 중복 됩니다!</p>
-                  <div className={"btnZone"}>
-                    <button
-                      className={"failBtn"}
-                      onClick={() => {
-                        setFailModal(false);
-                      }}
-                    >
-                      확인
-                    </button>
-                  </div>
-                </div>
-              </Modal>
-            }
-            <div
-              style={{
-                height: "15%",
-                backgroundColor: "#f3c5c5",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <span style={{ display: "inline", color: "#CD5C5C" }}>
-                회원가입
-              </span>
-            </div>
-            <div
-              style={{
-                height: "85%",
-                backgroundColor: "#f6e7d8",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-              }}
-            >
-              <div
-                style={{
-                  display: "grid",
-                  textAlign: "left",
-                  width: "90%",
-                  height: "20%",
-                  marginLeft: "5%",
-                  alignItems: "flex-end",
-                }}
-              >
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
-                    미술관 이름 (5자 이하)
-                  </p>
-                  {galleryName != "" ? (
-                    <p
-                      style={{
-                        display: "inline",
-                        fontSize: "0.7rem",
-                        margin: "0px 0px",
-                      }}
-                    >
-                      ✔️
-                    </p>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-                <input
-                  style={{
-                    border: "2px solid #575757",
-                    height: "70%",
-                    background: "#ece7e2",
-                    borderRadius: "5px",
-                    fontFamily: "KOTRAHOPE, cursive",
-                    fontSize: "1rem",
-                    paddingLeft: "5px",
-                  }}
-                  maxLength={5}
-                  onChange={(e) => setGalleryName(e.target.value)}
-                />
-              </div>
-              <div
-                style={{
-                  display: "grid",
-                  textAlign: "left",
-                  width: "90%",
-                  height: "20%",
-                  marginLeft: "5%",
-                  alignItems: "flex-end",
-                }}
-              >
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <p style={{ fontSize: "1rem", margin: "0px 0px" }}>이메일</p>
-                  {idCheck ? (
-                    <p
-                      style={{
-                        display: "inline",
-                        fontSize: "0.7rem",
-                        margin: "0px 0px",
-                      }}
-                    >
-                      ✔️
-                    </p>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-                <input
-                  style={{
-                    border: "2px solid #575757",
-                    height: "70%",
-                    background: "#ece7e2",
-                    borderRadius: "5px",
-                    fontFamily: "KOTRAHOPE, cursive",
-                    fontSize: "1rem",
-                    paddingLeft: "5px",
-                  }}
-                  onChange={(e) => setSignUpID(e.target.value)}
-                />
-              </div>
-              <div
-                style={{
-                  display: "grid",
-                  textAlign: "left",
-                  width: "90%",
-                  height: "20%",
-                  marginLeft: "5%",
-                  alignItems: "flex-end",
-                }}
-              >
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
-                    패스워드 (6자 이상)
-                  </p>
-                  {signUpPW.length >= 6 ? (
-                    <p
-                      style={{
-                        display: "inline",
-                        fontSize: "0.7rem",
-                        margin: "0px 0px",
-                      }}
-                    >
-                      ✔️
-                    </p>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-                <input
-                  style={{
-                    border: "2px solid #575757",
-                    height: "70%",
-                    background: "#ece7e2",
-                    borderRadius: "5px",
-                    fontFamily: "KOTRAHOPE, cursive",
-                    fontSize: "1rem",
-                    paddingLeft: "5px",
-                  }}
-                  type={"password"}
-                  onChange={(e) => setSignUpPW(e.target.value)}
-                />
-              </div>
-              <div
-                style={{
-                  display: "grid",
-                  textAlign: "left",
-                  width: "90%",
-                  height: "20%",
-                  marginLeft: "5%",
-                  alignItems: "flex-end",
-                }}
-              >
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <p
                     style={{
                       display: "inline",
                       fontSize: "1rem",
+                      width: "100%",
                       margin: "0px 0px",
+                      color: "#3e4356",
                     }}
                   >
-                    패스워드 확인
+                    {copyMessage}
                   </p>
-                  {checkCorrect ? (
-                    <p
-                      style={{
-                        display: "inline",
-                        fontSize: "0.7rem",
-                        margin: "0px 0px",
-                      }}
-                    >
-                      ✔️
-                    </p>
-                  ) : signUpPWCheck == "" ? (
-                    <p
-                      style={{
-                        display: "inline",
-                        fontSize: "1rem",
-                        margin: "0px 0px",
-                      }}
-                    ></p>
-                  ) : (
-                    <p
-                      style={{
-                        display: "inline",
-                        fontSize: "1rem",
-                        margin: "0px 0px",
-                      }}
-                    >
-                      불일치
-                    </p>
-                  )}
                 </div>
-                <input
-                  style={{
-                    border: "2px solid #575757",
-                    height: "70%",
-                    background: "#ece7e2",
-                    borderRadius: "5px",
-                    fontFamily: "KOTRAHOPE, cursive",
-                    fontSize: "1rem",
-                    paddingLeft: "5px",
-                  }}
-                  type={"password"}
-                  onChange={(e) => setSignUpPWCheck(e.target.value)}
-                />
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "92.5%",
-                  height: "20%",
-                  marginLeft: "3.75%",
-                }}
-              >
                 <div className={"btnZone"}>
                   <button
                     className={"modalBtn"}
-                    onClick={() => {
-                      signUp();
-                    }}
-                    disabled={disallowSignUp}
+                    onClick={() =>
+                      router.push({
+                        //pathname: "/mygallery",
+                        pathname: `/gallery/${userName}`,
+                        query: { username: userName },
+                      })
+                    }
                   >
-                    <p style={{ margin: "0" }}>가입하기</p>
+                    내 미술관으로
                   </button>
                 </div>
-                <div
-                  className={"btnZone"}
-                  onClick={() => setSignUpModal(false)}
-                >
-                  <button className={"modalBtn"}>메인으로</button>
-                </div>
               </div>
             </div>
           </div>
-        )}
-      </Modal>
-      <Modal
-        isOpen={loginSuccess}
-        closeTimeoutMS={500}
-        overlayClassName={{
-          base: styles.loginOverlayBase,
-          afterOpen: styles.loginOverlayAfter,
-          beforeClose: styles.loginOverlayBefore,
-        }}
-        className={{
-          base: styles.loginContentBase,
-          afterOpen: styles.loginContentAfter,
-          beforeClose: styles.loginContentBefore,
-        }}
-      >
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              height: "20%",
-              backgroundColor: "#f3c5c5",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <span
-              style={{
-                display: "inline",
-                color: "#CD5C5C",
-                fontSize: "1.5rem",
-              }}
-            >
-              {userName}님의 미술관
-            </span>
-          </div>
-          <div
-            style={{
-              height: "80%",
-              width: "100%",
-              backgroundColor: "#f6e7d8",
-              borderTopLeftRadius: "10px",
-              borderTopRightRadius: "10px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div
-              style={{
-                display: "grid",
-                textAlign: "center",
-                width: "90%",
-                height: "100%",
-                marginLeft: "5%",
-                alignItems: "center",
-              }}
-            >
-              <div
-                style={{
-                  display: "grid",
-                  width: "100%",
-                  height: "35%",
-                  justifyContent: "center",
-                  alignContent: "center",
-                  // border: "1px solid black",
-                }}
-              >
-                <input
-                  readOnly
-                  value={userLink}
-                  onClick={() => handleCopyClipBoard(userLink)}
-                  style={{
-                    display: "block",
-                    height: "1.5rem",
-                    fontSize: "1rem",
-                    border: "3px solid #3e4356",
-                    fontFamily: "KOTRAHOPE, cursive",
-                    color: "#3e4356",
-                    borderRadius: "5px",
-                    paddingLeft: "5px",
-                    paddingTop: "2px",
-                    paddingBottom: "2px",
-                    marginTop: "3px",
-                  }}
-                />
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  height: "20%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <p
-                  style={{
-                    display: "inline",
-                    fontSize: "1rem",
-                    width: "100%",
-                    margin: "0px 0px",
-                    color: "#3e4356",
-                  }}
-                >
-                  {copyMessage}
-                </p>
-              </div>
-              <div className={"btnZone"}>
-                <button
-                  className={"modalBtn"}
-                  onClick={() =>
-                    router.push({
-                      //pathname: "/mygallery",
-                      pathname: `/gallery/${userName}`,
-                      query: { username: userName },
-                    })
-                  }
-                >
-                  내 미술관으로
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Modal>
-
+        </Modal>
+      </div>
+      {loading && <Loading />}
       <style jsx>
         {`
-          body {
-            background-color: #f6e7d8;
-            overflow-y: auto;
-          }
           h1 {
             font-size: 6rem;
             font-weight: 500;
