@@ -8,6 +8,7 @@ type Props = {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   galleryName: string;
   drawer: string;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const SaveModal = ({
   modalOpen,
@@ -15,6 +16,7 @@ const SaveModal = ({
   setModalOpen,
   galleryName,
   drawer,
+  setLoading,
 }: Props) => {
   const [userGallery, setUserGallery] = useState(false);
   const [isSave, setIsSave] = useState(false);
@@ -40,6 +42,7 @@ const SaveModal = ({
           <button
             className={styles.saveBtn}
             onClick={() => {
+              setLoading(true);
               saveImage();
               router.push({
                 //pathname: "/mygallery",

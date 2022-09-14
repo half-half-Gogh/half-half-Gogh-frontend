@@ -28,7 +28,7 @@ const main = () => {
   const [signUpPWCheck, setSignUpPWCheck] = useState<string>("");
   const [checkCorrect, setCheckCorrect] = useState<boolean>(false);
   const [disallowSignUp, setDisallowSignUp] = useState<boolean>(true);
-  const [signUpSuccess, setSignUpSuccess] = useState(false);
+  const [signUpSuccess, setSignUpSuccess] = useState(true);
   const [failModal, setFailModal] = useState(false);
   const [loginFail, setLoginFail] = useState(false);
   const [waitingPath, setWatingPath] = useState<string>("");
@@ -414,7 +414,9 @@ const main = () => {
                     alignItems: "center",
                   }}
                 >
-                  <p>회원가입에 성공했습니다 !</p>
+                  <p>
+                    회원가입에<br></br>성공했습니다 !
+                  </p>
                   <div
                     style={{
                       width: "100%",
@@ -427,12 +429,12 @@ const main = () => {
                     <button
                       className={"successBtn"}
                       onClick={() => {
+                        setSignUpModal(false);
                         setSignUpID("");
                         setSignUpPW("");
                         setGalleryName("");
                         setDisallowSignUp(true);
                         setCheckCorrect(false);
-                        setSignUpModal(false);
                         setSignUpSuccess(false);
                       }}
                     >
