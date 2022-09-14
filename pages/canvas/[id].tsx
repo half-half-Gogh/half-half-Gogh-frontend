@@ -12,6 +12,8 @@ import {
 } from "next";
 import { useRouter } from "next/router";
 import { getRandomString } from "../../components/getRandomString";
+import Loading from "../../components/Loading";
+
 type Props = {
   galleryName: string;
 };
@@ -36,6 +38,8 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
   const [drawer, setDrawer] = useState("");
   const router = useRouter();
   const [failModal, setFailModal] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
     if (rangeRef.current) {
       rangeRef.current.min = "1";
@@ -103,6 +107,7 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
   const saveImage = () => {
     if (!canvasRef.current) return;
     canvasRef.current.toBlob(function (blob) {
+      setLoading(true);
       const formData = new FormData();
       const fileName = getRandomString(10);
       formData.append("halfhalfgogh", blob!, `${fileName}.png`);
@@ -116,6 +121,9 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
             drawer: drawer,
             imgId: response.data.fileName,
           });
+          setLoading(false);
+          setTimeout(() => setLoading(true), 500);
+          setTimeout(() => setLoading(false), 3000);
         })
         .catch(function (error) {
           console.log(error);
@@ -384,6 +392,7 @@ const MyCanvas = ({ galleryName }: InferGetServerSidePropsType<Props>) => {
           </div>
         </div>
       </div>
+      {loading && <Loading />}
       <style jsx>
         {`
           p {

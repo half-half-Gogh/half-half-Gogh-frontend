@@ -46,6 +46,7 @@ const mygallery = ({
     return value != deleteItem;
   };
   useEffect(() => {
+    console.log(results);
     if (typeof window !== "undefined") {
       const status: any = sessionStorage.getItem("loginStatus");
       const userName: any = sessionStorage.getItem("loginUserName");
@@ -117,6 +118,15 @@ const mygallery = ({
 
   const rendering = () => {
     const galleryRender = [];
+    if (results.length == 0) {
+      galleryRender.push(
+        <>
+          <div
+            style={{ width: "100%", height: windowSize.height * 0.58 }}
+          ></div>
+        </>
+      );
+    }
     for (let i = 0; i < results.length; i++) {
       if (i == 0) {
         galleryRender.push(
@@ -579,8 +589,7 @@ const mygallery = ({
     <div
       style={{
         width: "100%",
-        height: windowSize.height,
-        backgroundColor: "rgb(251, 240, 219)",
+        backgroundColor: "rgb(253, 239, 221)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -803,14 +812,17 @@ const mygallery = ({
       </Modal>
       <style jsx>
         {`
+          body {
+            backgroundcolor: rgb(249, 179, 140);
+          }
           article {
             width: windowSize.width * 0.7 + 60;
-            margin-top: 18vh;
+            margin-top: 17vh;
             margin-bottom: 21vh;
             justify-content: center;
             align-items: center;
             text-align: center;
-            z-index: 2;
+            z-index: 1;
           }
           header {
             position: fixed;
@@ -849,23 +861,18 @@ const mygallery = ({
 };
 
 export const getServerSideProps = async (context: any) => {
-  //"http://175.123.140.225:4000/im/imgResponse"
-
   var result: resultType[] = [];
   await axios
     .post(`${process.env.SERVER_URL}im/imgResponse`, {
       galleryName: `${context.params.id}`,
     })
     .then((res) => {
-      //setPictures((pictures) => [...pictures, ...res.data.pResult]);
-      //const { results } = res.data.pResult;
       result = res.data.pResult;
-      //console.log(result[0].like[0] + "sdadads");
-      //return {
-      //  props: {
-      //    results: res.data.pResult,
-      //  },
-      //};
+      result.forEach((value) => {
+        if (value.like.includes("")) {
+          value.like.pop();
+        }
+      });
       results = result.sort(function (a, b) {
         return b.like.length - a.like.length;
       });
@@ -874,40 +881,6 @@ export const getServerSideProps = async (context: any) => {
       console.error(err);
     });
 
-  /*
-  const result: resultType[] = [
-    {
-      src: "/images/Paint12.jpeg",
-      like: ["1", "2", "3"],
-      drawer: "김형국",
-    },
-    {
-      src: "/images/Paint13.jpeg",
-      like: ["3", "2", "4", "hi", "hihi"],
-      drawer: "조준영",
-    },
-    {
-      src: "/images/Paint11.jpeg",
-      like: ["7"],
-      drawer: "서창희",
-    },
-    {
-      src: "/images/Paint14.jpeg",
-      like: ["1", "2", "3", "11", "4", "6"],
-      drawer: "구정민",
-    },
-    {
-      src: "/images/Paint15.jpeg",
-      like: ["4", "5", "6", "hi"],
-      drawer: "보리",
-    },
-    {
-      src: "/images/Paint11.jpeg",
-      like: ["4", "5"],
-      drawer: "하이",
-    },
-  ];
-*/
   let results: resultType[] = [];
   results = result.sort(function (a, b) {
     return b.like.length - a.like.length;

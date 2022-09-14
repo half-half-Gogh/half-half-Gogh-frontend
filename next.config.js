@@ -5,15 +5,6 @@ const nextConfig = {
   },
   reactStrictMode: false,
   swcMinify: true,
-  redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/main",
-        permanent: false,
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;
