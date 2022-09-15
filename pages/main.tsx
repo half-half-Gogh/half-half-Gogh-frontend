@@ -863,7 +863,7 @@ const main = () => {
                       router.push({
                         //pathname: "/mygallery",
                         pathname: `/gallery/${userId}`,
-                        query: { userid: userId },
+                        //query: { userid: userId },
                       });
                     }}
                   >

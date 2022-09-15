@@ -47,7 +47,7 @@ const SaveModal = ({
               router.push({
                 //pathname: "/mygallery",
                 pathname: `/gallery/${userId}`,
-                query: { userId: userId },
+                //query: { userId: userId },
               });
             }}
           >
