@@ -51,11 +51,10 @@ const mygallery = ({
     if (typeof window !== "undefined") {
       const status: any = sessionStorage.getItem("loginStatus");
       const userName: any = sessionStorage.getItem("loginUserName");
-      const userid: any = sessionStorage.getItem("loginUserId");
+      const loginUserId: any = sessionStorage.getItem("loginUserId");
       setLoginStatus(status);
       setLoginUserName(userName);
-      setLoginUserId(userid);
-      console.log(userid + "SSSSS");
+      setLoginUserId(loginUserId);
     }
     console.log(loginStatus);
     if (window.innerWidth <= 500) {
@@ -76,7 +75,7 @@ const mygallery = ({
       if (results[index].like.includes(loginUserId)) {
         axios
           .post(`${process.env.NEXT_PUBLIC_SERVER_URL}im/pressLike`, {
-            galleryName: galleryName,
+            loginUserId: userId,
             imgId: pictureName,
             liker: loginUserId,
           })
@@ -680,10 +679,11 @@ const mygallery = ({
           <button
             className={styles.buttonStyle}
             onClick={() => {
-              if (loginStatus == "true") {
-                router.push({
+              if (loginStatus == "true" || loginStatus) {
+                console.log(loginUserId);
+                router.replace({
                   pathname: `/gallery/${loginUserId}`,
-                  query: { userId: loginUserId },
+                  //query: { userId: loginUserId },
                 });
               } else {
                 router.push({
@@ -693,7 +693,9 @@ const mygallery = ({
             }}
           >
             <p style={{ margin: "0px 0px", fontSize: "1.15rem" }}>
-              {loginStatus === "true" ? "내 미술관 가기" : "내 미술관 만들기"}
+              {loginStatus === "true" || loginStatus
+                ? "내 미술관 가기"
+                : "내 미술관 만들기"}
             </p>
           </button>
         </div>
