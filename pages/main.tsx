@@ -77,13 +77,15 @@ const main = () => {
             );
           }
           setLoading(false);
-          setLoginSuccess(true);
-          setLoginFail(false);
           if (!(waitingPath === "")) {
+            sessionStorage.removeItem("waitingPath");
             router.push({
               pathname: waitingPath,
             });
+          } else {
+            setLoginSuccess(true);
           }
+          setLoginFail(false);
         } else {
           if (response.data.signinError.includes("password")) {
             setErrorStr("잘못된 패스워드 입니다.");
