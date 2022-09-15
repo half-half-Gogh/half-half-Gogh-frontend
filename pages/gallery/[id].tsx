@@ -681,10 +681,11 @@ const mygallery = ({
             onClick={() => {
               if (loginStatus == "true" || loginStatus) {
                 console.log(loginUserId);
-                router.replace({
-                  pathname: `/gallery/${loginUserId}`,
-                  //query: { userId: loginUserId },
-                });
+                document.location.href = `/gallery/${loginUserId}`;
+                // router.replace({
+                //   pathname: `/gallery/${loginUserId}`,
+                //   //query: { userId: loginUserId },
+                // });
               } else {
                 router.push({
                   pathname: `/main/`,
