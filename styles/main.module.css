@@ -35,8 +35,8 @@
   transition-duration: 500ms;
   transition-timing-function: ease-in-out;
   position: absolute;
-  width: 60%;
-  height: 45%;
+  width: 90%;
+  height: 60%;
   max-width: 500px;
   max-height: 900px;
   border: 5px solid #f3c5c5;
@@ -51,10 +51,10 @@
 }
 
 .contentAfter {
-  width: 60%;
-  height: 45%;
   max-width: 500px;
   max-height: 900px;
+  width: 90%;
+  height: 60%;
   background-color: #f3c5c5;
   z-index: 5;
 }
@@ -168,7 +168,7 @@
   transition-duration: 500ms;
   transition-timing-function: ease-in-out;
   position: absolute;
-  width: 60%;
+  width: 90%;
   height: 30%;
   max-width: 500px;
   max-height: 900px;
@@ -184,7 +184,7 @@
 }
 
 .loginContentAfter {
-  width: 60%;
+  width: 90%;
   height: 30%;
   max-width: 500px;
   max-height: 900px;

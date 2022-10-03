@@ -8,6 +8,9 @@ import { TiKey, TiUser } from "react-icons/ti";
 import { BsClipboardPlus } from "react-icons/bs";
 import axios from "axios";
 import Loading from "../components/Loading";
+import classNames from "classnames";
+import Guide from "/public/images/guideImage.png";
+
 const main = () => {
   const router = useRouter();
   const [signUpModal, setSignUpModal] = useState<boolean>(false);
@@ -16,11 +19,12 @@ const main = () => {
   const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
-  const [userLink, setUserLink] = useState<string>("http://www.half-go.io/");
+  const [userLink, setUserLink] = useState<string>("");
   const [copyMessage, setCopyMessage] =
     useState<string>("링크를 눌러 친구들에게 홍보하자!");
   const [loginID, setLoginID] = useState<string>("");
   const [loginPW, setLoginPW] = useState<string>("");
+  const [loginToken, setLoginToken] = useState<string>("");
   const [galleryName, setGalleryName] = useState<string>("");
   const [signUpID, setSignUpID] = useState<string>("");
   const [idCheck, setIdCheck] = useState<boolean>(false);
@@ -56,7 +60,7 @@ const main = () => {
 
   const login = async () => {
     await axios
-      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}user/signin`, {
+      .post("/api/user/signin", {
         id: loginID,
         password: loginPW,
       })
@@ -67,6 +71,7 @@ const main = () => {
         ) {
           setUserName(response.data.signinUserName);
           setUserId(response.data.signinUserId);
+          setLoginToken(response.data.loginToken);
           if (typeof window !== "undefined") {
             sessionStorage.removeItem("loginStatus");
             sessionStorage.setItem("loginStatus", "true");
@@ -75,15 +80,18 @@ const main = () => {
               "loginUserName",
               response.data.signinUserName
             );
+            sessionStorage.setItem("loginToken", response.data.loginToken);
           }
+          setUserLink(`halfhalfgogh.me/gallery/${response.data.loginToken}`);
           setLoading(false);
-          if (!(waitingPath === "")) {
+          if (waitingPath === "") {
+            setLoginSuccess(true);
+          } else {
+            setLoading(true);
             sessionStorage.removeItem("waitingPath");
             router.push({
               pathname: waitingPath,
             });
-          } else {
-            setLoginSuccess(true);
           }
           setLoginFail(false);
         } else {
@@ -110,7 +118,7 @@ const main = () => {
 
   const signUp = async () => {
     await axios
-      .post(`${process.env.NEXT_PUBLIC_SERVER_URL}user/signup`, {
+      .post("/api/user/signup", {
         id: signUpID,
         password: signUpPWCheck,
         username: galleryName,
@@ -150,15 +158,17 @@ const main = () => {
         !loginSuccess
       ) {
         setLoading(true);
-        const galleryUrl = sessionStorage.getItem("loginUserId");
+        const galleryUrl = sessionStorage.getItem("loginToken");
         router.push({
           pathname: `/gallery/${galleryUrl}`,
         });
       }
       const path: any = sessionStorage.getItem("waitingPath");
-      setWatingPath(path);
+      if (path != null) {
+        setWatingPath(path);
+      }
     }
-  });
+  }, []);
   useEffect(() => {
     if (signUpPWCheck == "") {
       return;
@@ -182,13 +192,15 @@ const main = () => {
   useEffect(() => {
     if (idCheck && galleryName != "" && signUpPW.length >= 6 && checkCorrect) {
       setDisallowSignUp(false);
+    } else {
+      setDisallowSignUp(true);
     }
   }, [signUpID, galleryName, signUpPW, checkCorrect]);
 
   return (
-    <div>
+    <div style={{ justifyContent: "center" }}>
       <div className={"container"}>
-        <div>
+        <div style={{ width: "100%", height: "100%" }}>
           <Image src={title} />
           {windowSize.width < 363 ? (
             windowSize.width < 281 ? (
@@ -227,7 +239,6 @@ const main = () => {
             </h1>
           )}
         </div>
-
         <div
           style={{
             display: "flex",
@@ -328,6 +339,9 @@ const main = () => {
             회원가입
           </a>
         </button>
+        <p style={{ color: "#3e4356" }}>
+          아래로 스크롤하면 사용 가이드가 있어요!
+        </p>
         <Modal
           isOpen={loginFail}
           closeTimeoutMS={200}
@@ -369,6 +383,7 @@ const main = () => {
         <Modal
           isOpen={signUpModal}
           closeTimeoutMS={200}
+          ariaHideApp={false}
           overlayClassName={{
             base: styles.overlayBase,
             afterOpen: styles.overlayAfter,
@@ -416,7 +431,7 @@ const main = () => {
                     alignItems: "center",
                   }}
                 >
-                  <p>
+                  <p style={{ color: "#3E4356" }}>
                     회원가입에<br></br>성공했습니다 !
                   </p>
                   <div
@@ -504,6 +519,7 @@ const main = () => {
               <div
                 style={{
                   height: "85%",
+                  width: "100%",
                   backgroundColor: "#f6e7d8",
                   borderTopLeftRadius: "10px",
                   borderTopRightRadius: "10px",
@@ -522,7 +538,13 @@ const main = () => {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        margin: "0px 0px",
+                        color: "#3E4356",
+                      }}
+                    >
                       미술관 이름 (5자 이하)
                     </p>
                     {galleryName != "" ? (
@@ -531,6 +553,7 @@ const main = () => {
                           display: "inline",
                           fontSize: "0.7rem",
                           margin: "0px 0px",
+                          color: "#3E4356",
                         }}
                       >
                         ✔️
@@ -566,7 +589,13 @@ const main = () => {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        margin: "0px 0px",
+                        color: "#3E4356",
+                      }}
+                    >
                       이메일
                     </p>
                     {idCheck ? (
@@ -575,6 +604,7 @@ const main = () => {
                           display: "inline",
                           fontSize: "0.7rem",
                           margin: "0px 0px",
+                          color: "#3E4356",
                         }}
                       >
                         ✔️
@@ -609,7 +639,13 @@ const main = () => {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <p style={{ fontSize: "1rem", margin: "0px 0px" }}>
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        margin: "0px 0px",
+                        color: "#3E4356",
+                      }}
+                    >
                       패스워드 (6자 이상)
                     </p>
                     {signUpPW.length >= 6 ? (
@@ -618,6 +654,7 @@ const main = () => {
                           display: "inline",
                           fontSize: "0.7rem",
                           margin: "0px 0px",
+                          color: "#3E4356",
                         }}
                       >
                         ✔️
@@ -658,6 +695,7 @@ const main = () => {
                         display: "inline",
                         fontSize: "1rem",
                         margin: "0px 0px",
+                        color: "#3E4356",
                       }}
                     >
                       패스워드 확인
@@ -668,6 +706,7 @@ const main = () => {
                           display: "inline",
                           fontSize: "0.7rem",
                           margin: "0px 0px",
+                          color: "#3E4356",
                         }}
                       >
                         ✔️
@@ -686,6 +725,7 @@ const main = () => {
                           display: "inline",
                           fontSize: "1rem",
                           margin: "0px 0px",
+                          color: "#3E4356",
                         }}
                       >
                         불일치
@@ -716,18 +756,6 @@ const main = () => {
                     marginLeft: "3.75%",
                   }}
                 >
-                  <div className={"btnZone"}>
-                    <button
-                      className={"modalBtn"}
-                      onClick={() => {
-                        signUp();
-                        setLoading(true);
-                      }}
-                      disabled={disallowSignUp}
-                    >
-                      <p style={{ margin: "0" }}>가입하기</p>
-                    </button>
-                  </div>
                   <div
                     className={"btnZone"}
                     onClick={() => {
@@ -739,6 +767,18 @@ const main = () => {
                     }}
                   >
                     <button className={"modalBtn"}>메인으로</button>
+                  </div>
+                  <div className={"btnZone"}>
+                    <button
+                      className={"modalBtn"}
+                      onClick={() => {
+                        signUp();
+                        setLoading(true);
+                      }}
+                      disabled={disallowSignUp}
+                    >
+                      <p style={{ margin: "0" }}>가입하기</p>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -863,9 +903,7 @@ const main = () => {
                     onClick={() => {
                       setLoading(true);
                       router.push({
-                        //pathname: "/mygallery",
-                        pathname: `/gallery/${userId}`,
-                        //query: { userid: userId },
+                        pathname: `/gallery/${loginToken}`,
                       });
                     }}
                   >
@@ -876,6 +914,23 @@ const main = () => {
             </div>
           </div>
         </Modal>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: windowSize.height + 20,
+          //width: "60%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Image
+          src={Guide}
+          style={{
+            width: "90%",
+            position: "absolute",
+          }}
+        />
       </div>
       {loading && <Loading />}
       <style jsx>
@@ -936,12 +991,12 @@ const main = () => {
             display: block;
             position: relative;
             float: left;
-            width: 100%;
+            width: 95%;
             height: 80%;
             font-weight: 200;
             text-align: center;
             color: #cd5c5c;
-            border-radius: 5%;
+            border-radius: 5px;
             transition: all 0.2s;
             box-shadow: 0px 0px 0px 0px #f3c5c5;
             background: #ffc3c3;
@@ -1002,6 +1057,35 @@ const main = () => {
           }
           input::placeholder {
             color: #ffa3a3;
+          }
+          .contentBase {
+            background-color: transparent;
+            transition-property: background-color, width, height;
+            transition-duration: 500ms;
+            transition-timing-function: ease-in-out;
+            position: absolute;
+            width: windowSize.width * 0.6;
+            height: windowSize.height * 0.45;
+            max-width: 500px;
+            max-height: 900px;
+            border: 5px solid #f3c5c5;
+            background: #f6e7d8;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 10px;
+            outline: none;
+            text-align: center;
+            justify-content: center;
+            z-index: 5;
+          }
+
+          .contentAfter {
+            width: windowSize.width * 0.6;
+            height: windowSize.height * 0.45;
+            max-width: 500px;
+            max-height: 900px;
+            background-color: #f3c5c5;
+            z-index: 5;
           }
         `}
       </style>
