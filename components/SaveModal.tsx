@@ -6,7 +6,7 @@ type Props = {
   modalOpen: boolean;
   saveImage: () => void;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userId: string;
+  userToken: string;
   drawer: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -14,7 +14,7 @@ const SaveModal = ({
   modalOpen,
   saveImage,
   setModalOpen,
-  userId,
+  userToken,
   drawer,
   setLoading,
 }: Props) => {
@@ -41,12 +41,12 @@ const SaveModal = ({
         <div className={styles.saveBtnZone}>
           <button
             className={styles.saveBtn}
-            onClick={() => {
+            onClick={async () => {
               setLoading(true);
-              saveImage();
+              await saveImage();
               router.push({
                 //pathname: "/mygallery",
-                pathname: `/gallery/${userId}`,
+                pathname: `/gallery/${userToken}`,
                 //query: { userId: userId },
               });
             }}

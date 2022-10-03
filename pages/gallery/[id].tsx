@@ -13,6 +13,7 @@ import axios from "axios";
 import Modal from "react-modal";
 import classnames from "classnames";
 import { emit } from "process";
+import Loading from "../../components/Loading";
 
 type resultType = {
   src: string;
@@ -21,13 +22,12 @@ type resultType = {
 };
 
 const IMAGE_PATH = "public/images/";
-//const SERVER = "";
-//const IMAGE_PATH = "";
 
 const mygallery = ({
   result,
   galleryName,
   userId,
+  userToken,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   //const mygallery = () => {
   const [windowSize, setWindowSize] = useState({
@@ -40,21 +40,29 @@ const mygallery = ({
   const [loginStatus, setLoginStatus] = useState<string>("");
   const [loginUserId, setLoginUserId] = useState<string>("");
   const [loginUserName, setLoginUserName] = useState<string>("");
+  const [loginToken, setLoginToken] = useState<string>("");
   const [results, setResults] = useState<resultType[]>(result);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const likeFilter = (value: string, deleteItem: string) => {
     return value != deleteItem;
   };
+  const prevent = (event: any) => {
+    event.preventDefault();
+    event.returnValue = "";
+  };
   useEffect(() => {
-    console.log(results);
+    window.removeEventListener("beforeunload", prevent);
     if (typeof window !== "undefined") {
       const status: any = sessionStorage.getItem("loginStatus");
       const userName: any = sessionStorage.getItem("loginUserName");
       const loginUserId: any = sessionStorage.getItem("loginUserId");
+      const token: any = sessionStorage.getItem("loginToken");
       setLoginStatus(status);
       setLoginUserName(userName);
       setLoginUserId(loginUserId);
+      setLoginToken(token);
     }
     console.log(loginStatus);
     if (window.innerWidth <= 500) {
@@ -74,7 +82,7 @@ const mygallery = ({
     if (loginStatus == "true") {
       if (results[index].like.includes(loginUserId)) {
         axios
-          .post(`${process.env.NEXT_PUBLIC_SERVER_URL}im/pressLike`, {
+          .post("/api/im/pressLike", {
             loginUserId: userId,
             imgId: pictureName,
             liker: loginUserId,
@@ -94,7 +102,7 @@ const mygallery = ({
         setResults(copied);
       } else {
         axios
-          .post(`${process.env.NEXT_PUBLIC_SERVER_URL}im/pressLike`, {
+          .post("/api/im/pressLike", {
             loginUserId: userId,
             imgId: pictureName,
             liker: loginUserId,
@@ -143,11 +151,7 @@ const mygallery = ({
               }}
             >
               <Image
-                src={
-                  process.env.NEXT_PUBLIC_SERVER_URL +
-                  IMAGE_PATH +
-                  results[i].src
-                }
+                src={`/images/${results[i].src}`}
                 layout={"fixed"}
                 height={windowSize.width * 0.7}
                 width={windowSize.width * 0.7}
@@ -261,21 +265,13 @@ const mygallery = ({
                 }}
               >
                 <Image
-                  src={
-                    process.env.NEXT_PUBLIC_SERVER_URL +
-                    IMAGE_PATH +
-                    results[i - 1].src
-                  }
+                  src={`/images/${results[i - 1].src}`}
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(
-                      process.env.NEXT_PUBLIC_SERVER_URL +
-                        IMAGE_PATH +
-                        results[i - 1].src
-                    );
+                    setNowPic(results[i - 1].src);
                     setBigPic(true);
                   }}
                 />
@@ -366,21 +362,13 @@ const mygallery = ({
                 }}
               >
                 <Image
-                  src={
-                    process.env.NEXT_PUBLIC_SERVER_URL +
-                    IMAGE_PATH +
-                    results[i].src
-                  }
+                  src={`/images/${results[i].src}`}
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(
-                      process.env.NEXT_PUBLIC_SERVER_URL +
-                        IMAGE_PATH +
-                        results[i].src
-                    );
+                    setNowPic(results[i].src);
                     setBigPic(true);
                   }}
                 />
@@ -485,21 +473,13 @@ const mygallery = ({
                 }}
               >
                 <Image
-                  src={
-                    process.env.NEXT_PUBLIC_SERVER_URL +
-                    IMAGE_PATH +
-                    results[i].src
-                  }
+                  src={`/images/${results[i].src}`}
                   layout={"fixed"}
                   height={windowSize.width * 0.35}
                   width={windowSize.width * 0.35}
                   unoptimized={true}
                   onClick={() => {
-                    setNowPic(
-                      process.env.NEXT_PUBLIC_SERVER_URL +
-                        IMAGE_PATH +
-                        results[i].src
-                    );
+                    setNowPic(results[i].src);
                     setBigPic(true);
                   }}
                 />
@@ -668,7 +648,10 @@ const mygallery = ({
         >
           <button
             className={styles.buttonStyle}
-            onClick={() => router.push(`/canvas/${userId}`)}
+            onClick={() => {
+              setLoading(true);
+              router.push(`/canvas/${userToken}`);
+            }}
           >
             <p style={{ margin: "0px 0px", fontSize: "1.15rem" }}>
               그림 그리기
@@ -679,9 +662,9 @@ const mygallery = ({
           <button
             className={styles.buttonStyle}
             onClick={() => {
+              setLoading(true);
               if (loginStatus == "true" || loginStatus) {
-                console.log(loginUserId);
-                document.location.href = `/gallery/${loginUserId}`;
+                document.location.href = `/gallery/${loginToken}`;
                 // router.replace({
                 //   pathname: `/gallery/${loginUserId}`,
                 //   //query: { userId: loginUserId },
@@ -753,7 +736,7 @@ const mygallery = ({
             }}
           >
             <Image
-              src={nowPic}
+              src={`/images/${nowPic}`}
               layout={"fixed"}
               height={windowSize.width * 0.7}
               width={windowSize.width * 0.7}
@@ -787,14 +770,19 @@ const mygallery = ({
             height: "100%",
           }}
         >
-          <p style={{ margin: "5px 0px" }}>로그인이 필요합니다.</p>
+          <p style={{ margin: "5px 0px", color: "#3E4356" }}>
+            로그인이 필요합니다.
+          </p>
           <div style={{ display: "flex" }}>
             <button
               className={styles.mainBtn}
               onClick={() => {
                 setModalOpen(false);
                 if (typeof window !== "undefined") {
-                  sessionStorage.setItem("waitingPath", `/gallery/${userId}`);
+                  sessionStorage.setItem(
+                    "waitingPath",
+                    `/gallery/${userToken}`
+                  );
                   router.push({
                     pathname: `/main`,
                   });
@@ -809,7 +797,7 @@ const mygallery = ({
                 setModalOpen(false);
               }}
             >
-              창 닫기
+              닫기
             </button>
           </div>
         </div>
@@ -867,9 +855,29 @@ const mygallery = ({
 export const getServerSideProps = async (context: any) => {
   let result: resultType[] = [];
   let userName: string = "";
+  let userId: string = "";
+
+  await axios
+    .post(`${process.env.SERVER_URL}im/responseUserName`, {
+      loginToken: `${context.params.id}`,
+    })
+    .then((res) => {
+      userName = res.data.userName;
+      userId = res.data.loginUserId;
+    })
+    .catch((err) => {
+      return {
+        notFound: true,
+        redirect: {
+          destination: "/404",
+          permanent: false,
+        },
+      };
+    });
+
   await axios
     .post(`${process.env.SERVER_URL}im/imgResponse`, {
-      loginUserId: `${context.params.id}`,
+      loginUserId: userId,
     })
     .then((res) => {
       result = res.data.pResult;
@@ -878,23 +886,15 @@ export const getServerSideProps = async (context: any) => {
           value.like.pop();
         }
       });
-      /*
-      results = result.sort(function (a, b) {
-        return b.like.length - a.like.length;
-      });*/
     })
     .catch((err) => {
-      console.error(err);
-    });
-  await axios
-    .post(`${process.env.SERVER_URL}im/responseUserName`, {
-      loginUserId: `${context.params.id}`,
-    })
-    .then((res) => {
-      userName = res.data.userName;
-    })
-    .catch((err) => {
-      console.error(err);
+      return {
+        notFound: true,
+        redirect: {
+          destination: "/404",
+          permanent: false,
+        },
+      };
     });
 
   let results: resultType[] = [];
@@ -906,7 +906,8 @@ export const getServerSideProps = async (context: any) => {
     props: {
       result: results,
       galleryName: userName,
-      userId: context.params.id,
+      userId: userId,
+      userToken: context.params.id,
     },
   };
 };
