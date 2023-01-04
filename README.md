@@ -1,17 +1,18 @@
 
 
-### 🎨 프로젝트 소개
----
+## 🎨 프로젝트 소개
+
 <div align=center> 
 <img width="50%" src="https://postfiles.pstatic.net/MjAyMzAxMDRfMjQ1/MDAxNjcyODEwMTk4NjI2.DC6jjEOgsg6fXhDiseH0tegcZYGOg2t4v9khZ8gJBakg.mtjy-d0OZFh4ekbt4NpFFonbcG3j3wJtU2SR_NWDGRkg.PNG.nomm89/스크린샷_2023-01-04_오후_2.29.49.png?type=w773"/>
 
 
-**자유롭게 그림을 그려 게시하여 서로 공유하는 웹 어플리케이션**
+  
+### 👨🏻‍🎨 반의반고흐 : 자유롭게 그림을 그려 게시하여 서로 공유하는 웹 어플리케이션
 </div>
 
-### 💫 스킬 (FrontEnd part)
+## 💫 스킬 (FrontEnd part)
 
----
+
 <div align=center> 
 <img src="https://img.shields.io/badge/next.js-3F5767?style=for-the-badge&logo=next.js&logoColor=black">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
@@ -23,8 +24,8 @@
 
 
   
-### 🍩 주요기능 및 페이지 소개
----
+## 🍩 주요기능 및 페이지 소개
+
 <div align=center>
   
   <br>
