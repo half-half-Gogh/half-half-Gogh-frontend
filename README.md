@@ -50,5 +50,6 @@
 ## 💡 Contributor
 
 <div align=center>
-  <img src="https://user-images.githubusercontent.com/41909776/210522721-917994ee-3502-4938-aa55-5a0a37e98e8b.png" width="800px"/>
+  <img src="https://user-images.githubusercontent.com/41909776/210524016-28eb24d9-0e08-4091-8836-291fdd3bad11.png" width="800px"/>
 </div>
+
