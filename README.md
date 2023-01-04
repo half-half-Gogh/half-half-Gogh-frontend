@@ -46,3 +46,9 @@
 | <li>이미지 좋아요 기능</li><li>이미지 클릭 시 확대</li>                                                                                                             | <li>이용 가이드 소개</li>                                            |
 <br>
   </div>
+  
+## 💡 Contributor
+
+<div align=center>
+  <img src="https://user-images.githubusercontent.com/41909776/210522721-917994ee-3502-4938-aa55-5a0a37e98e8b.png" width="800px"/>
+</div>
