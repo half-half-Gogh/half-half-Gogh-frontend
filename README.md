@@ -10,7 +10,7 @@
 ### 👨🏻‍🎨 반의반고흐 : 자유롭게 그림을 그려 게시하여 서로 공유하는 웹 어플리케이션
 </div>
 
-## 💫 스킬 (FrontEnd part)
+## 💫 스킬 (Front-End Part)
 
 
 <div align=center> 
