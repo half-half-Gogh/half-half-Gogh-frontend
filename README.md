@@ -8,6 +8,7 @@
 
   
 ### 👨🏻‍🎨 반의반고흐 : 자유롭게 그림을 그려 게시하여 서로 공유하는 웹 어플리케이션
+[📹 데모영상 보기](https://youtu.be/gw6yHHLgiy0)
 </div>
 
 ## 💫 스킬 (Front-End Part)
@@ -37,7 +38,7 @@
 
 | Canvas 페이지                                                                                                                                                                                                                  | Canvas 기능 및 저장                                                                                                                                  |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <p align="center"><img src="https://user-images.githubusercontent.com/41909776/210511809-0857561a-9496-4aab-a092-9dc7893225f3.gif" width="300px"/></p>                                                                        | <p align="center"><img src="https://user-images.githubusercontent.com/41909776/210511813-cd01dec5-c770-496b-aea7-54314b88402a.gif" width="300px" /></p> |
+| <p align="center"><img src="https://user-images.githubusercontent.com/41909776/210511809-0857561a-9496-4aab-a092-9dc7893225f3.gif" width="300px"/></p>                                                                        | <p align="center"><img src="https://user-images.githubusercontent.com/41909776/210726227-f24395d4-bee4-4ac0-9ffa-a2fb3b1d3704.gif" width="300px" /></p> |
 | <li>그림 그리기 클릭 - Canavs 페이지 이동</li>| <li>획 undo 기능</li><li>색상 및 굵기 설정 기능</li><li>저장 기능</li>                                                               |
 
 | 하트 및 확대 기능                                                                                                                                            | 유저 가이드                                                                                                                                      |
@@ -52,4 +53,3 @@
 <div align=center>
   <img src="https://user-images.githubusercontent.com/41909776/210524016-28eb24d9-0e08-4091-8836-291fdd3bad11.png" width="800px"/>
 </div>
-
