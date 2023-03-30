@@ -88,6 +88,9 @@ const MyCanvas = ({
     context.fillStyle = "white";
     context.fillRect(0, 0, window.innerWidth, window.innerHeight);
     setCtx(context);
+    setPath(path.slice(0, -1));
+    setWidthArray(widthArray.slice(0, -1));
+    setColorArray(colorArray.slice(0, -1));
   }, []);
   useEffect(() => {
     if (!ctx) return;
@@ -113,6 +116,9 @@ const MyCanvas = ({
       setPickerColor(previousColor);
     }
   }, [isStroke]);
+  useEffect(() => {
+    drawPaths();
+  }, [colorArray]);
   const pickerChange = (color: string) => {
     setPickerColor(color);
   };
@@ -222,15 +228,14 @@ const MyCanvas = ({
     }
   };
   const undo = () => {
-    path.splice(-1, 1);
-    widthArray.splice(-1, 1);
-    colorArray.splice(-1, 1);
+    setPath(path.slice(0, -1));
+    setWidthArray(widthArray.slice(0, -1));
+    setColorArray(colorArray.slice(0, -1));
     drawPaths();
+ 
   };
   const drawPaths = () => {
-    console.log(path.length + "dsd" + widthArray.length);
     clearCanvas();
-    console.log(path);
     if (!path) return;
     path.forEach((p, index) => {
       if (!ctx) return;
